@@ -32,7 +32,6 @@
       min-height: 100vh;
     }
 
-    /* Mobile-first */
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
 
     header{
@@ -163,7 +162,6 @@
     }
     .btn:hover{ transform: translateY(-1px); }
 
-    /* Mobile: خلّي الزرار تتوزع بشكل أفضل */
     @media(max-width: 480px){
       .btnRow .btn{ width: 100%; }
       .btnRow{ gap: 12px; }
@@ -203,7 +201,6 @@
       line-height: 1.7;
     }
 
-    /* تحسين الهيدر على الجوال */
     @media(max-width: 420px){
       header{ padding: 12px 12px; }
       .brand h1{ font-size: 15px; }
@@ -303,19 +300,10 @@
       "مركز سعد العبدالله"
     ];
 
-    const EMPLOYEES_BY_CENTER = {
-      "مركز الشامية": ["سامي", "عبدالله", "خالد"],
-      "مركز جابر العلي": ["أحمد", "فهد", "ناصر"],
-      "مركز صباح الأحمد": ["سلمان", "مشعل", "تركي"],
-      "مركز اشبيلة": ["سالم", "محمد", "عمر"],
-      "مركز غرب مشرف": ["علي", "يوسف", "حسين"],
-      "مركز المسايل": ["عبدالرحمن", "راشد", "نواف"],
-      "مركز سعد العبدالله": ["حمد", "سعيد", "ماجد"]
-    };
-
     const LS_KEYS = {
       current: "reviews_current_v3",
-      archive: "reviews_archive_v3"
+      archive: "reviews_archive_v3",
+      employeesByCenter: "employees_by_center_v1"
     };
 
     function loadJson(key, fallback){
@@ -332,6 +320,12 @@
     }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
+
+    // ✅ الموظفين صاروا من localStorage
+    let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+    for(const c of CENTERS){
+      if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
+    }
 
     function formatDateTime(iso){
       const d = new Date(iso);
@@ -373,14 +367,33 @@
     }
 
     function renderEmployeesForCenter(center){
+      // تحدث من storage في كل مرة (مفيد لو الإدارة تغيّر)
+      employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+      for(const c of CENTERS){
+        if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
+      }
+
       employeeSelect.innerHTML = "";
-      const list = EMPLOYEES_BY_CENTER[center] || [];
-      for(const name of list){
+      const list = employeesByCenter[center] || [];
+
+      // إذا مافي موظفين، أعطينا خيار تنبيه
+      if(list.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
+        employeeSelect.appendChild(opt);
+        return;
+      }
+
+      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+      for(const name of unique){
         const opt = document.createElement("option");
         opt.value = name;
         opt.textContent = name;
         employeeSelect.appendChild(opt);
       }
+
+      employeeSelect.value = employeeSelect.options[0]?.value || "";
     }
 
     centerSelect.addEventListener("change", (e)=>{
@@ -397,7 +410,8 @@
       const rating = ratingSelect.value;
       const comment = (commentShort.value || "").trim();
 
-      if(!center || !employeeName) return showToast("❌ اختر المركز والموظف.");
+      if(!center) return showToast("❌ اختر المركز.");
+      if(!employeeName) return showToast("❌ اختر الموظف (أضف موظفين للمركز من الإدارة أولاً).");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
