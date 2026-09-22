@@ -15,7 +15,7 @@
 
       --blue: rgba(58,160,255,1);
       --green: rgba(24,195,126,1);
-      --danger: #ff4d4d; /* زر الحذف الأحمر */
+      --danger: #ff4d4d;
     }
 
     *{ box-sizing: border-box; }
@@ -98,7 +98,6 @@
       font-size: 15px;
     }
 
-    /* dropdown واضح */
     select{
       padding-left: 40px;
       background-image:
@@ -115,6 +114,7 @@
         1px 22px;
       background-repeat: no-repeat;
     }
+
     option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
 
@@ -148,7 +148,6 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
 
-    /* Mobile: خلّي الأزرار تأخذ عرض كامل */
     @media(max-width: 480px){
       .btnRow .btn{ width: 100%; }
       .btnRow{ gap: 12px; }
@@ -217,7 +216,6 @@
       display:none;
     }
 
-    /* تحسين مساحات صغيرة جدًا */
     @media(max-width: 420px){
       header{ padding: 12px 12px; }
       .card .cardBody{ padding: 12px; }
@@ -306,6 +304,15 @@
             </div>
 
             <h3>الأرشيف</h3>
+
+            <!-- ✅ أزرار فتح أرشيف كل مركز مباشرة -->
+            <div style="margin-top:6px; margin-bottom:10px;">
+              <div class="fineprint" style="margin-top:0;">
+                اضغط لعرض أرشيف مركز محدد مباشرة:
+              </div>
+              <div class="btnRow" id="archiveCenterQuickBtns" style="margin-top:10px;"></div>
+            </div>
+
             <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
               <table>
                 <thead>
@@ -405,6 +412,7 @@
     const downloadArchiveBtn = document.getElementById("downloadArchiveBtn");
     const deleteArchiveCenterBtn = document.getElementById("deleteArchiveCenterBtn");
 
+    const archiveCenterQuickBtns = document.getElementById("archiveCenterQuickBtns");
     const toastMsg = document.getElementById("toastMsg");
 
     function renderCenters(){
@@ -510,6 +518,7 @@
       renderAdminTablesForCenter(center);
     }
 
+    // ✅ عند تغيير المركز من القائمة
     adminCurrentCenter.addEventListener("change", (e)=>{
       const newCenter = e.target.value;
       adminCenterSession = newCenter;
@@ -605,8 +614,34 @@
       renderAdminTablesForCenter(center);
     });
 
+    // ✅ تنفيذ فتح أرشيف مركز محدد عن طريق زر
+    function goToArchiveOf(center){
+      if(!center) return;
+      adminCenterSession = center;
+      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+
+      // نحدّث القائمة + نعيد عرض الجداول
+      adminCurrentCenter.value = center;
+      renderAdminTablesForCenter(center);
+      showToast(`✅ عرض أرشيف: <b>${escapeHtml(center)}</b>`);
+    }
+
+    function renderQuickArchiveButtons(){
+      archiveCenterQuickBtns.innerHTML = "";
+      for(const c of CENTERS){
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "btn alt";
+        b.textContent = `أرشيف ${c}`;
+        b.addEventListener("click", ()=> goToArchiveOf(c));
+        archiveCenterQuickBtns.appendChild(b);
+      }
+    }
+
     // init
     renderCenters();
+    renderQuickArchiveButtons();
+
     const initialCenterValid = adminCenterSession && CENTERS.includes(adminCenterSession);
     if(initialCenterValid){
       adminCenterLogin.value = adminCenterSession;
