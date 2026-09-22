@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>لوحة الإدارة - KWAIT</title>
+  <style>
+    :root{
+      --panel: rgba(255,255,255,0.06);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,0.7);
+      --border: rgba(255,255,255,0.14);
+      --shadow: 0 12px 30px rgba(0,0,0,0.35);
+      --radius2: 22px;
+
+      --blue: rgba(58,160,255,1);
+      --yellow: #ffd24a;
+      --green: rgba(24,195,126,1);
+      --danger: #ff4d4d; /* زر الحذف الأحمر */
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(58,160,255,0.20), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(24,195,126,0.16), transparent 60%),
+        linear-gradient(180deg, #070b14, #0b1220);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container{ width: min(1200px, 96vw); margin: 18px auto 40px; }
+
+    header{
+      display:flex;
+      gap: 16px;
+      align-items:center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .brand{ display:flex; gap: 14px; align-items:center; }
+    .logo{
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05);
+      object-fit: cover;
+    }
+    .brand h1{ margin:0; font-size:18px; line-height:1.3; letter-spacing:0.2px; }
+    .brand p{ margin:6px 0 0; color: var(--muted); font-size:13px; }
+
+    .card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .card .cardHead{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08));
+    }
+    .card h2{ margin:0; font-size:16px; letter-spacing:0.2px; }
+    .card .cardBody{ padding:16px; }
+
+    .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
+    @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
+
+    label{
+      display:block;
+      color: var(--muted);
+      font-weight:700;
+      margin-bottom:8px;
+      font-size:13px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.30);
+      color: var(--text);
+      outline:none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    /* dropdown واضح */
+    select{
+      padding-left: 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(234,240,255,0.9) 50%),
+        linear-gradient(135deg, rgba(234,240,255,0.9) 50%, transparent 50%),
+        linear-gradient(to right, rgba(255,255,255,0.12), rgba(255,255,255,0.12));
+      background-position:
+        calc(10px) 50%,
+        calc(18px) 50%,
+        calc(100% - 42px) 50%;
+      background-size:
+        8px 8px,
+        8px 8px,
+        1px 22px;
+      background-repeat: no-repeat;
+    }
+    option{ background:#0f172a; color:#eaf0ff; }
+    input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
+
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+
+    .btn{
+      border:none; cursor:pointer;
+      padding:11px 14px;
+      border-radius:14px;
+      font-weight:900;
+      color:#071018;
+      transition:0.2s;
+      white-space: nowrap;
+      user-select:none;
+    }
+    .btn.blue{ background: var(--blue); color:#06131f; box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
+    .btn.green{ background: var(--green); color:#062116; box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
+    .btn.alt{
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:none;
+      padding: 11px 14px;
+    }
+    .btn.danger{
+      background: var(--danger);
+      color: #180404;
+      box-shadow: 0 10px 20px rgba(255,77,77,0.20);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
+
+    table{ width:100%; border-collapse: collapse; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); }
+    th, td{
+      padding:10px 10px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      text-align:center;
+      font-size:13px;
+      vertical-align: middle;
+    }
+    th{ background: rgba(255,255,255,0.06); color: var(--muted); font-weight:900; }
+    td{ color: var(--text); }
+    tr:last-child td{ border-bottom:none; }
+
+    h3{ margin:14px 0 8px; font-size:15px; color: rgba(234,240,255,0.7); }
+    .hide{ display:none; }
+
+    .fineprint{
+      color: rgba(234,240,255,0.55);
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+
+    .ratingTag{
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      white-space:nowrap;
+    }
+    .ratingTag.excellent{ border-color: rgba(24,195,126,0.55); }
+    .ratingTag.good{ border-color: rgba(58,160,255,0.55); }
+    .ratingTag.acceptable{ border-color: rgba(255,210,74,0.55); }
+
+    .smallBtn{
+      padding:8px 10px;
+      border-radius:12px;
+      font-weight:900;
+      border:none;
+      cursor:pointer;
+      background: rgba(24,195,126,1);
+      color:#062116;
+      box-shadow: 0 10px 20px rgba(24,195,126,0.20);
+      white-space:nowrap;
+    }
+
+    .msg{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      line-height:1.7;
+      font-weight:800;
+      font-size:13px;
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img class="logo" alt="Logo" src="logo.png" />
+        <div>
+          <h1>لوحة الإدارة - كويت</h1>
+          <p>KWAIT | تحكم حسب المركز (تجريبي محلي)</p>
+        </div>
+      </div>
+      <div></div>
+    </header>
+
+    <div style="margin-top:14px;">
+      <section class="card">
+        <div class="cardHead">
+          <h2>تسجيل دخول الإدارة + التقييمات</h2>
+        </div>
+
+        <div class="cardBody">
+          <!-- تسجيل دخول الإدارة -->
+          <div id="adminLoginBox">
+            <div class="row two">
+              <div>
+                <label>اختر اسم المركز للدخول</label>
+                <select id="adminCenterLogin"></select>
+              </div>
+              <div>
+                <label> </label>
+                <div class="btnRow" style="margin-top:0;">
+                  <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
+                  <button class="btn alt" id="adminLogoutBtn" type="button" disabled>خروج</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fineprint">
+              ملاحظة: هذا تسجيل دخول تجريبي داخل المتصفح (تغيير لاحقاً بصلاحيات Supabase).
+            </div>
+
+            <div class="msg" id="toastMsg"></div>
+          </div>
+
+          <!-- مساحة العمل بعد الدخول -->
+          <div id="adminWorkspace" class="hide">
+            <div class="row two" style="align-items:end;">
+              <div>
+                <label>المركز الحالي (تغيير بدون خروج)</label>
+                <select id="adminCurrentCenter"></select>
+              </div>
+              <div>
+                <label>إجراءات</label>
+                <div class="btnRow">
+                  <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
+                  <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
+                  <!-- ✅ زر حذف الأرشيف للمركز الحالي -->
+                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">
+                    حذف أرشيف المركز الحالي
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <h3>التقييمات الحالية</h3>
+            <div style="overflow:auto; border-radius:14px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>التاريخ والوقت</th>
+                    <th>اسم المراجع</th>
+                    <th>رقم المعاملة</th>
+                    <th>رقم الهاتف</th>
+                    <th>الموظف</th>
+                    <th>التقييم</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="currentReviewsTbody"></tbody>
+              </table>
+            </div>
+
+            <h3>الأرشيف</h3>
+            <div style="overflow:auto; border-radius:14px;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>التاريخ والوقت</th>
+                    <th>اسم المراجع</th>
+                    <th>رقم المعاملة</th>
+                    <th>رقم الهاتف</th>
+                    <th>الموظف</th>
+                    <th>التقييم</th>
+                  </tr>
+                </thead>
+                <tbody id="archiveReviewsTbody"></tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const CENTERS = [
+      "مركز الشامية",
+      "مركز جابر العلي",
+      "مركز صباح الأحمد",
+      "مركز اشبيلة",
+      "مركز غرب مشرف",
+      "مركز المسايل",
+      "مركز سعد العبدالله"
+    ];
+
+    const LS_KEYS = {
+      current: "reviews_current_v3",
+      archive: "reviews_archive_v3",
+      adminCenter: "admin_center_session_v3"
+    };
+
+    function loadJson(key, fallback){
+      try{
+        const v = localStorage.getItem(key);
+        return v ? JSON.parse(v) : fallback;
+      }catch(e){
+        return fallback;
+      }
+    }
+
+    function saveJson(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function formatDateTime(iso){
+      const d = new Date(iso);
+      return d.toLocaleString("ar-KW", {
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit"
+      });
+    }
+
+    function ratingClass(r){
+      if(r === "ممتاز") return "excellent";
+      if(r === "جيد") return "good";
+      return "acceptable";
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function showToast(html){
+      toastMsg.style.display = "block";
+      toastMsg.innerHTML = html;
+      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
+    }
+
+    let currentReviews = loadJson(LS_KEYS.current, []);
+    let archiveReviews = loadJson(LS_KEYS.archive, []);
+    let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
+
+    const adminCenterLogin = document.getElementById("adminCenterLogin");
+    const adminLoginBtn = document.getElementById("adminLoginBtn");
+    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+    const adminLoginBox = document.getElementById("adminLoginBox");
+    const adminWorkspace = document.getElementById("adminWorkspace");
+    const adminCurrentCenter = document.getElementById("adminCurrentCenter");
+
+    const currentReviewsTbody = document.getElementById("currentReviewsTbody");
+    const archiveReviewsTbody = document.getElementById("archiveReviewsTbody");
+
+    const archiveAllBtn = document.getElementById("archiveAllBtn");
+    const downloadArchiveBtn = document.getElementById("downloadArchiveBtn");
+    const deleteArchiveCenterBtn = document.getElementById("deleteArchiveCenterBtn");
+
+    const toastMsg = document.getElementById("toastMsg");
+
+    function renderCenters(){
+      adminCenterLogin.innerHTML = "";
+      adminCurrentCenter.innerHTML = "";
+      for(const c of CENTERS){
+        const o1 = document.createElement("option");
+        o1.value = c; o1.textContent = c;
+        adminCenterLogin.appendChild(o1);
+
+        const o2 = document.createElement("option");
+        o2.value = c; o2.textContent = c;
+        adminCurrentCenter.appendChild(o2);
+      }
+    }
+
+    function exitAdminWorkspace(){
+      adminLoginBox.style.display = "block";
+      adminWorkspace.classList.add("hide");
+      adminLogoutBtn.disabled = true;
+    }
+
+    function enterAdminWorkspace(center){
+      adminCenterSession = center;
+      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+
+      adminCurrentCenter.value = adminCenterSession;
+
+      adminLoginBox.style.display = "none";
+      adminWorkspace.classList.remove("hide");
+      adminLogoutBtn.disabled = false;
+
+      renderAdminTablesForCenter(adminCenterSession);
+    }
+
+    function renderAdminTablesForCenter(center){
+      const cur = currentReviews.filter(r => r.center === center);
+      const arc = archiveReviews.filter(r => r.center === center);
+
+      currentReviewsTbody.innerHTML = "";
+      archiveReviewsTbody.innerHTML = "";
+
+      if(cur.length === 0){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="7" style="color: rgba(234,240,255,0.6); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        currentReviewsTbody.appendChild(tr);
+      }else{
+        for(const r of cur){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${formatDateTime(r.createdAt)}</td>
+            <td>${escapeHtml(r.reviewerName)}</td>
+            <td>${escapeHtml(r.reviewerId)}</td>
+            <td>${escapeHtml(r.reviewerPhone)}</td>
+            <td>${escapeHtml(r.employeeName)}</td>
+            <td><span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span></td>
+            <td><button class="smallBtn" type="button" data-id="${escapeHtml(r.id)}">تم الإنجاز</button></td>
+          `;
+          currentReviewsTbody.appendChild(tr);
+        }
+      }
+
+      if(arc.length === 0){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="6" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
+        archiveReviewsTbody.appendChild(tr);
+      }else{
+        for(const r of arc){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${formatDateTime(r.archivedAt || r.createdAt)}</td>
+            <td>${escapeHtml(r.reviewerName)}</td>
+            <td>${escapeHtml(r.reviewerId)}</td>
+            <td>${escapeHtml(r.reviewerPhone)}</td>
+            <td>${escapeHtml(r.employeeName)}</td>
+            <td><span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span></td>
+          `;
+          archiveReviewsTbody.appendChild(tr);
+        }
+      }
+
+      currentReviewsTbody.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          const id = e.currentTarget.getAttribute("data-id");
+          archiveOne(id, center);
+        });
+      });
+    }
+
+    function archiveOne(id, center){
+      const target = currentReviews.find(r => r.id === id && r.center === center);
+      if(!target) return showToast("❌ التقييم غير موجود (ربما تم أرشفته).");
+
+      const moved = { ...target, archivedAt: new Date().toISOString() };
+      archiveReviews.unshift(moved);
+
+      currentReviews = currentReviews.filter(r => !(r.id === id && r.center === center));
+
+      saveJson(LS_KEYS.current, currentReviews);
+      saveJson(LS_KEYS.archive, archiveReviews);
+
+      showToast("✅ تم الإنجاز وتم الأرشفة وحذفها من الحالي.");
+      renderAdminTablesForCenter(center);
+    }
+
+    // ✅ تغيير المركز بدون خروج
+    adminCurrentCenter.addEventListener("change", (e)=>{
+      const newCenter = e.target.value;
+      adminCenterSession = newCenter;
+      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+      renderAdminTablesForCenter(newCenter);
+    });
+
+    adminLoginBtn.addEventListener("click", ()=>{
+      const center = adminCenterLogin.value;
+      if(!center) return showToast("❌ اختر اسم المركز أولاً.");
+      enterAdminWorkspace(center);
+      showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(center)}</b>`);
+    });
+
+    adminLogoutBtn.addEventListener("click", ()=>{
+      adminCenterSession = "";
+      localStorage.removeItem(LS_KEYS.adminCenter);
+      adminLogoutBtn.disabled = true;
+      exitAdminWorkspace();
+      showToast("تم تسجيل الخروج من الإدارة.");
+    });
+
+    archiveAllBtn.addEventListener("click", ()=>{
+      const center = adminCenterSession;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const toArchive = currentReviews.filter(r => r.center === center);
+      if(toArchive.length === 0) return showToast("لا يوجد تقييمات حالياً للأرشفة لهذا المركز.");
+
+      const moved = toArchive.map(r => ({...r, archivedAt: new Date().toISOString()}));
+      archiveReviews = moved.concat(archiveReviews);
+      currentReviews = currentReviews.filter(r => r.center !== center);
+
+      saveJson(LS_KEYS.current, currentReviews);
+      saveJson(LS_KEYS.archive, archiveReviews);
+
+      showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) للمركز ✅`);
+      renderAdminTablesForCenter(center);
+    });
+
+    // تنزيل CSV للأرشيف (حاليًا للمركز الحالي)
+    function downloadCSV(rows, filename){
+      const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
+      const csv = [
+        header.join(","),
+        ...rows.map(r=>{
+          const dt = formatDateTime(r.archivedAt || r.createdAt);
+          const cells = [dt, r.reviewerName, r.reviewerId, r.reviewerPhone, r.center, r.employeeName, r.rating].map(v=>{
+            const s = String(v ?? "").replaceAll('"','""');
+            return `"${s}"`;
+          });
+          return cells.join(",");
+        })
+      ].join("\n");
+
+      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    downloadArchiveBtn.addEventListener("click", ()=>{
+      const center = adminCenterSession;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const rows = archiveReviews.filter(r => r.center === center);
+      if(rows.length === 0) return showToast("لا يوجد أرشيف لتنزيله لهذا المركز.");
+
+      downloadCSV(rows, `archive_${center.replaceAll(" ","_")}.csv`);
+      showToast("تم تنزيل ملف CSV ✅");
+    });
+
+    // ✅ زر حذف أرشيف المركز الحالي (وبما أنك تختار المركز من الدروب، فهو لكل مركز حسب الاختيار)
+    deleteArchiveCenterBtn.addEventListener("click", ()=>{
+      const center = adminCenterSession;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const count = archiveReviews.filter(r => r.center === center).length;
+      if(count === 0) return showToast("لا يوجد أرشيف لحذفه لهذا المركز.");
+
+      const ok = confirm(`هل أنت متأكد؟ سيتم حذف أرشيف هذا المركز فقط:\n${center}\n(العدد: ${count})`);
+      if(!ok) return;
+
+      archiveReviews = archiveReviews.filter(r => r.center !== center);
+
+      saveJson(LS_KEYS.archive, archiveReviews);
+      showToast(`✅ تم حذف أرشيف المركز: ${center}`);
+
+      renderAdminTablesForCenter(center);
+    });
+
+    // init
+    renderCenters();
+    const initialCenterValid = adminCenterSession && CENTERS.includes(adminCenterSession);
+    if(initialCenterValid){
+      adminCenterLogin.value = adminCenterSession;
+      enterAdminWorkspace(adminCenterSession);
+    }else{
+      adminCenterLogin.value = CENTERS[0];
+      exitAdminWorkspace();
+    }
+  </script>
+</body>
+</html>
