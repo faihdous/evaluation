@@ -285,7 +285,7 @@
               </div>
             </div>
 
-            <!-- ✅ أزرار عرض Current / Archive -->
+            <!-- أزرار عرض Current / Archive -->
             <div class="btnRow" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف المركز الحالي</button>
@@ -452,13 +452,11 @@
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
-      // افتراضيًا نعرض Current
       setView("current");
       renderCurrentTablesForCenter(adminCenterSession);
       renderArchiveTablesForCenter(adminCenterSession);
     }
 
-    // ✅ فقط تبويب Current (فلترة على المركز الحالي)
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -491,7 +489,6 @@
       });
     }
 
-    // ✅ فقط تبويب Archive (فلترة على المركز الحالي)
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -530,7 +527,6 @@
 
       showToast("✅ تم الإنجاز وتم الأرشفة وحذفها من الحالي.");
 
-      // حدّث الصفوف حسب العرض الحالي
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
     }
@@ -545,7 +541,6 @@
       }
     }
 
-    // ✅ تغيير المركز الحالي يعيد عرض Current/Archive بنفس المركز الجديد
     adminCurrentCenter.addEventListener("change", (e)=>{
       const newCenter = e.target.value;
       adminCenterSession = newCenter;
@@ -554,7 +549,6 @@
       renderCurrentTablesForCenter(newCenter);
       renderArchiveTablesForCenter(newCenter);
 
-      // إذا المستخدم حالياً على Archive خليّه يبقى عليه
       const isArchiveVisible = !archiveSection.classList.contains("hide");
       setView(isArchiveVisible ? "archive" : "current");
     });
@@ -574,14 +568,12 @@
       showToast("تم تسجيل الخروج من الإدارة.");
     });
 
-    // زر عرض Current
     showCurrentBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       setView("current");
       renderCurrentTablesForCenter(adminCenterSession);
     });
 
-    // ✅ زر عرض أرشيف “المركز الحالي” فقط
     showArchiveBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       setView("archive");
@@ -604,11 +596,11 @@
 
       showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) للمركز ✅`);
 
-      // حدّث الجداول حسب العرض
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
     });
 
+    // ✅ تعديل: إضافة BOM UTF-8 لتفادي الأحرف المشوهة في Excel
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -623,7 +615,8 @@
         })
       ].join("\n");
 
-      const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+      const bom = "\uFEFF"; // UTF-8 BOM
+      const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
