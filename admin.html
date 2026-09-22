@@ -148,11 +148,6 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
 
-    @media(max-width: 480px){
-      .btnRow .btn{ width: 100%; }
-      .btnRow{ gap: 12px; }
-    }
-
     table{ width:100%; border-collapse: collapse; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); }
     th, td{
       padding:10px 10px;
@@ -196,9 +191,10 @@
       font-weight:900;
       border:none;
       cursor:pointer;
-      background: rgba(24,195,126,1);
-      color:#062116;
-      box-shadow: 0 10px 20px rgba(24,195,126,0.20);
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:none;
       white-space:nowrap;
       min-height: 40px;
     }
@@ -214,6 +210,37 @@
       font-weight:850;
       font-size:13px;
       display:none;
+    }
+
+    .employeeChipRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:8px;
+    }
+    .employeeChip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: var(--text);
+      font-weight:900;
+      font-size:13px;
+    }
+    .employeeChip button{
+      min-height: 34px;
+      min-width: 34px;
+      padding:0 10px;
+      border-radius: 999px;
+      border:none;
+      cursor:pointer;
+      background: rgba(255,77,77,0.18);
+      color: #ffb3b3;
+      border: 1px solid rgba(255,77,77,0.35);
+      font-weight:950;
     }
 
     @media(max-width: 420px){
@@ -285,10 +312,40 @@
               </div>
             </div>
 
-            <!-- أزرار عرض Current / Archive -->
             <div class="btnRow" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف المركز الحالي</button>
+            </div>
+
+            <!-- ✅ إدارة الموظفين (إضافة/حذف أسماء الموظفين لكل مركز) -->
+            <div class="card" style="margin-top:10px;">
+              <div class="cardHead">
+                <h2>إدارة أسماء الموظفين للمركز الحالي</h2>
+              </div>
+              <div class="cardBody">
+                <div class="row two" style="margin-bottom:10px;">
+                  <div>
+                    <label>اسم الموظف (سيظهر في صفحة التقييم)</label>
+                    <input id="newEmployeeName" placeholder="مثال: أحمد" inputmode="text" />
+                  </div>
+                  <div style="display:flex; align-items:end;">
+                    <div class="btnRow" style="width:100%;">
+                      <button class="btn green" id="addEmployeeBtn" type="button">إضافة</button>
+                      <button class="btn alt" id="clearEmployeesBtn" type="button">مسح قائمة الموظفين</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="fineprint" id="employeesHint">
+                  سيتم حفظ الأسماء لكل مركز في جهازك (localStorage). يمكنك حذف أي اسم من القائمة.
+                </div>
+
+                <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
+                <div id="employeesList" class="employeeChipRow"></div>
+                <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">
+                  لا توجد أسماء موظفين لهذا المركز. أضف اسم أولاً.
+                </div>
+              </div>
             </div>
 
             <!-- Current Section -->
@@ -352,7 +409,8 @@
     const LS_KEYS = {
       current: "reviews_current_v3",
       archive: "reviews_archive_v3",
-      adminCenter: "admin_center_session_v3"
+      adminCenter: "admin_center_session_v3",
+      employeesByCenter: "employees_by_center_v1"
     };
 
     function loadJson(key, fallback){
@@ -397,9 +455,17 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    // reviews
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
+
+    // ✅ employees
+    // init with empty lists (وبعدين تقدر تضيف من الإدارة)
+    let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+    for(const c of CENTERS){
+      if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
+    }
 
     const adminCenterLogin = document.getElementById("adminCenterLogin");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -422,6 +488,13 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
+    // employee UI
+    const newEmployeeName = document.getElementById("newEmployeeName");
+    const addEmployeeBtn = document.getElementById("addEmployeeBtn");
+    const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
+    const employeesList = document.getElementById("employeesList");
+    const noEmployeesMsg = document.getElementById("noEmployeesMsg");
+
     function renderCenters(){
       adminCenterLogin.innerHTML = "";
       adminCurrentCenter.innerHTML = "";
@@ -434,6 +507,78 @@
         o2.value = c; o2.textContent = c;
         adminCurrentCenter.appendChild(o2);
       }
+    }
+
+    function renderEmployeesForCenter(center){
+      const list = employeesByCenter[center] || [];
+      employeesList.innerHTML = "";
+
+      if(list.length === 0){
+        noEmployeesMsg.style.display = "block";
+        return;
+      }
+      noEmployeesMsg.style.display = "none";
+
+      // منع تكرار يظهر
+      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+
+      for(const name of unique){
+        const chip = document.createElement("div");
+        chip.className = "employeeChip";
+        chip.innerHTML = `
+          <span>${escapeHtml(name)}</span>
+          <button type="button" title="حذف" data-name="${escapeHtml(name)}">×</button>
+        `;
+        chip.querySelector("button").addEventListener("click", ()=>{
+          removeEmployee(center, name);
+        });
+        employeesList.appendChild(chip);
+      }
+    }
+
+    function removeEmployee(center, name){
+      const current = employeesByCenter[center] || [];
+      employeesByCenter[center] = current.filter(x => String(x).trim() !== String(name).trim());
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+      renderEmployeesForCenter(center);
+      showToast(`✅ تم حذف الموظف: <b>${escapeHtml(name)}</b>`);
+    }
+
+    function addEmployee(){
+      const center = adminCenterSession;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const name = (newEmployeeName.value || "").trim();
+      if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
+
+      const arr = employeesByCenter[center] || [];
+      // منع التكرار (بنفس الاسم بعد trim)
+      const exists = arr.some(x => String(x).trim() === name);
+      if(exists){
+        showToast(`⚠️ الاسم موجود مسبقاً: <b>${escapeHtml(name)}</b>`);
+        return;
+      }
+
+      arr.push(name);
+      employeesByCenter[center] = arr;
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+
+      newEmployeeName.value = "";
+      renderEmployeesForCenter(center);
+      showToast(`✅ تم إضافة الموظف: <b>${escapeHtml(name)}</b>`);
+    }
+
+    function clearEmployeesForCenter(){
+      const center = adminCenterSession;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const ok = confirm(`هل أنت متأكد؟ سيتم مسح كل أسماء الموظفين لهذا المركز فقط:\n${center}`);
+      if(!ok) return;
+
+      employeesByCenter[center] = [];
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+      renderEmployeesForCenter(center);
+      showToast("✅ تم مسح قائمة الموظفين.");
     }
 
     function exitAdminWorkspace(){
@@ -455,6 +600,7 @@
       setView("current");
       renderCurrentTablesForCenter(adminCenterSession);
       renderArchiveTablesForCenter(adminCenterSession);
+      renderEmployeesForCenter(adminCenterSession);
     }
 
     function renderCurrentTablesForCenter(center){
@@ -548,6 +694,7 @@
 
       renderCurrentTablesForCenter(newCenter);
       renderArchiveTablesForCenter(newCenter);
+      renderEmployeesForCenter(newCenter);
 
       const isArchiveVisible = !archiveSection.classList.contains("hide");
       setView(isArchiveVisible ? "archive" : "current");
@@ -600,7 +747,7 @@
       renderArchiveTablesForCenter(center);
     });
 
-    // ✅ تعديل: إضافة BOM UTF-8 لتفادي الأحرف المشوهة في Excel
+    // ✅ CSV download (BOM UTF-8)
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -615,7 +762,7 @@
         })
       ].join("\n");
 
-      const bom = "\uFEFF"; // UTF-8 BOM
+      const bom = "\uFEFF";
       const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
@@ -655,6 +802,13 @@
       showToast(`✅ تم حذف أرشيف المركز: ${center}`);
       renderArchiveTablesForCenter(center);
     });
+
+    // ✅ employee handlers
+    addEmployeeBtn.addEventListener("click", addEmployee);
+    newEmployeeName.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter") addEmployee();
+    });
+    clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
     // init
     renderCenters();
