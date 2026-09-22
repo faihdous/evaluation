@@ -13,8 +13,14 @@
       --yellow: #ffd24a;
       --shadow: 0 12px 30px rgba(0,0,0,0.35);
       --radius2: 22px;
+
+      --gap: 14px;
+      --fieldPad: 12px;
+      --radius: 14px;
     }
+
     *{ box-sizing: border-box; }
+
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
@@ -25,30 +31,34 @@
       color: var(--text);
       min-height: 100vh;
     }
-    .container{ width: min(1200px, 96vw); margin: 18px auto 40px; }
+
+    /* Mobile-first */
+    .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
 
     header{
       display:flex;
-      gap: 16px;
+      gap: 12px;
       align-items:center;
       justify-content: space-between;
-      padding: 16px 18px;
+      padding: 12px 14px;
       background: var(--panel);
       border: 1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-    .brand{ display:flex; gap: 14px; align-items:center; }
+
+    .brand{ display:flex; gap: 12px; align-items:center; min-width: 0; }
     .logo{
-      width: 62px; height: 62px;
+      width: 56px; height: 56px;
       border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.05);
       object-fit: cover;
+      flex: 0 0 auto;
     }
-    .brand h1{ margin:0; font-size:18px; line-height:1.3; letter-spacing:0.2px; }
-    .brand p{ margin:6px 0 0; color: var(--muted); font-size:13px; }
+    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
+    .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
 
     .card{
       background: var(--panel);
@@ -59,24 +69,24 @@
       overflow:hidden;
     }
     .card .cardHead{
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.10);
       background: linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08));
     }
-    .card h2{ margin:0; font-size:16px; letter-spacing:0.2px; }
-    .card .cardBody{ padding:16px; }
+    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
+    .card .cardBody{ padding: 14px; }
 
     .grid{
       display:grid;
       grid-template-columns: 1fr;
-      gap: 14px;
+      gap: var(--gap);
       margin-top: 14px;
     }
 
     label{
       display:block;
       color: var(--muted);
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 8px;
       font-size: 13px;
     }
@@ -93,14 +103,15 @@
 
     input, select, textarea{
       width:100%;
-      padding: 12px 12px;
-      border-radius: 12px;
+      padding: calc(var(--fieldPad) + 2px) 12px;
+      border-radius: var(--radius);
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(0,0,0,0.30);
       color: var(--text);
       outline:none;
       appearance: none;
       -webkit-appearance: none;
+      font-size: 15px;
     }
 
     select{
@@ -138,17 +149,25 @@
     .btn{
       border:none;
       cursor:pointer;
-      padding: 11px 14px;
-      border-radius: 14px;
-      font-weight: 900;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-weight: 950;
       color: #071018;
       background: var(--yellow);
       transition: 0.2s;
       box-shadow: 0 10px 20px rgba(255,210,74,0.18);
       user-select:none;
       white-space: nowrap;
+      min-height: 46px;
+      width: auto;
     }
     .btn:hover{ transform: translateY(-1px); }
+
+    /* Mobile: خلّي الزرار تتوزع بشكل أفضل */
+    @media(max-width: 480px){
+      .btnRow .btn{ width: 100%; }
+      .btnRow{ gap: 12px; }
+    }
 
     .btn.alt{
       background: rgba(255,255,255,0.10);
@@ -172,7 +191,7 @@
       background: rgba(255,255,255,0.06);
       color: var(--muted);
       line-height: 1.7;
-      font-weight: 800;
+      font-weight: 850;
       font-size: 13px;
       display:none;
     }
@@ -183,6 +202,13 @@
       margin-top: 10px;
       line-height: 1.7;
     }
+
+    /* تحسين الهيدر على الجوال */
+    @media(max-width: 420px){
+      header{ padding: 12px 12px; }
+      .brand h1{ font-size: 15px; }
+      .card .cardBody{ padding: 12px; }
+    }
   </style>
 </head>
 
@@ -191,12 +217,11 @@
     <header>
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
-        <div>
+        <div style="min-width:0;">
           <h1>تطبيق تقييم موظفي مراكز خدمة المراجعين</h1>
-          <p>KWAIT | Kuwait - تحسين جودة الخدمة</p>
+          <p>KWAIT | الكويت - تحسين جودة الخدمة</p>
         </div>
       </div>
-      <!-- بدون تبويب إدارة -->
       <div></div>
     </header>
 
@@ -222,18 +247,18 @@
           <div class="row two">
             <div>
               <label>اسم المراجع</label>
-              <input id="reviewerName" placeholder="اكتب اسمك" />
+              <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
             </div>
             <div>
               <label>رقم المعاملة</label>
-              <input id="reviewerId" placeholder="مثال: رقم المعاملة" />
+              <input id="reviewerId" placeholder="مثال: رقم المعاملة" inputmode="text" />
             </div>
           </div>
 
           <div class="row two">
             <div>
               <label>رقم الهاتف</label>
-              <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" />
+              <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
             <div>
               <label>التقييم</label>
@@ -248,12 +273,12 @@
           <div class="row">
             <div>
               <label>ملاحظة (اختياري)</label>
-              <input id="commentShort" placeholder="اكتب ملاحظة سريعة" />
+              <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
             </div>
           </div>
 
           <div class="btnRow">
-            <button class="btn green" id="submitReviewBtn">إرسال التقييم</button>
+            <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
             <button class="btn alt" id="clearBtn" type="button">مسح</button>
           </div>
 
