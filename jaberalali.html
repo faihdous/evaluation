@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>تقييم الموظفين - KWAIT</title>
+  <title>تقييم موظفين - جابر العلي</title>
   <style>
     :root{
       --panel: rgba(255,255,255,0.06);
@@ -18,9 +18,7 @@
       --fieldPad: 12px;
       --radius: 14px;
     }
-
     *{ box-sizing: border-box; }
-
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
@@ -31,75 +29,43 @@
       color: var(--text);
       min-height: 100vh;
     }
-
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
-
     header{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      display:flex; gap: 12px; align-items:center; justify-content: space-between;
+      padding: 12px 14px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: var(--radius2);
+      box-shadow: var(--shadow); backdrop-filter: blur(10px);
     }
-
     .brand{ display:flex; gap: 12px; align-items:center; min-width: 0; }
     .logo{
-      width: 56px; height: 56px;
-      border-radius: 50%;
+      width: 56px; height: 56px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.05);
-      object-fit: cover;
-      flex: 0 0 auto;
+      object-fit: cover; flex: 0 0 auto;
     }
     .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
     .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
-
     .card{
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius2); box-shadow: var(--shadow);
+      backdrop-filter: blur(10px); overflow:hidden;
     }
     .card .cardHead{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
+      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.10);
       background: linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08));
     }
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
     .card .cardBody{ padding: 14px; }
-
     .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      margin-top: 14px;
+      display:grid; grid-template-columns: 1fr; gap: var(--gap); margin-top: 14px;
     }
-
     label{
-      display:block;
-      color: var(--muted);
-      font-weight: 800;
-      margin-bottom: 8px;
-      font-size: 13px;
+      display:block; color: var(--muted); font-weight: 800; margin-bottom: 8px; font-size: 13px;
     }
-
     .row{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
+      display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px;
     }
-    @media(min-width: 720px){
-      .row.two{ grid-template-columns: 1fr 1fr; }
-    }
-
+    @media(min-width: 720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
@@ -112,7 +78,6 @@
       -webkit-appearance: none;
       font-size: 15px;
     }
-
     select{
       padding-left: 40px;
       background-image:
@@ -129,78 +94,39 @@
         1px 22px;
       background-repeat: no-repeat;
     }
-
-    option{
-      background:#0f172a;
-      color:#eaf0ff;
-    }
-
+    option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
     textarea{ min-height: 86px; resize: vertical; }
-
-    .btnRow{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
-
+    .btnRow{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
     .btn{
-      border:none;
-      cursor:pointer;
-      padding: 12px 14px;
-      border-radius: 16px;
-      font-weight: 950;
-      color: #071018;
-      background: var(--yellow);
-      transition: 0.2s;
-      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
-      user-select:none;
-      white-space: nowrap;
-      min-height: 46px;
-      width: auto;
+      border:none; cursor:pointer; padding: 12px 14px; border-radius: 16px;
+      font-weight: 950; color: #071018; background: var(--yellow);
+      transition: 0.2s; box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      user-select:none; white-space: nowrap; min-height: 46px; width: auto;
     }
     .btn:hover{ transform: translateY(-1px); }
-
     @media(max-width: 480px){
-      .btnRow .btn{ width: 100%; }
-      .btnRow{ gap: 12px; }
+      .btnRow .btn{ width: 100%; } .btnRow{ gap: 12px; }
     }
-
     .btn.alt{
-      background: rgba(255,255,255,0.10);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: none;
+      background: rgba(255,255,255,0.10); color: var(--text);
+      border: 1px solid rgba(255,255,255,0.18); box-shadow: none;
     }
     .btn.alt:hover{ background: rgba(255,255,255,0.14); }
-
     .btn.green{
-      background: rgba(24,195,126,1);
-      color: #062116;
+      background: rgba(24,195,126,1); color: #062116;
       box-shadow: 0 10px 20px rgba(24,195,126,0.20);
     }
-
     .msg{
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 14px;
+      margin-top: 12px; padding: 12px; border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      line-height: 1.7;
-      font-weight: 850;
-      font-size: 13px;
+      color: var(--muted); line-height: 1.7; font-weight: 850; font-size: 13px;
       display:none;
     }
-
     .fineprint{
-      color: rgba(234,240,255,0.55);
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.7;
+      color: rgba(234,240,255,0.55); font-size: 12px; margin-top: 10px; line-height: 1.7;
     }
-
     @media(max-width: 420px){
       header{ padding: 12px 12px; }
       .brand h1{ font-size: 15px; }
@@ -215,8 +141,8 @@
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
         <div style="min-width:0;">
-          <h1>تطبيق تقييم موظفي مراكز خدمة المراجعين</h1>
-          <p>KWAIT | الكويت - تحسين جودة الخدمة</p>
+          <h1>إدارة الهوية الوطنية - مركز جابر العلي</h1>
+          <p>تقييم الموظف</p>
         </div>
       </div>
       <div></div>
@@ -290,15 +216,7 @@
   </div>
 
   <script>
-    const CENTERS = [
-      "مركز الشامية",
-      "مركز جابر العلي",
-      "مركز صباح الأحمد",
-      "مركز اشبيلة",
-      "مركز غرب مشرف",
-      "مركز المسايل",
-      "مركز سعد العبدالله"
-    ];
+    const center = "مركز جابر العلي";
 
     const LS_KEYS = {
       current: "reviews_current_v3",
@@ -320,12 +238,6 @@
     }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
-
-    // ✅ الموظفين صاروا من localStorage
-    let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-    for(const c of CENTERS){
-      if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
-    }
 
     function formatDateTime(iso){
       const d = new Date(iso);
@@ -354,30 +266,25 @@
     const clearBtn = document.getElementById("clearBtn");
     const toastMsg = document.getElementById("toastMsg");
 
-    function renderCenters(){
+    function renderCenterSingle(){
       centerSelect.innerHTML = "";
-      for(const c of CENTERS){
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
-        centerSelect.appendChild(opt);
-      }
-      centerSelect.value = CENTERS[0];
-      renderEmployeesForCenter(centerSelect.value);
+      const opt = document.createElement("option");
+      opt.value = center;
+      opt.textContent = center;
+      centerSelect.appendChild(opt);
+      centerSelect.value = center;
+      centerSelect.disabled = true;
     }
 
-    function renderEmployeesForCenter(center){
-      // تحدث من storage في كل مرة (مفيد لو الإدارة تغيّر)
-      employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-      for(const c of CENTERS){
-        if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
-      }
-
-      employeeSelect.innerHTML = "";
+    function renderEmployeesForCenter(){
+      const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
       const list = employeesByCenter[center] || [];
 
-      // إذا مافي موظفين، أعطينا خيار تنبيه
-      if(list.length === 0){
+      employeeSelect.innerHTML = "";
+
+      const unique = Array.from(new Set(list.map(x => String(x).trim()).filter(Boolean)));
+
+      if(unique.length === 0){
         const opt = document.createElement("option");
         opt.value = "";
         opt.textContent = "لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
@@ -385,23 +292,16 @@
         return;
       }
 
-      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
       for(const name of unique){
         const opt = document.createElement("option");
         opt.value = name;
         opt.textContent = name;
         employeeSelect.appendChild(opt);
       }
-
-      employeeSelect.value = employeeSelect.options[0]?.value || "";
     }
 
-    centerSelect.addEventListener("change", (e)=>{
-      renderEmployeesForCenter(e.target.value);
-    });
-
     submitReviewBtn.addEventListener("click", () => {
-      const center = centerSelect.value;
+      const centerValue = center;
       const employeeName = employeeSelect.value;
 
       const name = (reviewerName.value || "").trim();
@@ -410,8 +310,7 @@
       const rating = ratingSelect.value;
       const comment = (commentShort.value || "").trim();
 
-      if(!center) return showToast("❌ اختر المركز.");
-      if(!employeeName) return showToast("❌ اختر الموظف (أضف موظفين للمركز من الإدارة أولاً).");
+      if(!centerValue || !employeeName) return showToast("❌ اختر الموظف.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
@@ -419,7 +318,7 @@
       const review = {
         id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
         createdAt: new Date().toISOString(),
-        center,
+        center: centerValue,
         employeeName,
         reviewerName: name,
         reviewerId: dealNo,
@@ -449,7 +348,8 @@
       toastMsg.style.display = "none";
     });
 
-    renderCenters();
+    renderCenterSingle();
+    renderEmployeesForCenter();
   </script>
 </body>
 </html>
