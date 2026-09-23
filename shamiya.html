@@ -244,14 +244,7 @@
               <label>رقم الهاتف</label>
               <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
-            <div>
-              <label>التقييم العام</label>
-              <select id="ratingSelect">
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="مقبول">مقبول</option>
-              </select>
-            </div>
+            <div></div>
           </div>
 
           <!-- ✅ أسئلة التقييم الديناميكية (فوق الملاحظات) -->
@@ -337,7 +330,6 @@
     const reviewerName = document.getElementById("reviewerName");
     const reviewerId = document.getElementById("reviewerId");
     const reviewerPhone = document.getElementById("reviewerPhone");
-    const ratingSelect = document.getElementById("ratingSelect");
     const commentShort = document.getElementById("commentShort");
 
     const submitReviewBtn = document.getElementById("submitReviewBtn");
@@ -431,10 +423,11 @@
         if(sel) questionAnswers[q.id] = sel.value;
       }
 
-      // rating محفوظ للوحة الإدارة (من أول سؤال إن وجد، وإلا من التقييم العام أو مقبول)
+      // ✅ التقييم العام ملغي نهائياً:
+      // التقييم يُؤخذ فقط من أول سؤال إن وُجد، وإلا يكون "مقبول"
       const rating = qs.length
         ? (questionAnswers[qs[0].id] || "مقبول")
-        : (ratingSelect.value || "مقبول");
+        : "مقبول";
 
       const currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -458,7 +451,6 @@
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
-      ratingSelect.value = "ممتاز";
 
       renderQuestionDropdowns();
 
@@ -471,7 +463,6 @@
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
-      ratingSelect.value = "ممتاز";
       toastMsg.style.display = "none";
       renderQuestionDropdowns();
     });
