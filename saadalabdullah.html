@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>تقييم موظفين - سعد العبدالله</title>
+  <style>
+    :root{ --panel: rgba(255,255,255,0.06); --text:#eaf0ff; --muted: rgba(234,240,255,0.7); --border: rgba(255,255,255,0.14);
+      --yellow:#ffd24a; --shadow:0 12px 30px rgba(0,0,0,0.35); --radius2:22px; --gap:14px; --fieldPad:12px; --radius:14px; }
+    *{ box-sizing:border-box; }
+    body{ margin:0; font-family:"Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
+      background: radial-gradient(900px 500px at 10% 0%, rgba(58,160,255,0.20), transparent 60%),
+                  radial-gradient(900px 500px at 90% 0%, rgba(24,195,126,0.16), transparent 60%),
+                  linear-gradient(180deg,#070b14,#0b1220);
+      color:var(--text); min-height:100vh; }
+    .container{ width:min(1200px,96vw); margin:12px auto 22px; }
+    header{ display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:12px 14px; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius2);
+      box-shadow:var(--shadow); backdrop-filter:blur(10px); }
+    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
+    .logo{ width:56px; height:56px; border-radius:50%; border:2px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.05);
+      object-fit:cover; flex:0 0 auto; }
+    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
+    .brand p{ margin:6px 0 0; color:var(--muted); font-size:12px; }
+    .card{ background:var(--panel); border:1px solid var(--border); border-radius:var(--radius2); box-shadow:var(--shadow);
+      backdrop-filter:blur(10px); overflow:hidden; }
+    .card .cardHead{ padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.10);
+      background:linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08)); }
+    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
+    .card .cardBody{ padding:14px; }
+    .grid{ display:grid; grid-template-columns:1fr; gap:var(--gap); margin-top:14px; }
+    label{ display:block; color:var(--muted); font-weight:800; margin-bottom:8px; font-size:13px; }
+    .row{ display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:14px; }
+    @media(min-width:720px){ .row.two{ grid-template-columns:1fr 1fr; } }
+    input,select,textarea{ width:100%; padding:calc(var(--fieldPad) + 2px) 12px; border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,0.18); background:rgba(0,0,0,0.30); color:var(--text); outline:none;
+      appearance:none; -webkit-appearance:none; font-size:15px; }
+    select{ padding-left:40px; background-image:
+      linear-gradient(45deg, transparent 50%, rgba(234,240,255,0.9) 50%),
+      linear-gradient(135deg, rgba(234,240,255,0.9) 50%, transparent 50%),
+      linear-gradient(to right, rgba(255,255,255,0.12), rgba(255,255,255,0.12));
+      background-position: calc(10px) 50%, calc(18px) 50%, calc(100% - 42px) 50%;
+      background-size: 8px 8px, 8px 8px, 1px 22px; background-repeat:no-repeat; }
+    option{ background:#0f172a; color:#eaf0ff; }
+    input::placeholder,textarea::placeholder{ color:rgba(234,240,255,0.45); }
+    textarea{ min-height:86px; resize:vertical; }
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .btn{ border:none; cursor:pointer; padding:12px 14px; border-radius:16px; font-weight:950; color:#071018; background:var(--yellow);
+      transition:0.2s; box-shadow:0 10px 20px rgba(255,210,74,0.18); user-select:none; white-space:nowrap; min-height:46px; width:auto; }
+    .btn:hover{ transform:translateY(-1px); }
+    @media(max-width:480px){ .btnRow .btn{ width:100%; } .btnRow{ gap:12px; } }
+    .btn.alt{ background:rgba(255,255,255,0.10); color:var(--text); border:1px solid rgba(255,255,255,0.18); box-shadow:none; }
+    .btn.alt:hover{ background:rgba(255,255,255,0.14); }
+    .btn.green{ background:rgba(24,195,126,1); color:#062116; box-shadow:0 10px 20px rgba(24,195,126,0.20); }
+    .msg{ margin-top:12px; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06);
+      color:var(--muted); line-height:1.7; font-weight:850; font-size:13px; display:none; }
+    .fineprint{ color:rgba(234,240,255,0.55); font-size:12px; margin-top:10px; line-height:1.7; }
+    @media(max-width:420px){ header{ padding:12px 12px; } .brand h1{ font-size:15px; } .card .cardBody{ padding:12px; } }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img class="logo" alt="Logo" src="logo.png" />
+        <div style="min-width:0;">
+          <h1>إدارة الهوية الوطنية - مركز سعد العبدالله</h1>
+          <p>تقييم الموظف</p>
+        </div>
+      </div>
+      <div></div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <div class="cardHead"><h2>صفحة التقييم للمراجع</h2></div>
+
+        <div class="cardBody">
+          <div class="row two">
+            <div><label>اسم الموظف</label><select id="employeeSelect"></select></div>
+            <div></div>
+          </div>
+
+          <div class="row two">
+            <div><label>اسم المراجع</label><input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" /></div>
+            <div><label>رقم المعاملة</label><input id="reviewerId" placeholder="مثال: رقم المعاملة" inputmode="text" /></div>
+          </div>
+
+          <div class="row two">
+            <div><label>رقم الهاتف</label><input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" /></div>
+            <div>
+              <label>التقييم</label>
+              <select id="ratingSelect">
+                <option value="ممتاز">ممتاز</option>
+                <option value="جيد">جيد</option>
+                <option value="مقبول">مقبول</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div><label>ملاحظة (اختياري)</label><input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" /></div>
+          </div>
+
+          <div class="btnRow">
+            <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
+            <button class="btn alt" id="clearBtn" type="button">مسح</button>
+          </div>
+
+          <div class="msg" id="toastMsg"></div>
+
+          <div class="fineprint">
+            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف، وتظهر باللوحة الإدارية ضمن المركز.
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const center = "مركز سعد العبدالله";
+    const LS_KEYS = { current: "reviews_current_v3", employeesByCenter: "employees_by_center_v1" };
+
+    function loadJson(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+    function saveJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+    let currentReviews = loadJson(LS_KEYS.current, []);
+
+    function formatDateTime(iso){
+      const d=new Date(iso);
+      return d.toLocaleString("ar-KW", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    }
+    function showToast(html){
+      toastMsg.style.display="block";
+      toastMsg.innerHTML=html;
+      setTimeout(()=>{ toastMsg.style.display="none"; },4500);
+    }
+
+    const employeeSelect=document.getElementById("employeeSelect");
+    const reviewerName=document.getElementById("reviewerName");
+    const reviewerId=document.getElementById("reviewerId");
+    const reviewerPhone=document.getElementById("reviewerPhone");
+    const ratingSelect=document.getElementById("ratingSelect");
+    const commentShort=document.getElementById("commentShort");
+
+    const submitReviewBtn=document.getElementById("submitReviewBtn");
+    const clearBtn=document.getElementById("clearBtn");
+    const toastMsg=document.getElementById("toastMsg");
+
+    function renderEmployeesForCenter(){
+      const employeesByCenter=loadJson(LS_KEYS.employeesByCenter,{});
+      const list=employeesByCenter[center]||[];
+      employeeSelect.innerHTML="";
+      const unique=Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+
+      if(unique.length===0){
+        const opt=document.createElement("option");
+        opt.value="";
+        opt.textContent="لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
+        employeeSelect.appendChild(opt);
+        return;
+      }
+
+      for(const name of unique){
+        const opt=document.createElement("option");
+        opt.value=name;
+        opt.textContent=name;
+        employeeSelect.appendChild(opt);
+      }
+    }
+
+    submitReviewBtn.addEventListener("click", ()=>{
+      const employeeName=employeeSelect.value;
+      const name=(reviewerName.value||"").trim();
+      const dealNo=(reviewerId.value||"").trim();
+      const phone=(reviewerPhone.value||"").trim();
+      const rating=ratingSelect.value;
+      const comment=(commentShort.value||"").trim();
+
+      if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
+      if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
+      if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
+      if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
+
+      const review={
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        createdAt: new Date().toISOString(),
+        center: center,
+        employeeName,
+        reviewerName: name,
+        reviewerId: dealNo,
+        reviewerPhone: phone,
+        rating,
+        comment
+      };
+
+      currentReviews.unshift(review);
+      saveJson(LS_KEYS.current, currentReviews);
+
+      reviewerName.value="";
+      reviewerId.value="";
+      reviewerPhone.value="";
+      commentShort.value="";
+      ratingSelect.value="ممتاز";
+
+      showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
+    });
+
+    clearBtn.addEventListener("click", ()=>{
+      reviewerName.value="";
+      reviewerId.value="";
+      reviewerPhone.value="";
+      commentShort.value="";
+      ratingSelect.value="ممتاز";
+      toastMsg.style.display="none";
+    });
+
+    renderEmployeesForCenter();
+  </script>
+</body>
+</html>
