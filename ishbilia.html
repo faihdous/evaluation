@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>مركز اشبيلية - التقييم</title>
+
+  <style>
+    :root{
+      --panel: rgba(255,255,255,0.06);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,0.7);
+      --border: rgba(255,255,255,0.14);
+      --shadow: 0 12px 30px rgba(0,0,0,0.35);
+      --radius2: 22px;
+
+      --blue: rgba(58,160,255,1);
+      --green: rgba(24,195,126,1);
+      --danger: #ff4d4d;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(58,160,255,0.20), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(24,195,126,0.16), transparent 60%),
+        linear-gradient(180deg, #070b14, #0b1220);
+      color: var(--text);
+      min-height:100vh;
+      padding: 18px 12px 40px;
+    }
+    .container{ width:min(1000px, 98vw); margin:0 auto; }
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      background: var(--panel);
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      margin-bottom:14px;
+    }
+    .title{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:54px; height:54px; border-radius:50%;
+      border:2px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05);
+    }
+    h1{ margin:0; font-size:16px; letter-spacing:0.2px; }
+    .sub{ margin-top:4px; color: var(--muted); font-size:12px; }
+
+    .card{
+      background: var(--panel);
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08));
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      flex-wrap:wrap;
+    }
+    .cardHead h2{ margin:0; font-size:15px; }
+    .cardBody{ padding:14px; }
+
+    .row{ display:grid; gap:12px; grid-template-columns:1fr; }
+    @media(min-width:800px){ .row.two{ grid-template-columns: 1fr 1fr; } }
+    .row.three{ grid-template-columns: 1fr; }
+    @media(min-width:900px){ .row.three{ grid-template-columns: 1fr 1fr 1fr; } }
+
+    label{
+      display:block;
+      color: var(--muted);
+      font-weight:900;
+      margin-bottom:8px;
+      font-size:13px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.30);
+      color: var(--text);
+      outline:none;
+      appearance:none;
+      -webkit-appearance:none;
+      font-size:15px;
+    }
+    input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
+
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    .btn{
+      border:none; cursor:pointer;
+      padding:12px 14px;
+      border-radius:16px;
+      font-weight:950;
+      color:#071018;
+      transition:0.2s;
+      white-space:nowrap;
+      user-select:none;
+      min-height:46px;
+    }
+    .btn.blue{ background: var(--blue); box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
+    .btn.green{ background: var(--green); box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
+    .btn.alt{
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border:1px solid rgba(255,255,255,0.18);
+      box-shadow:none;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .fineprint{
+      color: rgba(234,240,255,0.55);
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.7;
+    }
+    .ratingWrap{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:6px;
+    }
+    .ratingBtn{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:950;
+      user-select:none;
+      min-height:40px;
+    }
+    .ratingBtn.active{
+      border-color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.14);
+    }
+    .msg{
+      margin-top:12px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      line-height:1.7;
+      font-weight:850;
+      font-size:13px;
+      display:none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="title">
+        <div class="logo"></div>
+        <div>
+          <h1>التقييم - مركز اشبيلية</h1>
+          <div class="sub">KWAIT | صفحة تقييم تجريبية (LocalStorage)</div>
+        </div>
+      </div>
+      <div>
+        <button class="btn alt" type="button" onclick="history.back()">رجوع</button>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="cardHead">
+        <h2>أدخل بيانات التقييم</h2>
+      </div>
+      <div class="cardBody">
+        <div class="row two">
+          <div>
+            <label>اسم المراجع</label>
+            <input id="reviewerName" placeholder="مثال: محمد" autocomplete="off"/>
+          </div>
+          <div>
+            <label>رقم المعاملة</label>
+            <input id="reviewerId" placeholder="مثال: 12345" inputmode="numeric" autocomplete="off"/>
+          </div>
+        </div>
+
+        <div class="row two" style="margin-top:12px;">
+          <div>
+            <label>رقم الهاتف</label>
+            <input id="reviewerPhone" placeholder="مثال: 50000000" inputmode="tel" autocomplete="off"/>
+          </div>
+          <div>
+            <label>اسم الموظف</label>
+            <select id="employeeName"></select>
+            <div class="fineprint" id="employeeHint" style="margin-top:8px;">
+              إذا القائمة فاضية، راجع لوحة الإدارة وأضف أسماء الموظفين لهذا المركز.
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label>اختر التقييم</label>
+          <div class="ratingWrap">
+            <div class="ratingBtn" data-rating="ممتاز" role="button" tabindex="0">ممتاز</div>
+            <div class="ratingBtn" data-rating="جيد" role="button" tabindex="0">جيد</div>
+            <div class="ratingBtn" data-rating="مقبول" role="button" tabindex="0">مقبول</div>
+          </div>
+          <input type="hidden" id="ratingValue" value=""/>
+          <div class="fineprint">ملاحظة: سيتم حفظ التقييم للتجهيز داخل Current.</div>
+        </div>
+
+        <div class="btnRow">
+          <button class="btn green" id="submitBtn" type="button">إرسال التقييم</button>
+          <button class="btn alt" id="clearBtn" type="button">مسح الحقول</button>
+        </div>
+
+        <div class="msg" id="toastMsg"></div>
+      </div>
+    </section>
+
+    <div class="fineprint">
+      يتم حفظ البيانات محلياً في جهاز المستخدم. لوحة الإدارة عندك تقرأ نفس المفاتيح.
+    </div>
+  </div>
+
+  <script>
+    const CENTER = "مركز اشبيلية";
+
+    const LS_KEYS = {
+      current: "reviews_current_v3",
+      employeesByCenter: "employees_by_center_v1"
+    };
+
+    function loadJson(key, fallback){
+      try{
+        const v = localStorage.getItem(key);
+        return v ? JSON.parse(v) : fallback;
+      }catch(e){
+        return fallback;
+      }
+    }
+
+    function saveJson(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    const reviewerName = document.getElementById("reviewerName");
+    const reviewerId = document.getElementById("reviewerId");
+    const reviewerPhone = document.getElementById("reviewerPhone");
+    const employeeName = document.getElementById("employeeName");
+
+    const ratingValue = document.getElementById("ratingValue");
+    const ratingBtns = document.querySelectorAll(".ratingBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const toastMsg = document.getElementById("toastMsg");
+    const employeeHint = document.getElementById("employeeHint");
+
+    ratingBtns.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        ratingBtns.forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        ratingValue.value = btn.dataset.rating;
+      });
+      btn.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+
+    function showToast(html){
+      toastMsg.style.display = "block";
+      toastMsg.innerHTML = html;
+      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
+    }
+
+    function renderEmployees(){
+      const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+      const list = employeesByCenter[CENTER] || [];
+
+      employeeName.innerHTML = "";
+
+      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+
+      if(unique.length === 0){
+        employeeHint.style.display = "block";
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "لا توجد موظفين - أضف من الإدارة";
+        employeeName.appendChild(opt);
+        employeeName.value = "";
+        return;
+      }
+
+      employeeHint.style.display = "none";
+
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "اختر الموظف";
+      employeeName.appendChild(placeholder);
+
+      for(const name of unique){
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
+        employeeName.appendChild(opt);
+      }
+    }
+
+    function clearFields(){
+      reviewerName.value = "";
+      reviewerId.value = "";
+      reviewerPhone.value = "";
+      employeeName.value = "";
+      ratingValue.value = "";
+      ratingBtns.forEach(b=>b.classList.remove("active"));
+      showToast("تم مسح الحقول ✅");
+    }
+
+    function submitReview(){
+      const data = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+        center: CENTER,
+
+        createdAt: new Date().toISOString(),
+        archivedAt: null,
+
+        reviewerName: (reviewerName.value || "").trim(),
+        reviewerId: (reviewerId.value || "").trim(),
+        reviewerPhone: (reviewerPhone.value || "").trim(),
+
+        employeeName: employeeName.value || "",
+        rating: ratingValue.value || ""
+      };
+
+      if(!data.reviewerName) return showToast("❌ اكتب <b>اسم المراجع</b> أولاً.");
+      if(!data.reviewerId) return showToast("❌ اكتب <b>رقم المعاملة</b> أولاً.");
+      if(!data.reviewerPhone) return showToast("❌ اكتب <b>رقم الهاتف</b> أولاً.");
+      if(!data.employeeName) return showToast("❌ اختر <b>اسم الموظف</b> أولاً.");
+      if(!data.rating) return showToast("❌ اختر <b>التقييم</b> أولاً.");
+
+      const current = loadJson(LS_KEYS.current, []);
+      current.push(data);
+      saveJson(LS_KEYS.current, current);
+
+      showToast(
+        `✅ تم الإرسال!<br/>
+         المركز: <b>${escapeHtml(CENTER)}</b><br/>
+         الموظف: <b>${escapeHtml(data.employeeName)}</b><br/>
+         التقييم: <b>${escapeHtml(data.rating)}</b>`
+      );
+
+      clearFields();
+    }
+
+    submitBtn.addEventListener("click", submitReview);
+    clearBtn.addEventListener("click", clearFields);
+
+    renderEmployees();
+  </script>
+</body>
+</html>
