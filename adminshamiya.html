@@ -92,7 +92,7 @@
     option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
 
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     .btn{
       border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
       font-weight:950; color:#071018; transition:0.2s; white-space: nowrap;
@@ -195,7 +195,7 @@
         </div>
 
         <div class="cardBody">
-          <!-- واجهة الدخول (بدون زر الخروج) -->
+          <!-- واجهة الدخول -->
           <div id="adminLoginBox">
             <div style="text-align:center;">
               <img src="logo.png" alt="Logo"
@@ -204,24 +204,26 @@
 
               <div id="adminCenterName" class="admin-center-name"></div>
 
-              <div class="fineprint">
-              </div>
+              <div class="fineprint"></div>
 
               <div class="btnRow" style="justify-content:center; margin-top:12px;">
                 <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
               </div>
 
-              <div class="msg" id="toastMsg" style="display:none;"></div>
+              <div class="msg" id="toastMsg"></div>
             </div>
           </div>
 
-          <!-- الصفحة الإدارية (زر الخروج داخلها) -->
+          <!-- مساحة الإدارة -->
           <div id="adminWorkspace" class="hide">
+
+            <!-- شريط الأدوات -->
             <div class="btnRow" style="justify-content: flex-start; margin-bottom:10px;">
               <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
+              <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
             </div>
 
-            <div class="row two" style="align-items:end;">
+            <div class="row two" style="align-items:end; margin-top:4px;">
               <div>
                 <label>المركز الحالي (مركز ثابت)</label>
                 <select id="adminCurrentCenter"></select>
@@ -239,35 +241,6 @@
             <div class="btnRow" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف المركز الحالي</button>
-            </div>
-
-            <!-- إدارة الموظفين -->
-            <div class="card" style="margin-top:10px;">
-              <div class="cardHead"><h2>إدارة أسماء الموظفين للمركز الحالي</h2></div>
-              <div class="cardBody">
-                <div class="row two" style="margin-bottom:10px;">
-                  <div>
-                    <label>اسم الموظف (سيظهر في صفحة التقييم)</label>
-                    <input id="newEmployeeName" placeholder="مثال: أحمد" inputmode="text" />
-                  </div>
-                  <div style="display:flex; align-items:end;">
-                    <div class="btnRow" style="width:100%;">
-                      <button class="btn green" id="addEmployeeBtn" type="button">إضافة</button>
-                      <button class="btn alt" id="clearEmployeesBtn" type="button">مسح قائمة الموظفين</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="fineprint" id="employeesHint">
-                  سيتم حفظ الأسماء لكل مركز في جهازك (localStorage). يمكنك حذف أي اسم من القائمة.
-                </div>
-
-                <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
-                <div id="employeesList" class="employeeChipRow"></div>
-                <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">
-                  لا توجد أسماء موظفين لهذا المركز. أضف اسم أولاً.
-                </div>
-              </div>
             </div>
 
             <!-- Current -->
@@ -311,7 +284,83 @@
               </div>
             </div>
 
-          </div>
+            <!-- صفحة التعديلات (داخل نفس الصفحة) -->
+            <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
+
+              <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
+                <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
+              </div>
+
+              <div class="btnRow" style="margin:6px 0 14px;">
+                <button class="btn green" id="tabEmployeesBtn" type="button">أسماء الموظفين</button>
+                <button class="btn blue" id="tabQuestionsBtn" type="button">أسئلة التقييم</button>
+              </div>
+
+              <!-- تبويب الموظفين -->
+              <div id="employeesAdminPanel">
+                <div class="card">
+                  <div class="cardHead"><h2>إدارة أسماء الموظفين</h2></div>
+                  <div class="cardBody">
+                    <div class="row two" style="margin-bottom:10px;">
+                      <div>
+                        <label>اسم الموظف (سيظهر في صفحة التقييم)</label>
+                        <input id="newEmployeeName" placeholder="مثال: أحمد" inputmode="text" />
+                      </div>
+                      <div style="display:flex; align-items:end;">
+                        <div class="btnRow" style="width:100%;">
+                          <button class="btn green" id="addEmployeeBtn" type="button">إضافة</button>
+                          <button class="btn alt" id="clearEmployeesBtn" type="button">مسح قائمة الموظفين</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="fineprint" id="employeesHint" style="margin-top:0;">
+                      سيتم حفظ الأسماء لكل مركز في جهازك (localStorage). يمكنك حذف أي اسم من القائمة.
+                    </div>
+
+                    <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
+                    <div id="employeesList" class="employeeChipRow"></div>
+                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">
+                      لا توجد أسماء موظفين لهذا المركز. أضف اسم أولاً.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- تبويب الأسئلة -->
+              <div id="questionsAdminPanel" class="hide">
+                <div class="card">
+                  <div class="cardHead"><h2>إدارة أسئلة التقييم</h2></div>
+                  <div class="cardBody">
+                    <div class="row two" style="margin-bottom:10px;">
+                      <div>
+                        <label>اكتب السؤال</label>
+                        <input id="newQuestionText" placeholder="مثال: هل تم حل المشكلة بسرعة؟" inputmode="text" />
+                      </div>
+                      <div style="display:flex; align-items:end;">
+                        <div class="btnRow" style="width:100%;">
+                          <button class="btn green" id="addQuestionBtn" type="button">إضافة سؤال</button>
+                          <button class="btn alt" id="clearQuestionsBtn" type="button">مسح الأسئلة</button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="fineprint" style="margin-top:0;">
+                      سيتم إنشاء DropDown لهذا السؤال في صفحة التقييم. (القيم: ممتاز/جيد/مقبول)
+                    </div>
+
+                    <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
+                    <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
+                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">
+                      لا توجد أسئلة. أضف سؤال أولاً.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- end adminAdjustPage -->
+
+          </div><!-- end adminWorkspace -->
         </div>
       </section>
     </div>
@@ -334,7 +383,8 @@
       current: "reviews_current_v3",
       archive: "reviews_archive_v3",
       adminCenter: "admin_center_session_v3",
-      employeesByCenter: "employees_by_center_v1"
+      employeesByCenter: "employees_by_center_v1",
+      questions: "rating_questions_v1"
     };
 
     function loadJson(key, fallback){
@@ -393,6 +443,7 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
+    // -------- Employees UI (داخل صفحة التعديلات) --------
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -403,13 +454,14 @@
       const list = employeesByCenter[center] || [];
       employeesList.innerHTML = "";
 
-      if(list.length === 0){
+      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+
+      if(unique.length === 0){
         noEmployeesMsg.style.display = "block";
         return;
       }
       noEmployeesMsg.style.display = "none";
 
-      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
       for(const name of unique){
         const chip = document.createElement("div");
         chip.className = "employeeChip";
@@ -465,38 +517,153 @@
       showToast("✅ تم مسح قائمة الموظفين.");
     }
 
-    function exitAdminWorkspace(){
-      adminCenterSession = "";
-      localStorage.removeItem(LS_KEYS.adminCenter);
+    addEmployeeBtn.addEventListener("click", addEmployee);
+    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
+    clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-      adminLogoutBtn.disabled = true;
+    // -------- Questions UI (داخل صفحة التعديلات) --------
+    const questionsListEl = document.getElementById("questionsList");
+    const noQuestionsMsg = document.getElementById("noQuestionsMsg");
+    const newQuestionText = document.getElementById("newQuestionText");
+    const addQuestionBtn = document.getElementById("addQuestionBtn");
+    const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
 
-      adminLoginBox.style.display = "block";
-      adminWorkspace.classList.add("hide");
+    function loadQuestions(){
+      return loadJson(LS_KEYS.questions, []); // [{id,text}]
+    }
+    function saveQuestions(qs){
+      saveJson(LS_KEYS.questions, qs);
     }
 
-    function enterAdminWorkspace(center){
-      adminCenterSession = center;
-      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+    let questions = loadQuestions();
 
-      adminCurrentCenter.innerHTML = "";
-      const o = document.createElement("option");
-      o.value = center; o.textContent = center;
-      adminCurrentCenter.appendChild(o);
-      adminCurrentCenter.value = center;
+    function renderQuestions(){
+      questionsListEl.innerHTML = "";
 
-      adminCurrentCenter.disabled = true;
-      adminLoginBox.style.display = "none";
-      adminWorkspace.classList.remove("hide");
+      if(!questions.length){
+        noQuestionsMsg.style.display = "block";
+        return;
+      }
+      noQuestionsMsg.style.display = "none";
 
-      adminLogoutBtn.disabled = false;
+      questions.forEach((q, index)=>{
+        const wrap = document.createElement("div");
+        wrap.style.border="1px solid rgba(255,255,255,0.14)";
+        wrap.style.borderRadius="14px";
+        wrap.style.padding="10px 12px";
+        wrap.style.background="rgba(255,255,255,0.05)";
 
-      setView("current");
-      renderCurrentTablesForCenter(center);
-      renderArchiveTablesForCenter(center);
-      renderEmployeesForCenter(center);
+        wrap.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
+            <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
+          </div>
+          <div class="fineprint" style="margin-top:6px;">الاختيارات: ممتاز / جيد / مقبول</div>
+        `;
+
+        wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
+          questions = questions.filter(x => x.id !== q.id);
+          saveQuestions(questions);
+          renderQuestions();
+          showToast("✅ تم حذف السؤال.");
+        });
+
+        questionsListEl.appendChild(wrap);
+      });
     }
 
+    function addQuestion(){
+      const text = (newQuestionText.value || "").trim();
+      if(!text) return showToast("❌ اكتب اسم السؤال أولاً.");
+
+      questions = loadQuestions();
+      const q = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        text
+      };
+      questions.push(q);
+      saveQuestions(questions);
+
+      newQuestionText.value = "";
+      renderQuestions();
+      showToast("✅ تم إضافة سؤال.");
+    }
+
+    function clearQuestions(){
+      questions = loadQuestions();
+      if(!questions.length) return showToast("لا توجد أسئلة لمسحها.");
+
+      const ok = confirm("هل أنت متأكد؟ سيتم مسح كل أسئلة التقييم.");
+      if(!ok) return;
+
+      questions = [];
+      saveQuestions(questions);
+      renderQuestions();
+      showToast("✅ تم مسح الأسئلة.");
+    }
+
+    addQuestionBtn.addEventListener("click", addQuestion);
+    newQuestionText.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addQuestion(); });
+    clearQuestionsBtn.addEventListener("click", clearQuestions);
+
+    renderQuestions();
+
+    // -------- صفحة التعديلات (تنقل) --------
+    const adminAdjustBtn = document.getElementById("adminAdjustBtn");
+    const backToReviewsBtn = document.getElementById("backToReviewsBtn");
+    const adminAdjustPage = document.getElementById("adminAdjustPage");
+
+    const tabEmployeesBtn = document.getElementById("tabEmployeesBtn");
+    const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
+
+    const employeesAdminPanel = document.getElementById("employeesAdminPanel");
+    const questionsAdminPanel = document.getElementById("questionsAdminPanel");
+
+    function showAdjustPage(defaultTab="employees"){
+      adminAdjustPage.classList.remove("hide");
+      currentSection.classList.add("hide");
+      archiveSection.classList.add("hide");
+
+      // تبويب افتراضي
+      if(defaultTab === "questions"){
+        employeesAdminPanel.classList.add("hide");
+        questionsAdminPanel.classList.remove("hide");
+      }else{
+        questionsAdminPanel.classList.add("hide");
+        employeesAdminPanel.classList.remove("hide");
+      }
+    }
+
+    function backToReviews(){
+      adminAdjustPage.classList.add("hide");
+      // رجوع للوضع الحالي: نعرض Current افتراضيًا
+      if(!adminCenterSession) return;
+      archiveSection.classList.add("hide");
+      currentSection.classList.remove("hide");
+    }
+
+    adminAdjustBtn.addEventListener("click", ()=>{
+      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+      // افتراضي تبويب الموظفين
+      tabEmployeesBtn.click();
+      showAdjustPage("employees");
+      renderEmployeesForCenter(adminCenterSession);
+      renderQuestions();
+    });
+
+    backToReviewsBtn.addEventListener("click", backToReviews);
+
+    tabEmployeesBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.remove("hide");
+      questionsAdminPanel.classList.add("hide");
+    });
+
+    tabQuestionsBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.add("hide");
+      questionsAdminPanel.classList.remove("hide");
+    });
+
+    // -------- Tables rendering --------
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -579,14 +746,78 @@
       }
     }
 
+    // -------- Archive tools --------
+    function downloadCSV(rows, filename){
+      const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
+      const csv = [
+        header.join(","),
+        ...rows.map(r=>{
+          const dt = formatDateTime(r.archivedAt || r.createdAt);
+          const cells = [dt, r.reviewerName, r.reviewerId, r.reviewerPhone, r.center, r.employeeName, r.rating].map(v=>{
+            const s = String(v ?? "").replaceAll('"','""');
+            return `"${s}"`;
+          });
+          return cells.join(",");
+        })
+      ].join("\n");
+
+      const bom = "\uFEFF";
+      const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    // -------- Enter/Exit admin --------
+    function exitAdminWorkspace(){
+      adminCenterSession = "";
+      localStorage.removeItem(LS_KEYS.adminCenter);
+
+      adminLogoutBtn.disabled = true;
+
+      adminLoginBox.style.display = "block";
+      adminWorkspace.classList.add("hide");
+    }
+
+    function enterAdminWorkspace(center){
+      adminCenterSession = center;
+      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+
+      adminCurrentCenter.innerHTML = "";
+      const o = document.createElement("option");
+      o.value = center; o.textContent = center;
+      adminCurrentCenter.appendChild(o);
+      adminCurrentCenter.value = center;
+
+      adminCurrentCenter.disabled = true;
+      adminLoginBox.style.display = "none";
+      adminWorkspace.classList.remove("hide");
+
+      adminLogoutBtn.disabled = false;
+
+      setView("current");
+      renderCurrentTablesForCenter(center);
+      renderArchiveTablesForCenter(center);
+      renderEmployeesForCenter(center);
+    }
+
+    // -------- Events --------
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace(LOCK_CENTER);
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
     });
 
     adminLogoutBtn.addEventListener("click", ()=>{
-      exitAdminWorkspace();
+      // إذا داخل التعديلات ارجع
+      adminAdjustPage.classList.add("hide");
       setView("current");
+      exitAdminWorkspace();
       showToast("تم تسجيل الخروج من الإدارة.");
     });
 
@@ -621,33 +852,6 @@
       renderArchiveTablesForCenter(center);
     });
 
-    function downloadCSV(rows, filename){
-      const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
-      const csv = [
-        header.join(","),
-        ...rows.map(r=>{
-          const dt = formatDateTime(r.archivedAt || r.createdAt);
-          const cells = [dt, r.reviewerName, r.reviewerId, r.reviewerPhone, r.center, r.employeeName, r.rating].map(v=>{
-            const s = String(v ?? "").replaceAll('"','""');
-            return `"${s}"`;
-          });
-          return cells.join(",");
-        })
-      ].join("\n");
-
-      const bom = "\uFEFF";
-      const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
     downloadArchiveBtn.addEventListener("click", ()=>{
       const center = adminCenterSession;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
@@ -676,14 +880,10 @@
       renderArchiveTablesForCenter(center);
     });
 
-    addEmployeeBtn.addEventListener("click", addEmployee);
-    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
-    clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
-
     // init
     adminCenterNameEl.textContent = LOCK_CENTER;
-    adminLogoutBtn.disabled = true;     // زر الخروج لا يعمل قبل الدخول
-    exitAdminWorkspace();              // يرجّع واجهة الدخول
+    adminLogoutBtn.disabled = true;
+    exitAdminWorkspace();
     adminCurrentCenter.disabled = true;
     setView("current");
   </script>
