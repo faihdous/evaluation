@@ -244,14 +244,7 @@
               <label>رقم الهاتف</label>
               <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
-            <div>
-              <label>التقييم العام</label>
-              <select id="ratingSelect">
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="مقبول">مقبول</option>
-              </select>
-            </div>
+            <div></div>
           </div>
 
           <div class="row">
@@ -313,8 +306,6 @@
         .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
-    let currentReviews = loadJson(LS_KEYS.current, []);
-
     function formatDateTime(iso){
       const d = new Date(iso);
       return d.toLocaleString("ar-KW", {
@@ -338,7 +329,6 @@
     const reviewerName = document.getElementById("reviewerName");
     const reviewerId = document.getElementById("reviewerId");
     const reviewerPhone = document.getElementById("reviewerPhone");
-    const ratingSelect = document.getElementById("ratingSelect");
     const commentShort = document.getElementById("commentShort");
 
     const submitReviewBtn = document.getElementById("submitReviewBtn");
@@ -382,7 +372,6 @@
       questionsContainer.innerHTML = "";
 
       if(!qs.length){
-        // لا نخلي مكان فاضي؛ خيار: نخلي رسالة صغيرة
         const info = document.createElement("div");
         info.className = "fineprint";
         info.style.marginTop = "0";
@@ -392,12 +381,11 @@
       }
 
       qs.forEach((q)=>{
-        const wrap = document.createElement("div");
-
         const optionsHtml = getRatingOptions()
           .map(opt => `<option value="${opt}">${opt}</option>`)
           .join("");
 
+        const wrap = document.createElement("div");
         wrap.innerHTML = `
           <div class="row" style="margin-bottom:0;">
             <div>
@@ -419,7 +407,6 @@
       const name = (reviewerName.value || "").trim();
       const dealNo = (reviewerId.value || "").trim();
       const phone = (reviewerPhone.value || "").trim();
-      const rating = ratingSelect.value;
       const comment = (commentShort.value || "").trim();
 
       if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
@@ -427,7 +414,6 @@
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
-      // جمع إجابات الأسئلة
       const qs = loadQuestions();
       const questionAnswers = {};
 
@@ -435,6 +421,13 @@
         const sel = document.querySelector(`select[data-qid="${q.id}"]`);
         if(sel) questionAnswers[q.id] = sel.value;
       }
+
+      // تعيين "rating" (المستخدمة في لوحة الإدارة) من أول سؤال إن وجد
+      const rating = qs.length
+        ? (questionAnswers[qs[0].id] || "مقبول")
+        : "مقبول";
+
+      const currentReviews = loadJson(LS_KEYS.current, []);
 
       const review = {
         id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
@@ -444,7 +437,7 @@
         reviewerName: name,
         reviewerId: dealNo,
         reviewerPhone: phone,
-        rating,
+        rating,              // محفوظ عشان الإدارة
         comment,
         questionAnswers
       };
@@ -456,20 +449,18 @@
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
-      ratingSelect.value = "ممتاز";
 
-      // إعادة تعيين أسئلة الدروب داون لأفضل تجربة
       renderQuestionDropdowns();
 
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
+    // -------- Clear --------
     clearBtn.addEventListener("click", () => {
       reviewerName.value = "";
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
-      ratingSelect.value = "ممتاز";
       toastMsg.style.display = "none";
       renderQuestionDropdowns();
     });
