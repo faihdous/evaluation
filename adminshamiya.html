@@ -16,9 +16,6 @@
       --green: rgba(24,195,126,1);
       --danger: #ff4d4d;
       --modalBg: rgba(0,0,0,0.55);
-
-      --pillBg: rgba(255,255,255,0.08);
-      --pillBorder: rgba(255,255,255,0.18);
     }
     *{ box-sizing: border-box; }
     body{
@@ -32,66 +29,28 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
-
     header{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      display:flex; gap: 12px; align-items:center; justify-content: space-between;
+      padding: 12px 14px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: var(--radius2);
+      box-shadow: var(--shadow); backdrop-filter: blur(10px);
     }
-
-    /* ✅ نفس شكل الصورة: شريط/زر دائري مع الشعار بجانب النص */
-    .brandPill{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: var(--pillBg);
-      border: 1px solid var(--pillBorder);
-      box-shadow: 0 18px 35px rgba(0,0,0,0.18);
-      max-width: 100%;
-    }
-
-    .brandPill .logo{
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
+    .brand{ display:flex; gap: 12px; align-items:center; min-width:0; }
+    .logo{
+      width: 56px; height: 56px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.05);
-      flex: 0 0 auto;
+      object-fit: cover; flex: 0 0 auto;
     }
-
-    .brandPill .title{
-      margin:0;
-      font-weight: 950;
-      font-size: 18px;
-      letter-spacing: 0.2px;
-      color: #fff;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
+    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
+    .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
 
     .card{
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
-      width: 100%;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius2); box-shadow: var(--shadow);
+      backdrop-filter: blur(10px); overflow:hidden; width: 100%;
     }
-
     .card .cardHead{
       padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.10);
@@ -100,33 +59,13 @@
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
     .card .cardBody{ padding: 14px; }
 
-    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    .btn{
-      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
-      font-weight:950; color:#071018; transition:0.2s; white-space: nowrap;
-      user-select:none; min-height: 46px; width:auto;
-    }
-    .btn.blue{ background: var(--blue); color:#06131f; box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
-    .btn.green{ background: var(--green); color:#062116; box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
-    .btn.alt{
-      background: rgba(255,255,255,0.10); color: var(--text);
-      border:1px solid rgba(255,255,255,0.18); box-shadow:none; padding: 12px 14px;
-    }
-    .btn.danger{
-      background: var(--danger); color: #180404;
-      box-shadow: 0 10px 20px rgba(255,77,77,0.20);
-    }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
+    .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
+    @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
 
-    table{ width:100%; border-collapse: collapse; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); }
-    th, td{
-      padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.10);
-      text-align:center; font-size:13px; vertical-align: middle; white-space: nowrap;
+    @media(max-width: 720px){
+      .container{ width: 100%; margin: 8px auto 14px; padding: 0 10px; }
+      .card .cardBody{ padding: 12px; }
     }
-    th{ background: rgba(255,255,255,0.06); color: var(--muted); font-weight:900; }
-    td{ color: var(--text); }
-    tr:last-child td{ border-bottom:none; }
 
     label{
       display:block; color: var(--muted); font-weight:800;
@@ -152,19 +91,34 @@
     option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
 
-    .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
-    @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
-
-    @media(max-width:720px){
-      .container{ width: 100%; margin: 8px auto 14px; padding: 0 10px; }
-      header{ padding: 12px 12px; }
-      .brandPill{ padding: 10px 12px; }
-      .brandPill .title{ font-size:16px; }
-      .brandPill .logo{ width:50px; height:50px; }
-      .card .cardBody{ padding: 12px; }
+    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn{
+      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
+      font-weight:950; color:#071018; transition:0.2s; white-space: nowrap;
+      user-select:none; min-height: 46px;
     }
+    .btn.blue{ background: var(--blue); color:#06131f; box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
+    .btn.green{ background: var(--green); color:#062116; box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
+    .btn.alt{
+      background: rgba(255,255,255,0.10); color: var(--text);
+      border:1px solid rgba(255,255,255,0.18); box-shadow:none; padding: 12px 14px;
+    }
+    .btn.danger{
+      background: var(--danger); color: #180404;
+      box-shadow: 0 10px 20px rgba(255,77,77,0.20);
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
 
-    label{ display:block; color: var(--muted); font-weight:800; margin-bottom:8px; font-size:13px; }
+    table{ width:100%; border-collapse: collapse; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); }
+    th, td{
+      padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.10);
+      text-align:center; font-size:13px; vertical-align: middle; white-space: nowrap;
+    }
+    th{ background: rgba(255,255,255,0.06); color: var(--muted); font-weight:900; }
+    td{ color: var(--text); }
+    tr:last-child td{ border-bottom:none; }
+
     h3{ margin:14px 0 8px; font-size:15px; color: rgba(234,240,255,0.7); }
     .hide{ display:none; }
     .fineprint{ color: rgba(234,240,255,0.55); font-size: 12px; margin-top: 10px; line-height: 1.7; }
@@ -184,7 +138,6 @@
       border:1px solid rgba(255,255,255,0.18); box-shadow:none;
       white-space:nowrap; min-height: 40px;
     }
-
     .msg{
       margin-top:12px; padding:12px; border-radius:14px;
       border:1px solid rgba(255,255,255,0.14);
@@ -192,7 +145,6 @@
       color: var(--muted); line-height:1.7; font-weight:850; font-size:13px;
       display:none;
     }
-
     .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
     .employeeChip{
       display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
@@ -207,6 +159,17 @@
       border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
 
+    .admin-login-title{ font-weight:950; font-size:20px; margin-top:10px; }
+    .admin-center-name{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-weight: 950;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
     /* Modal */
     #reviewDetailsModal{ position: fixed; inset: 0; background: var(--modalBg); display:flex; align-items:center; justify-content:center; z-index: 9999; }
   </style>
@@ -215,10 +178,11 @@
 <body>
   <div class="container">
     <header>
-      <div class="brandPill">
-        <!-- ✅ الشعار يبقى ويظهر مثل الصورة -->
+      <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
-        <h1 class="title" id="adminHeaderTitle">لوحة الإدارة - مركز الشامية</h1>
+        <div>
+          <h1>لوحة الإدارة</h1>
+        </div>
       </div>
       <div></div>
     </header>
@@ -232,17 +196,11 @@
         <div class="cardBody">
           <div id="adminLoginBox">
             <div style="text-align:center;">
-              <div class="admin-login-title" style="font-weight:950; font-size:20px; margin-top:10px;">إدارة الهوية الوطنية</div>
+              <img src="logo.png" alt="Logo"
+                   style="width:90px;height:90px;border-radius:18px; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06); padding:8px;">
+              <div class="admin-login-title">إدارة الهوية الوطنية</div>
 
-              <div id="adminCenterName" class="admin-center-name" style="
-                background: rgba(255,255,255,0.08);
-                border: 1px solid rgba(255,255,255,0.18);
-                padding: 10px 16px;
-                border-radius: 14px;
-                font-weight: 950;
-                display: inline-block;
-                margin-top: 10px;
-              "></div>
+              <div id="adminCenterName" class="admin-center-name"></div>
 
               <div class="fineprint"></div>
 
@@ -255,6 +213,7 @@
           </div>
 
           <div id="adminWorkspace" class="hide">
+
             <div class="btnRow" style="justify-content: flex-start; margin-bottom:10px;">
               <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
@@ -270,14 +229,14 @@
                 <div class="btnRow">
                   <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
                   <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
-                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">حذف أرشيف مركز الشامية</button>
+                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">حذف أرشيف المركز الحالي</button>
                 </div>
               </div>
             </div>
 
             <div class="btnRow" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
-              <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
+              <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف المركز الحالي</button>
             </div>
 
             <div id="currentSection">
@@ -301,7 +260,7 @@
             </div>
 
             <div id="archiveSection" class="hide">
-              <h3>أرشيف التقييمات (مركز الشامية)</h3>
+              <h3>أرشيف التقييمات (المركز الحالي فقط)</h3>
               <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead>
@@ -320,7 +279,7 @@
               </div>
             </div>
 
-            <!-- صفحة التعديلات -->
+            <!-- صفحة التعديلات (داخل نفس الصفحة) -->
             <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
               <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
@@ -348,11 +307,15 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
+                    <div class="fineprint" id="employeesHint" style="margin-top:0;">
+                      سيتم حفظ الأسماء لكل مركز في جهازك (localStorage). يمكنك حذف أي اسم من القائمة.
+                    </div>
 
                     <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
                     <div id="employeesList" class="employeeChipRow"></div>
-                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">لا توجد أسماء موظفين. أضف اسم أولاً.</div>
+                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">
+                      لا توجد أسماء موظفين لهذا المركز. أضف اسم أولاً.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -374,15 +337,19 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0;">سيتم إنشاء DropDown في صفحة التقييم.</div>
+                    <div class="fineprint" style="margin-top:0;">
+                      سيتم إنشاء DropDown لهذا السؤال في صفحة التقييم. (الاختيارات: ممتاز/جيد/مقبول)
+                    </div>
 
                     <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
                     <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
-                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">لا توجد أسئلة. أضف سؤال أولاً.</div>
+                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">
+                      لا توجد أسئلة. أضف سؤال أولاً.
+                    </div>
                   </div>
                 </div>
               </div>
-            </div><!-- end adjust -->
+            </div><!-- end adminAdjustPage -->
 
           </div><!-- end adminWorkspace -->
         </div>
@@ -390,7 +357,7 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal تفاصيل الأسئلة والجواب -->
   <div id="reviewDetailsModal" class="hide">
     <div style="
       width: min(900px, 94vw);
@@ -405,6 +372,7 @@
         <div style="font-weight:950;">تفاصيل التقييم</div>
         <button class="btn alt" id="closeReviewDetailsBtn" type="button">إغلاق</button>
       </div>
+
       <div id="reviewDetailsMeta" class="fineprint" style="margin-top:0;"></div>
 
       <div style="
@@ -469,7 +437,7 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // Data
+    // ============ Data ============
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
@@ -477,8 +445,7 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     for(const c of CENTERS){ if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = []; }
 
-    // Elements
-    const adminHeaderTitle = document.getElementById("adminHeaderTitle");
+    // ============ Elements ============
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
@@ -499,7 +466,7 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
-    // Modal
+    // ============ Modal details ============
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
@@ -510,7 +477,7 @@
     });
 
     function openReviewDetails(review){
-      const qs = loadJson(LS_KEYS.questions, []);
+      const qs = loadJson(LS_KEYS.questions, []); // [{id,text}]
       const answers = review?.questionAnswers || {};
 
       reviewDetailsMeta.innerHTML = `
@@ -545,7 +512,7 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
-    // Adjust page nav
+    // ============ Employees UI (داخل صفحة التعديلات) ============
     const adminAdjustBtn = document.getElementById("adminAdjustBtn");
     const backToReviewsBtn = document.getElementById("backToReviewsBtn");
     const adminAdjustPage = document.getElementById("adminAdjustPage");
@@ -554,28 +521,6 @@
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
     const questionsAdminPanel = document.getElementById("questionsAdminPanel");
 
-    function showAdjustPage(defaultTab="employees"){
-      adminAdjustPage.classList.remove("hide");
-      currentSection.classList.add("hide");
-      archiveSection.classList.add("hide");
-
-      if(defaultTab === "questions"){
-        employeesAdminPanel.classList.add("hide");
-        questionsAdminPanel.classList.remove("hide");
-      }else{
-        questionsAdminPanel.classList.add("hide");
-        employeesAdminPanel.classList.remove("hide");
-      }
-    }
-
-    function backToReviews(){
-      adminAdjustPage.classList.add("hide");
-      if(!adminCenterSession) return;
-      archiveSection.classList.add("hide");
-      currentSection.classList.remove("hide");
-    }
-
-    // Employees UI
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -616,7 +561,6 @@
     function addEmployee(){
       const center = adminCenterSession;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
-
       const name = (newEmployeeName.value || "").trim();
       if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
 
@@ -650,14 +594,14 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // Questions UI
+    // ============ Questions UI (داخل صفحة التعديلات) ============
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
     const addQuestionBtn = document.getElementById("addQuestionBtn");
     const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
 
-    let questions = loadJson(LS_KEYS.questions, []);
+    let questions = loadJson(LS_KEYS.questions, []); // [{id,text}]
 
     function renderQuestions(){
       questionsListEl.innerHTML = "";
@@ -725,7 +669,51 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
-    // Tables
+    renderQuestions();
+
+    // ============ Adjust page navigation ============
+    function showAdjustPage(defaultTab="employees"){
+      adminAdjustPage.classList.remove("hide");
+      currentSection.classList.add("hide");
+      archiveSection.classList.add("hide");
+
+      if(defaultTab === "questions"){
+        employeesAdminPanel.classList.add("hide");
+        questionsAdminPanel.classList.remove("hide");
+      }else{
+        questionsAdminPanel.classList.add("hide");
+        employeesAdminPanel.classList.remove("hide");
+      }
+    }
+
+    function backToReviews(){
+      adminAdjustPage.classList.add("hide");
+      if(!adminCenterSession) return;
+      archiveSection.classList.add("hide");
+      currentSection.classList.remove("hide");
+    }
+
+    adminAdjustBtn.addEventListener("click", ()=>{
+      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+      tabEmployeesBtn.click();
+      showAdjustPage("employees");
+      renderEmployeesForCenter(adminCenterSession);
+      renderQuestions();
+    });
+
+    backToReviewsBtn.addEventListener("click", backToReviews);
+
+    tabEmployeesBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.remove("hide");
+      questionsAdminPanel.classList.add("hide");
+    });
+
+    tabQuestionsBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.add("hide");
+      questionsAdminPanel.classList.remove("hide");
+    });
+
+    // ============ Tables rendering ============
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -767,7 +755,10 @@
             else showToast("❌ لا توجد بيانات للتفاصيل.");
             return;
           }
-          if(action === "archive") archiveOne(id, center);
+
+          if(action === "archive"){
+            archiveOne(id, center);
+          }
         });
       });
     }
@@ -833,7 +824,7 @@
       }
     }
 
-    // Admin tools
+    // ============ Archive tools ============
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -861,6 +852,7 @@
       URL.revokeObjectURL(url);
     }
 
+    // ============ Enter/Exit admin ============
     function exitAdminWorkspace(){
       adminCenterSession = "";
       localStorage.removeItem(LS_KEYS.adminCenter);
@@ -875,15 +867,13 @@
       adminCenterSession = center;
       localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
 
-      adminCenterNameEl.textContent = center;
-
       adminCurrentCenter.innerHTML = "";
       const o = document.createElement("option");
       o.value = center; o.textContent = center;
       adminCurrentCenter.appendChild(o);
       adminCurrentCenter.value = center;
-      adminCurrentCenter.disabled = true;
 
+      adminCurrentCenter.disabled = true;
       adminLoginBox.style.display = "none";
       adminWorkspace.classList.remove("hide");
 
@@ -893,10 +883,9 @@
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
       renderEmployeesForCenter(center);
-      renderQuestions();
     }
 
-    // Events
+    // ============ Events ============
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace(LOCK_CENTER);
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -935,7 +924,7 @@
       saveJson(LS_KEYS.current, currentReviews);
       saveJson(LS_KEYS.archive, archiveReviews);
 
-      showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) ✅`);
+      showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) للمركز ✅`);
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
     });
@@ -968,35 +957,12 @@
       renderArchiveTablesForCenter(center);
     });
 
-    adminAdjustBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-      tabEmployeesBtn.click();
-      showAdjustPage("employees");
-      renderEmployeesForCenter(adminCenterSession);
-      renderQuestions();
-    });
-
-    backToReviewsBtn.addEventListener("click", backToReviews);
-
-    tabEmployeesBtn.addEventListener("click", ()=>{
-      employeesAdminPanel.classList.remove("hide");
-      questionsAdminPanel.classList.add("hide");
-    });
-
-    tabQuestionsBtn.addEventListener("click", ()=>{
-      employeesAdminPanel.classList.add("hide");
-      questionsAdminPanel.classList.remove("hide");
-    });
-
     // init
-    adminHeaderTitle.textContent = `لوحة الإدارة - ${LOCK_CENTER}`;
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
-
     exitAdminWorkspace();
     adminCurrentCenter.disabled = true;
     setView("current");
-    renderQuestions();
   </script>
 </body>
 </html>
