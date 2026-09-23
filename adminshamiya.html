@@ -47,7 +47,6 @@
       backdrop-filter: blur(10px);
     }
 
-    /* ✅ نفس شكل الصورة: شريط/زر دائري مع الشعار بجانب النص */
     .brandPill{
       display:flex;
       align-items:center;
@@ -205,8 +204,23 @@
       border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
 
-    /* Modal */
-    #reviewDetailsModal{ position: fixed; inset: 0; background: var(--modalBg); display:flex; align-items:center; justify-content:center; z-index: 9999; }
+    /* ✅ Modal (تم إصلاحه ليكون مخفي افتراضيًا 100%) */
+    #reviewDetailsModal{
+      position: fixed;
+      inset: 0;
+      background: var(--modalBg);
+      z-index: 9999;
+
+      /* المخفي افتراضيًا */
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+    }
+    /* إذا تم إزالة hide => يظهر */
+    #reviewDetailsModal:not(.hide){
+      display: flex;
+    }
   </style>
 </head>
 
@@ -317,7 +331,6 @@
               </div>
             </div>
 
-            <!-- صفحة التعديلات -->
             <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
               <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
@@ -379,9 +392,8 @@
                   </div>
                 </div>
               </div>
-            </div><!-- end adjust -->
-
-          </div><!-- end adminWorkspace -->
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -466,7 +478,6 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // Data
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
@@ -474,7 +485,6 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     for(const c of CENTERS){ if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = []; }
 
-    // Elements
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -496,7 +506,6 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
-    // Modal
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
@@ -507,7 +516,6 @@
     });
 
     function openReviewDetails(review){
-      // ✅ حماية: لو review فاضي لا تعرض المودال بشكل يعلّق/يخرّب
       if(!review){
         reviewDetailsMeta.innerHTML = "";
         reviewDetailsQuestions.innerHTML = `<div class="fineprint">لا توجد بيانات للتفاصيل.</div>`;
@@ -550,7 +558,6 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
-    // Adjust page nav
     const adminAdjustBtn = document.getElementById("adminAdjustBtn");
     const backToReviewsBtn = document.getElementById("backToReviewsBtn");
     const adminAdjustPage = document.getElementById("adminAdjustPage");
@@ -580,7 +587,6 @@
       currentSection.classList.remove("hide");
     }
 
-    // Employees UI
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -655,7 +661,6 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // Questions UI
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
@@ -703,7 +708,6 @@
       const text = (newQuestionText.value || "").trim();
       if(!text) return showToast("❌ اكتب اسم السؤال أولاً.");
 
-      questions = loadJson(LS_KEYS.questions, []);
       const q = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), text };
       questions.push(q);
       saveJson(LS_KEYS.questions, questions);
@@ -730,7 +734,6 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
-    // Tables
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -838,7 +841,6 @@
       }
     }
 
-    // Admin tools
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -873,7 +875,9 @@
 
       adminLoginBox.style.display = "block";
       adminWorkspace.classList.add("hide");
-      reviewDetailsModal.classList.add("hide"); // ✅ حماية إضافية
+
+      // ✅ حماية إضافية
+      reviewDetailsModal.classList.add("hide");
     }
 
     function enterAdminWorkspace(center){
@@ -901,7 +905,6 @@
       renderQuestions();
     }
 
-    // Events
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace(LOCK_CENTER);
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -998,7 +1001,7 @@
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
 
-    // ✅ مهم جداً: إخفاء المودال من البداية (سبب التعليق/الظهور العشوائي)
+    // ✅ ضمان إضافي (حتى لو حصل أي تعارض)
     reviewDetailsModal.classList.add("hide");
 
     exitAdminWorkspace();
