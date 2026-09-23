@@ -244,22 +244,30 @@
               <label>رقم الهاتف</label>
               <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
-            <div></div>
-          </div>
-
-          <div class="row">
             <div>
-              <label>ملاحظة (اختياري)</label>
-              <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+              <label>التقييم العام</label>
+              <select id="ratingSelect">
+                <option value="ممتاز">ممتاز</option>
+                <option value="جيد">جيد</option>
+                <option value="مقبول">مقبول</option>
+              </select>
             </div>
           </div>
 
-          <!-- أسئلة التقييم الديناميكية -->
+          <!-- ✅ أسئلة التقييم الديناميكية (فوق الملاحظات) -->
           <div style="margin-top:8px;">
             <div class="fineprint" style="margin-top:0;">
               سيتم عرض أسئلة التقييم التي أضافها الإداري (إذا وُجدت).
             </div>
             <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px;"></div>
+          </div>
+
+          <!-- الملاحظات تحت الأسئلة -->
+          <div class="row" style="margin-top:14px;">
+            <div>
+              <label>ملاحظة (اختياري)</label>
+              <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+            </div>
           </div>
 
           <div class="btnRow" style="margin-top:14px;">
@@ -329,6 +337,7 @@
     const reviewerName = document.getElementById("reviewerName");
     const reviewerId = document.getElementById("reviewerId");
     const reviewerPhone = document.getElementById("reviewerPhone");
+    const ratingSelect = document.getElementById("ratingSelect");
     const commentShort = document.getElementById("commentShort");
 
     const submitReviewBtn = document.getElementById("submitReviewBtn");
@@ -422,10 +431,10 @@
         if(sel) questionAnswers[q.id] = sel.value;
       }
 
-      // تعيين "rating" (المستخدمة في لوحة الإدارة) من أول سؤال إن وجد
+      // rating محفوظ للوحة الإدارة (من أول سؤال إن وجد، وإلا من التقييم العام أو مقبول)
       const rating = qs.length
         ? (questionAnswers[qs[0].id] || "مقبول")
-        : "مقبول";
+        : (ratingSelect.value || "مقبول");
 
       const currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -437,7 +446,7 @@
         reviewerName: name,
         reviewerId: dealNo,
         reviewerPhone: phone,
-        rating,              // محفوظ عشان الإدارة
+        rating,
         comment,
         questionAnswers
       };
@@ -449,6 +458,7 @@
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
+      ratingSelect.value = "ممتاز";
 
       renderQuestionDropdowns();
 
@@ -461,6 +471,7 @@
       reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
+      ratingSelect.value = "ممتاز";
       toastMsg.style.display = "none";
       renderQuestionDropdowns();
     });
