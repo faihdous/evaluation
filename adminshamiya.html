@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>لوحة الإدارة - KWAIT</title>
+  <title>لوحة الإدارة - مركز الشامية</title>
   <style>
     :root{
       --panel: rgba(255,255,255,0.06);
@@ -12,14 +12,11 @@
       --border: rgba(255,255,255,0.14);
       --shadow: 0 12px 30px rgba(0,0,0,0.35);
       --radius2: 22px;
-
       --blue: rgba(58,160,255,1);
       --green: rgba(24,195,126,1);
       --danger: #ff4d4d;
     }
-
     *{ box-sizing: border-box; }
-
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
@@ -30,41 +27,26 @@
       color: var(--text);
       min-height: 100vh;
     }
-
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; }
-
     header{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      display:flex; gap: 12px; align-items:center; justify-content: space-between;
+      padding: 12px 14px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: var(--radius2);
+      box-shadow: var(--shadow); backdrop-filter: blur(10px);
     }
-
     .brand{ display:flex; gap: 12px; align-items:center; min-width:0; }
     .logo{
-      width: 56px; height: 56px;
-      border-radius: 50%;
+      width: 56px; height: 56px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.18);
       background: rgba(255,255,255,0.05);
-      object-fit: cover;
-      flex: 0 0 auto;
+      object-fit: cover; flex: 0 0 auto;
     }
     .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
     .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
-
     .card{
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      overflow:hidden;
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: var(--radius2); box-shadow: var(--shadow);
+      backdrop-filter: blur(10px); overflow:hidden;
     }
     .card .cardHead{
       padding: 12px 14px;
@@ -73,31 +55,18 @@
     }
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
     .card .cardBody{ padding: 14px; }
-
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
-
     label{
-      display:block;
-      color: var(--muted);
-      font-weight:800;
-      margin-bottom:8px;
-      font-size:13px;
+      display:block; color: var(--muted); font-weight:800;
+      margin-bottom:8px; font-size:13px;
     }
-
     input, select, textarea{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
+      width:100%; padding: 12px 12px; border-radius: 14px;
       border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.30);
-      color: var(--text);
-      outline:none;
-      appearance: none;
-      -webkit-appearance: none;
-      font-size: 15px;
+      background: rgba(0,0,0,0.30); color: var(--text);
+      outline:none; appearance: none; -webkit-appearance: none; font-size: 15px;
     }
-
     select{
       padding-left: 40px;
       background-image:
@@ -105,31 +74,18 @@
         linear-gradient(135deg, rgba(234,240,255,0.9) 50%, transparent 50%),
         linear-gradient(to right, rgba(255,255,255,0.12), rgba(255,255,255,0.12));
       background-position:
-        calc(10px) 50%,
-        calc(18px) 50%,
-        calc(100% - 42px) 50%;
-      background-size:
-        8px 8px,
-        8px 8px,
-        1px 22px;
+        calc(10px) 50%, calc(18px) 50%, calc(100% - 42px) 50%;
+      background-size: 8px 8px, 8px 8px, 1px 22px;
       background-repeat: no-repeat;
     }
-
     option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
 
     .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
     .btn{
-      border:none; cursor:pointer;
-      padding:12px 14px;
-      border-radius:16px;
-      font-weight:950;
-      color:#071018;
-      transition:0.2s;
-      white-space: nowrap;
-      user-select:none;
-      min-height: 46px;
+      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
+      font-weight:950; color:#071018; transition:0.2s; white-space: nowrap;
+      user-select:none; min-height: 46px;
     }
     .btn.blue{ background: var(--blue); color:#06131f; box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
     .btn.green{ background: var(--green); color:#062116; box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
@@ -137,12 +93,10 @@
       background: rgba(255,255,255,0.10);
       color: var(--text);
       border:1px solid rgba(255,255,255,0.18);
-      box-shadow:none;
-      padding: 12px 14px;
+      box-shadow:none; padding: 12px 14px;
     }
     .btn.danger{
-      background: var(--danger);
-      color: #180404;
+      background: var(--danger); color: #180404;
       box-shadow: 0 10px 20px rgba(255,77,77,0.20);
     }
     .btn:hover{ transform: translateY(-1px); }
@@ -150,12 +104,8 @@
 
     table{ width:100%; border-collapse: collapse; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); }
     th, td{
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.10);
-      text-align:center;
-      font-size:13px;
-      vertical-align: middle;
-      white-space: nowrap;
+      padding:10px 10px; border-bottom:1px solid rgba(255,255,255,0.10);
+      text-align:center; font-size:13px; vertical-align: middle; white-space: nowrap;
     }
     th{ background: rgba(255,255,255,0.06); color: var(--muted); font-weight:900; }
     td{ color: var(--text); }
@@ -163,89 +113,58 @@
 
     h3{ margin:14px 0 8px; font-size:15px; color: rgba(234,240,255,0.7); }
     .hide{ display:none; }
-
-    .fineprint{
-      color: rgba(234,240,255,0.55);
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.7;
-    }
+    .fineprint{ color: rgba(234,240,255,0.55); font-size: 12px; margin-top: 10px; line-height: 1.7; }
 
     .ratingTag{
-      display:inline-flex;
-      padding:6px 10px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
+      display:inline-flex; padding:6px 10px; border-radius:999px;
+      font-weight:900; font-size:12px;
       border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      white-space:nowrap;
+      background: rgba(255,255,255,0.06); white-space:nowrap;
     }
     .ratingTag.excellent{ border-color: rgba(24,195,126,0.55); }
     .ratingTag.good{ border-color: rgba(58,160,255,0.55); }
     .ratingTag.acceptable{ border-color: rgba(255,210,74,0.55); }
 
     .smallBtn{
-      padding:9px 10px;
-      border-radius:14px;
-      font-weight:900;
-      border:none;
-      cursor:pointer;
-      background: rgba(255,255,255,0.10);
-      color: var(--text);
-      border:1px solid rgba(255,255,255,0.18);
-      box-shadow:none;
-      white-space:nowrap;
-      min-height: 40px;
+      padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
+      background: rgba(255,255,255,0.10); color: var(--text);
+      border:1px solid rgba(255,255,255,0.18); box-shadow:none;
+      white-space:nowrap; min-height: 40px;
     }
-
     .msg{
-      margin-top:12px;
-      padding:12px;
-      border-radius:14px;
+      margin-top:12px; padding:12px; border-radius:14px;
       border:1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      line-height:1.7;
-      font-weight:850;
-      font-size:13px;
+      color: var(--muted); line-height:1.7; font-weight:850; font-size:13px;
       display:none;
     }
-
-    .employeeChipRow{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:8px;
-    }
+    .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
     .employeeChip{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:8px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,0.06);
+      display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
+      border-radius:999px; background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.14);
-      color: var(--text);
-      font-weight:900;
-      font-size:13px;
+      color: var(--text); font-weight:900; font-size:13px;
     }
     .employeeChip button{
-      min-height: 34px;
-      min-width: 34px;
-      padding:0 10px;
-      border-radius: 999px;
-      border:none;
-      cursor:pointer;
-      background: rgba(255,77,77,0.18);
-      color: #ffb3b3;
-      border: 1px solid rgba(255,77,77,0.35);
-      font-weight:950;
+      min-height: 34px; min-width: 34px; padding:0 10px; border-radius: 999px;
+      border:none; cursor:pointer;
+      background: rgba(255,77,77,0.18); color: #ffb3b3;
+      border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
-
     @media(max-width: 420px){
       header{ padding: 12px 12px; }
       .card .cardBody{ padding: 12px; }
+    }
+
+    .admin-login-title{ font-weight:950; font-size:20px; margin-top:10px; }
+    .admin-center-name{
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-weight: 950;
+      display: inline-block;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -256,7 +175,7 @@
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
         <div>
-          <h1>لوحة الإدارة - مركز الشامية</h1>
+          <h1>لوحة الإدارة</h1>
         </div>
       </div>
       <div></div>
@@ -269,34 +188,33 @@
         </div>
 
         <div class="cardBody">
-          <!-- تسجيل دخول الإدارة -->
+          <!-- تسجيل دخول الإدارة (بدون dropdown) -->
           <div id="adminLoginBox">
-            <div class="row two">
-              <div>
-                <label>اختر اسم المركز للدخول</label>
-                <select id="adminCenterLogin"></select>
-              </div>
-              <div>
-                <label> </label>
-                <div class="btnRow" style="margin-top:0;">
-                  <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
-                  <button class="btn alt" id="adminLogoutBtn" type="button" disabled>خروج</button>
-                </div>
-              </div>
-            </div>
+            <div style="text-align:center;">
+              <img src="logo.png" alt="Logo"
+                   style="width:90px;height:90px;border-radius:18px; border:1px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.06); padding:8px;">
+              <div class="admin-login-title">إدارة الهوية الوطنية</div>
 
-            <div class="fineprint">
-              ملاحظة: هذا تسجيل دخول تجريبي داخل المتصفح (تغيير لاحقاً بصلاحيات Supabase).
-            </div>
+              <div id="adminCenterName" class="admin-center-name"></div>
 
-            <div class="msg" id="toastMsg"></div>
+              <div class="fineprint">
+                ملاحظة: هذا تسجيل دخول تجريبي داخل المتصفح (المركز ثابت لهذه الصفحة).
+              </div>
+
+              <div class="btnRow" style="justify-content:center; margin-top:12px;">
+                <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
+                <button class="btn alt" id="adminLogoutBtn" type="button" disabled>خروج</button>
+              </div>
+
+              <div class="msg" id="toastMsg" style="display:none;"></div>
+            </div>
           </div>
 
           <!-- مساحة العمل بعد الدخول -->
           <div id="adminWorkspace" class="hide">
             <div class="row two" style="align-items:end;">
               <div>
-                <label>المركز الحالي (تغيير بدون خروج)</label>
+                <label>المركز الحالي (مركز ثابت)</label>
                 <select id="adminCurrentCenter"></select>
               </div>
               <div>
@@ -304,9 +222,7 @@
                 <div class="btnRow">
                   <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
                   <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
-                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">
-                    حذف أرشيف المركز الحالي
-                  </button>
+                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">حذف أرشيف المركز الحالي</button>
                 </div>
               </div>
             </div>
@@ -318,9 +234,7 @@
 
             <!-- إدارة الموظفين -->
             <div class="card" style="margin-top:10px;">
-              <div class="cardHead">
-                <h2>إدارة أسماء الموظفين للمركز الحالي</h2>
-              </div>
+              <div class="cardHead"><h2>إدارة أسماء الموظفين للمركز الحالي</h2></div>
               <div class="cardBody">
                 <div class="row two" style="margin-bottom:10px;">
                   <div>
@@ -405,6 +319,8 @@
       "مركز اشبيلية"
     ];
 
+    const LOCK_CENTER = "مركز الشامية"; // ✅ ثابت لهذه الصفحة
+
     const LS_KEYS = {
       current: "reviews_current_v3",
       archive: "reviews_archive_v3",
@@ -416,56 +332,38 @@
       try{
         const v = localStorage.getItem(key);
         return v ? JSON.parse(v) : fallback;
-      }catch(e){
-        return fallback;
-      }
+      }catch(e){ return fallback; }
     }
-
-    function saveJson(key, value){
-      localStorage.setItem(key, JSON.stringify(value));
-    }
+    function saveJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
 
     function formatDateTime(iso){
       const d = new Date(iso);
-      return d.toLocaleString("ar-KW", {
-        year:"numeric", month:"2-digit", day:"2-digit",
-        hour:"2-digit", minute:"2-digit"
-      });
+      return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
-
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
       if(r === "جيد") return "good";
       return "acceptable";
     }
-
     function escapeHtml(str){
       return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
-
     function showToast(html){
       toastMsg.style.display = "block";
       toastMsg.innerHTML = html;
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // reviews
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
 
-    // employees
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-    for(const c of CENTERS){
-      if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
-    }
+    for(const c of CENTERS){ if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = []; }
 
-    const adminCenterLogin = document.getElementById("adminCenterLogin");
+    const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
     const adminLoginBox = document.getElementById("adminLoginBox");
@@ -478,7 +376,6 @@
     const archiveAllBtn = document.getElementById("archiveAllBtn");
     const downloadArchiveBtn = document.getElementById("downloadArchiveBtn");
     const deleteArchiveCenterBtn = document.getElementById("deleteArchiveCenterBtn");
-
     const toastMsg = document.getElementById("toastMsg");
 
     const showCurrentBtn = document.getElementById("showCurrentBtn");
@@ -486,26 +383,11 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
-    // employee UI
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
     const employeesList = document.getElementById("employeesList");
     const noEmployeesMsg = document.getElementById("noEmployeesMsg");
-
-    function renderCenters(){
-      adminCenterLogin.innerHTML = "";
-      adminCurrentCenter.innerHTML = "";
-      for(const c of CENTERS){
-        const o1 = document.createElement("option");
-        o1.value = c; o1.textContent = c;
-        adminCenterLogin.appendChild(o1);
-
-        const o2 = document.createElement("option");
-        o2.value = c; o2.textContent = c;
-        adminCurrentCenter.appendChild(o2);
-      }
-    }
 
     function renderEmployeesForCenter(center){
       const list = employeesByCenter[center] || [];
@@ -518,7 +400,6 @@
       noEmployeesMsg.style.display = "none";
 
       const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
-
       for(const name of unique){
         const chip = document.createElement("div");
         chip.className = "employeeChip";
@@ -526,9 +407,7 @@
           <span>${escapeHtml(name)}</span>
           <button type="button" title="حذف" data-name="${escapeHtml(name)}">×</button>
         `;
-        chip.querySelector("button").addEventListener("click", ()=>{
-          removeEmployee(center, name);
-        });
+        chip.querySelector("button").addEventListener("click", ()=> removeEmployee(center, name));
         employeesList.appendChild(chip);
       }
     }
@@ -544,7 +423,6 @@
     function addEmployee(){
       const center = adminCenterSession;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
-
       const name = (newEmployeeName.value || "").trim();
       if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
 
@@ -587,16 +465,21 @@
       adminCenterSession = center;
       localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
 
-      adminCurrentCenter.value = adminCenterSession;
+      adminCurrentCenter.innerHTML = "";
+      const o = document.createElement("option");
+      o.value = center; o.textContent = center;
+      adminCurrentCenter.appendChild(o);
+      adminCurrentCenter.value = center;
 
+      adminCurrentCenter.disabled = true; // لا تعديل
       adminLoginBox.style.display = "none";
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
       setView("current");
-      renderCurrentTablesForCenter(adminCenterSession);
-      renderArchiveTablesForCenter(adminCenterSession);
-      renderEmployeesForCenter(adminCenterSession);
+      renderCurrentTablesForCenter(center);
+      renderArchiveTablesForCenter(center);
+      renderEmployeesForCenter(center);
     }
 
     function renderCurrentTablesForCenter(center){
@@ -624,7 +507,7 @@
       }
 
       currentReviewsTbody.querySelectorAll("button[data-id]").forEach(btn=>{
-        btn.addEventListener("click", (e)=>{
+        btn.addEventListener("click",(e)=>{
           const id = e.currentTarget.getAttribute("data-id");
           archiveOne(id, center);
         });
@@ -661,14 +544,12 @@
 
       const moved = { ...target, archivedAt: new Date().toISOString() };
       archiveReviews.unshift(moved);
-
       currentReviews = currentReviews.filter(r => !(r.id === id && r.center === center));
 
       saveJson(LS_KEYS.current, currentReviews);
       saveJson(LS_KEYS.archive, archiveReviews);
 
       showToast("✅ تم الإنجاز وتم الأرشفة وحذفها من الحالي.");
-
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
     }
@@ -683,24 +564,9 @@
       }
     }
 
-    adminCurrentCenter.addEventListener("change", (e)=>{
-      const newCenter = e.target.value;
-      adminCenterSession = newCenter;
-      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
-
-      renderCurrentTablesForCenter(newCenter);
-      renderArchiveTablesForCenter(newCenter);
-      renderEmployeesForCenter(newCenter);
-
-      const isArchiveVisible = !archiveSection.classList.contains("hide");
-      setView(isArchiveVisible ? "archive" : "current");
-    });
-
     adminLoginBtn.addEventListener("click", ()=>{
-      const center = adminCenterLogin.value;
-      if(!center) return showToast("❌ اختر اسم المركز أولاً.");
-      enterAdminWorkspace(center);
-      showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(center)}</b>`);
+      enterAdminWorkspace(LOCK_CENTER);
+      showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
     });
 
     adminLogoutBtn.addEventListener("click", ()=>{
@@ -738,12 +604,10 @@
       saveJson(LS_KEYS.archive, archiveReviews);
 
       showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) للمركز ✅`);
-
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
     });
 
-    // CSV download
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -774,7 +638,6 @@
     downloadArchiveBtn.addEventListener("click", ()=>{
       const center = adminCenterSession;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
-
       const rows = archiveReviews.filter(r => r.center === center);
       if(rows.length === 0) return showToast("لا يوجد أرشيف لتنزيله لهذا المركز.");
 
@@ -799,26 +662,15 @@
       renderArchiveTablesForCenter(center);
     });
 
-    // employee handlers
     addEmployeeBtn.addEventListener("click", addEmployee);
-    newEmployeeName.addEventListener("keydown", (e)=>{
-      if(e.key === "Enter") addEmployee();
-    });
+    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
     // init
-    renderCenters();
-    adminCurrentCenter.value = CENTERS[0];
-
-    const initialCenterValid = adminCenterSession && CENTERS.includes(adminCenterSession);
-    if(initialCenterValid){
-      adminCenterLogin.value = adminCenterSession;
-      enterAdminWorkspace(adminCenterSession);
-    }else{
-      adminCenterLogin.value = CENTERS[0];
-      exitAdminWorkspace();
-      setView("current");
-    }
+    adminCenterNameEl.textContent = LOCK_CENTER;
+    adminCurrentCenter.disabled = true;
+    exitAdminWorkspace();
+    setView("current");
   </script>
 </body>
 </html>
