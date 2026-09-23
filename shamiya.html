@@ -18,9 +18,7 @@
       --fieldPad: 12px;
       --radius: 14px;
     }
-
     *{ box-sizing: border-box; }
-
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
@@ -31,9 +29,7 @@
       color: var(--text);
       min-height: 100vh;
     }
-
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
-
     header{
       display:flex;
       gap: 12px;
@@ -46,7 +42,6 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
     }
-
     .brand{ display:flex; gap: 12px; align-items:center; min-width: 0; }
     .logo{
       width: 56px; height: 56px;
@@ -130,11 +125,7 @@
       background-repeat: no-repeat;
     }
 
-    option{
-      background:#0f172a;
-      color:#eaf0ff;
-    }
-
+    option{ background:#0f172a; color:#eaf0ff; }
     input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
     textarea{ min-height: 86px; resize: vertical; }
 
@@ -231,14 +222,10 @@
         <div class="cardBody">
           <div class="row two">
             <div>
-              <label>اسم المركز</label>
-              <select id="centerSelect"></select>
-            </div>
-
-            <div>
               <label>اسم الموظف</label>
               <select id="employeeSelect"></select>
             </div>
+            <div></div>
           </div>
 
           <div class="row two">
@@ -282,7 +269,7 @@
           <div class="msg" id="toastMsg"></div>
 
           <div class="fineprint">
-            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف، وتظهر باللوحة الإدارية ضمن المركز المحدد.
+            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف، وتظهر باللوحة الإدارية ضمن المركز.
           </div>
         </div>
       </section>
@@ -294,7 +281,6 @@
 
     const LS_KEYS = {
       current: "reviews_current_v3",
-      archive: "reviews_archive_v3",
       employeesByCenter: "employees_by_center_v1"
     };
 
@@ -327,9 +313,7 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    const centerSelect = document.getElementById("centerSelect");
     const employeeSelect = document.getElementById("employeeSelect");
-
     const reviewerName = document.getElementById("reviewerName");
     const reviewerId = document.getElementById("reviewerId");
     const reviewerPhone = document.getElementById("reviewerPhone");
@@ -339,16 +323,6 @@
     const submitReviewBtn = document.getElementById("submitReviewBtn");
     const clearBtn = document.getElementById("clearBtn");
     const toastMsg = document.getElementById("toastMsg");
-
-    function renderCenterSingle(){
-      centerSelect.innerHTML = "";
-      const opt = document.createElement("option");
-      opt.value = center;
-      opt.textContent = center;
-      centerSelect.appendChild(opt);
-      centerSelect.value = center;
-      centerSelect.disabled = true;
-    }
 
     function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
@@ -375,7 +349,6 @@
     }
 
     submitReviewBtn.addEventListener("click", () => {
-      const centerValue = center; // ثابت حسب الصفحة
       const employeeName = employeeSelect.value;
 
       const name = (reviewerName.value || "").trim();
@@ -384,7 +357,7 @@
       const rating = ratingSelect.value;
       const comment = (commentShort.value || "").trim();
 
-      if(!centerValue || !employeeName) return showToast("❌ اختر الموظف.");
+      if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
@@ -392,7 +365,7 @@
       const review = {
         id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
         createdAt: new Date().toISOString(),
-        center: centerValue,
+        center: center,
         employeeName,
         reviewerName: name,
         reviewerId: dealNo,
@@ -422,7 +395,6 @@
       toastMsg.style.display = "none";
     });
 
-    renderCenterSingle();
     renderEmployeesForCenter();
   </script>
 </body>
