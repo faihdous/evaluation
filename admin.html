@@ -317,7 +317,7 @@
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف المركز الحالي</button>
             </div>
 
-            <!-- ✅ إدارة الموظفين (إضافة/حذف أسماء الموظفين لكل مركز) -->
+            <!-- إدارة الموظفين -->
             <div class="card" style="margin-top:10px;">
               <div class="cardHead">
                 <h2>إدارة أسماء الموظفين للمركز الحالي</h2>
@@ -348,7 +348,7 @@
               </div>
             </div>
 
-            <!-- Current Section -->
+            <!-- Current -->
             <div id="currentSection">
               <h3>التقييمات الحالية</h3>
               <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
@@ -369,7 +369,7 @@
               </div>
             </div>
 
-            <!-- Archive Section -->
+            <!-- Archive -->
             <div id="archiveSection" class="hide">
               <h3>أرشيف التقييمات (المركز الحالي فقط)</h3>
               <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
@@ -400,7 +400,7 @@
       "مركز الشامية",
       "مركز جابر العلي",
       "مركز صباح الأحمد",
-      "مركز اشبيلة",
+      "مركز القصر",
       "مركز غرب مشرف",
       "مركز المسايل",
       "مركز سعد العبدالله"
@@ -460,8 +460,7 @@
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
 
-    // ✅ employees
-    // init with empty lists (وبعدين تقدر تضيف من الإدارة)
+    // employees
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     for(const c of CENTERS){
       if(!Array.isArray(employeesByCenter[c])) employeesByCenter[c] = [];
@@ -519,7 +518,6 @@
       }
       noEmployeesMsg.style.display = "none";
 
-      // منع تكرار يظهر
       const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
 
       for(const name of unique){
@@ -552,7 +550,6 @@
       if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
 
       const arr = employeesByCenter[center] || [];
-      // منع التكرار (بنفس الاسم بعد trim)
       const exists = arr.some(x => String(x).trim() === name);
       if(exists){
         showToast(`⚠️ الاسم موجود مسبقاً: <b>${escapeHtml(name)}</b>`);
@@ -747,7 +744,7 @@
       renderArchiveTablesForCenter(center);
     });
 
-    // ✅ CSV download (BOM UTF-8)
+    // CSV download
     function downloadCSV(rows, filename){
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
@@ -803,7 +800,7 @@
       renderArchiveTablesForCenter(center);
     });
 
-    // ✅ employee handlers
+    // employee handlers
     addEmployeeBtn.addEventListener("click", addEmployee);
     newEmployeeName.addEventListener("keydown", (e)=>{
       if(e.key === "Enter") addEmployee();
