@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>تقييم موظفين - اشبيلة</title>
+  <title>تقييم موظفين - القصر</title>
   <style>
     :root{ --panel: rgba(255,255,255,0.06); --text:#eaf0ff; --muted: rgba(234,240,255,0.7); --border: rgba(255,255,255,0.14);
       --yellow:#ffd24a; --shadow:0 12px 30px rgba(0,0,0,0.35); --radius2:22px; --gap:14px; --fieldPad:12px; --radius:14px; }
@@ -65,7 +65,7 @@
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
         <div style="min-width:0;">
-          <h1>إدارة الهوية الوطنية - مركز اشبيلة</h1>
+          <h1>إدارة الهوية الوطنية - مركز القصر</h1>
           <p>تقييم الموظف</p>
         </div>
       </div>
@@ -119,73 +119,80 @@
   </div>
 
   <script>
-    const center = "مركز اشبيلة";
+    const center = "مركز القصر";
     const LS_KEYS = { current: "reviews_current_v3", employeesByCenter: "employees_by_center_v1" };
 
-    function loadJson(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+    function loadJson(key, fallback){
+      try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }catch(e){ return fallback; }
+    }
     function saveJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
 
     function formatDateTime(iso){
-      const d=new Date(iso);
-      return d.toLocaleString("ar-KW", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+      const d = new Date(iso);
+      return d.toLocaleString("ar-KW", {
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit"
+      });
     }
+
     function showToast(html){
-      toastMsg.style.display="block";
-      toastMsg.innerHTML=html;
-      setTimeout(()=>{ toastMsg.style.display="none"; },4500);
+      toastMsg.style.display = "block";
+      toastMsg.innerHTML = html;
+      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    const employeeSelect=document.getElementById("employeeSelect");
-    const reviewerName=document.getElementById("reviewerName");
-    const reviewerId=document.getElementById("reviewerId");
-    const reviewerPhone=document.getElementById("reviewerPhone");
-    const ratingSelect=document.getElementById("ratingSelect");
-    const commentShort=document.getElementById("commentShort");
+    const employeeSelect = document.getElementById("employeeSelect");
+    const reviewerName = document.getElementById("reviewerName");
+    const reviewerId = document.getElementById("reviewerId");
+    const reviewerPhone = document.getElementById("reviewerPhone");
+    const ratingSelect = document.getElementById("ratingSelect");
+    const commentShort = document.getElementById("commentShort");
 
-    const submitReviewBtn=document.getElementById("submitReviewBtn");
-    const clearBtn=document.getElementById("clearBtn");
-    const toastMsg=document.getElementById("toastMsg");
+    const submitReviewBtn = document.getElementById("submitReviewBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const toastMsg = document.getElementById("toastMsg");
 
     function renderEmployeesForCenter(){
-      const employeesByCenter=loadJson(LS_KEYS.employeesByCenter,{});
-      const list=employeesByCenter[center]||[];
-      employeeSelect.innerHTML="";
+      const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+      const list = employeesByCenter[center] || [];
+      employeeSelect.innerHTML = "";
 
-      const unique=Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+      const unique = Array.from(new Set(list.map(x => String(x).trim()).filter(Boolean)));
 
-      if(unique.length===0){
-        const opt=document.createElement("option");
-        opt.value="";
-        opt.textContent="لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
+      if(unique.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
         employeeSelect.appendChild(opt);
         return;
       }
 
       for(const name of unique){
-        const opt=document.createElement("option");
-        opt.value=name;
-        opt.textContent=name;
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
         employeeSelect.appendChild(opt);
       }
     }
 
-    submitReviewBtn.addEventListener("click", ()=>{
-      const employeeName=employeeSelect.value;
-      const name=(reviewerName.value||"").trim();
-      const dealNo=(reviewerId.value||"").trim();
-      const phone=(reviewerPhone.value||"").trim();
-      const rating=ratingSelect.value;
-      const comment=(commentShort.value||"").trim();
+    submitReviewBtn.addEventListener("click", () => {
+      const employeeName = employeeSelect.value;
+
+      const name = (reviewerName.value || "").trim();
+      const dealNo = (reviewerId.value || "").trim();
+      const phone = (reviewerPhone.value || "").trim();
+      const rating = ratingSelect.value;
+      const comment = (commentShort.value || "").trim();
 
       if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
-      const review={
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      const review = {
+        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
         createdAt: new Date().toISOString(),
         center: center,
         employeeName,
@@ -199,22 +206,22 @@
       currentReviews.unshift(review);
       saveJson(LS_KEYS.current, currentReviews);
 
-      reviewerName.value="";
-      reviewerId.value="";
-      reviewerPhone.value="";
-      commentShort.value="";
-      ratingSelect.value="ممتاز";
+      reviewerName.value = "";
+      reviewerId.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
+      ratingSelect.value = "ممتاز";
 
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
-    clearBtn.addEventListener("click", ()=>{
-      reviewerName.value="";
-      reviewerId.value="";
-      reviewerPhone.value="";
-      commentShort.value="";
-      ratingSelect.value="ممتاز";
-      toastMsg.style.display="none";
+    clearBtn.addEventListener("click", () => {
+      reviewerName.value = "";
+      reviewerId.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
+      ratingSelect.value = "ممتاز";
+      toastMsg.style.display = "none";
     });
 
     renderEmployeesForCenter();
