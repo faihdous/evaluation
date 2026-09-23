@@ -245,7 +245,7 @@
               <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
             <div>
-              <label>التقييم</label>
+              <label>التقييم العام</label>
               <select id="ratingSelect">
                 <option value="ممتاز">ممتاز</option>
                 <option value="جيد">جيد</option>
@@ -261,7 +261,15 @@
             </div>
           </div>
 
-          <div class="btnRow">
+          <!-- أسئلة التقييم الديناميكية -->
+          <div style="margin-top:8px;">
+            <div class="fineprint" style="margin-top:0;">
+              سيتم عرض أسئلة التقييم التي أضافها الإداري (إذا وُجدت).
+            </div>
+            <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px;"></div>
+          </div>
+
+          <div class="btnRow" style="margin-top:14px;">
             <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
             <button class="btn alt" id="clearBtn" type="button">مسح</button>
           </div>
@@ -269,7 +277,8 @@
           <div class="msg" id="toastMsg"></div>
 
           <div class="fineprint">
-            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف، وتظهر باللوحة الإدارية ضمن المركز.
+            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف،
+            وتظهر باللوحة الإدارية ضمن المركز.
           </div>
         </div>
       </section>
@@ -281,7 +290,8 @@
 
     const LS_KEYS = {
       current: "reviews_current_v3",
-      employeesByCenter: "employees_by_center_v1"
+      employeesByCenter: "employees_by_center_v1",
+      questions: "rating_questions_v1"
     };
 
     function loadJson(key, fallback){
@@ -295,6 +305,12 @@
 
     function saveJson(key, value){
       localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
@@ -313,6 +329,11 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    function getRatingOptions(){
+      return ["ممتاز","جيد","مقبول"];
+    }
+
+    // -------- Elements --------
     const employeeSelect = document.getElementById("employeeSelect");
     const reviewerName = document.getElementById("reviewerName");
     const reviewerId = document.getElementById("reviewerId");
@@ -324,6 +345,9 @@
     const clearBtn = document.getElementById("clearBtn");
     const toastMsg = document.getElementById("toastMsg");
 
+    const questionsContainer = document.getElementById("questionsContainer");
+
+    // -------- Employees render --------
     function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
       const list = employeesByCenter[center] || [];
@@ -348,6 +372,47 @@
       }
     }
 
+    // -------- Questions render (Dynamic) --------
+    function loadQuestions(){
+      return loadJson(LS_KEYS.questions, []); // [{id,text}]
+    }
+
+    function renderQuestionDropdowns(){
+      const qs = loadQuestions();
+      questionsContainer.innerHTML = "";
+
+      if(!qs.length){
+        // لا نخلي مكان فاضي؛ خيار: نخلي رسالة صغيرة
+        const info = document.createElement("div");
+        info.className = "fineprint";
+        info.style.marginTop = "0";
+        info.textContent = "لا توجد أسئلة مضافة حالياً.";
+        questionsContainer.appendChild(info);
+        return;
+      }
+
+      qs.forEach((q)=>{
+        const wrap = document.createElement("div");
+
+        const optionsHtml = getRatingOptions()
+          .map(opt => `<option value="${opt}">${opt}</option>`)
+          .join("");
+
+        wrap.innerHTML = `
+          <div class="row" style="margin-bottom:0;">
+            <div>
+              <label>${escapeHtml(q.text)}</label>
+              <select data-qid="${escapeHtml(q.id)}" class="questionSelect">
+                ${optionsHtml}
+              </select>
+            </div>
+          </div>
+        `;
+        questionsContainer.appendChild(wrap);
+      });
+    }
+
+    // -------- Submit --------
     submitReviewBtn.addEventListener("click", () => {
       const employeeName = employeeSelect.value;
 
@@ -362,6 +427,15 @@
       if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
+      // جمع إجابات الأسئلة
+      const qs = loadQuestions();
+      const questionAnswers = {};
+
+      for(const q of qs){
+        const sel = document.querySelector(`select[data-qid="${q.id}"]`);
+        if(sel) questionAnswers[q.id] = sel.value;
+      }
+
       const review = {
         id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
         createdAt: new Date().toISOString(),
@@ -371,7 +445,8 @@
         reviewerId: dealNo,
         reviewerPhone: phone,
         rating,
-        comment
+        comment,
+        questionAnswers
       };
 
       currentReviews.unshift(review);
@@ -383,6 +458,9 @@
       commentShort.value = "";
       ratingSelect.value = "ممتاز";
 
+      // إعادة تعيين أسئلة الدروب داون لأفضل تجربة
+      renderQuestionDropdowns();
+
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
@@ -393,9 +471,12 @@
       commentShort.value = "";
       ratingSelect.value = "ممتاز";
       toastMsg.style.display = "none";
+      renderQuestionDropdowns();
     });
 
+    // init
     renderEmployeesForCenter();
+    renderQuestionDropdowns();
   </script>
 </body>
 </html>
