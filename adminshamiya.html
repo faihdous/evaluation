@@ -26,8 +26,9 @@
         linear-gradient(180deg, #070b14, #0b1220);
       color: var(--text);
       min-height: 100vh;
+      overflow-x: hidden;
     }
-    .container{ width: min(1200px, 96vw); margin: 12px auto 26px; }
+    .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
     header{
       display:flex; gap: 12px; align-items:center; justify-content: space-between;
       padding: 12px 14px; background: var(--panel);
@@ -43,10 +44,12 @@
     }
     .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
     .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
+
     .card{
       background: var(--panel); border: 1px solid var(--border);
       border-radius: var(--radius2); box-shadow: var(--shadow);
       backdrop-filter: blur(10px); overflow:hidden;
+      width: 100%;
     }
     .card .cardHead{
       padding: 12px 14px;
@@ -55,8 +58,16 @@
     }
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
     .card .cardBody{ padding: 14px; }
+
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
+
+    @media(max-width: 720px){
+      .container{ width: 100%; margin: 8px auto 14px; padding: 0 10px; }
+      .card{ max-width:100%; }
+      .card .cardBody{ padding: 12px; }
+    }
+
     label{
       display:block; color: var(--muted); font-weight:800;
       margin-bottom:8px; font-size:13px;
@@ -151,10 +162,6 @@
       background: rgba(255,77,77,0.18); color: #ffb3b3;
       border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
-    @media(max-width: 420px){
-      header{ padding: 12px 12px; }
-      .card .cardBody{ padding: 12px; }
-    }
 
     .admin-login-title{ font-weight:950; font-size:20px; margin-top:10px; }
     .admin-center-name{
@@ -188,7 +195,7 @@
         </div>
 
         <div class="cardBody">
-          <!-- تسجيل دخول الإدارة (بدون dropdown) -->
+          <!-- واجهة الدخول (بدون زر الخروج) -->
           <div id="adminLoginBox">
             <div style="text-align:center;">
               <img src="logo.png" alt="Logo"
@@ -198,20 +205,22 @@
               <div id="adminCenterName" class="admin-center-name"></div>
 
               <div class="fineprint">
-                ملاحظة: هذا تسجيل دخول تجريبي داخل المتصفح (المركز ثابت لهذه الصفحة).
               </div>
 
               <div class="btnRow" style="justify-content:center; margin-top:12px;">
                 <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
-                <button class="btn alt" id="adminLogoutBtn" type="button" disabled>خروج</button>
               </div>
 
               <div class="msg" id="toastMsg" style="display:none;"></div>
             </div>
           </div>
 
-          <!-- مساحة العمل بعد الدخول -->
+          <!-- الصفحة الإدارية (زر الخروج داخلها) -->
           <div id="adminWorkspace" class="hide">
+            <div class="btnRow" style="justify-content: flex-start; margin-bottom:10px;">
+              <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
+            </div>
+
             <div class="row two" style="align-items:end;">
               <div>
                 <label>المركز الحالي (مركز ثابت)</label>
@@ -319,7 +328,7 @@
       "مركز اشبيلية"
     ];
 
-    const LOCK_CENTER = "مركز الشامية"; // ✅ ثابت لهذه الصفحة
+    const LOCK_CENTER = "مركز الشامية";
 
     const LS_KEYS = {
       current: "reviews_current_v3",
@@ -366,6 +375,7 @@
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
+
     const adminLoginBox = document.getElementById("adminLoginBox");
     const adminWorkspace = document.getElementById("adminWorkspace");
     const adminCurrentCenter = document.getElementById("adminCurrentCenter");
@@ -456,9 +466,13 @@
     }
 
     function exitAdminWorkspace(){
+      adminCenterSession = "";
+      localStorage.removeItem(LS_KEYS.adminCenter);
+
+      adminLogoutBtn.disabled = true;
+
       adminLoginBox.style.display = "block";
       adminWorkspace.classList.add("hide");
-      adminLogoutBtn.disabled = true;
     }
 
     function enterAdminWorkspace(center){
@@ -471,9 +485,10 @@
       adminCurrentCenter.appendChild(o);
       adminCurrentCenter.value = center;
 
-      adminCurrentCenter.disabled = true; // لا تعديل
+      adminCurrentCenter.disabled = true;
       adminLoginBox.style.display = "none";
       adminWorkspace.classList.remove("hide");
+
       adminLogoutBtn.disabled = false;
 
       setView("current");
@@ -570,10 +585,8 @@
     });
 
     adminLogoutBtn.addEventListener("click", ()=>{
-      adminCenterSession = "";
-      localStorage.removeItem(LS_KEYS.adminCenter);
-      adminLogoutBtn.disabled = true;
       exitAdminWorkspace();
+      setView("current");
       showToast("تم تسجيل الخروج من الإدارة.");
     });
 
@@ -638,6 +651,7 @@
     downloadArchiveBtn.addEventListener("click", ()=>{
       const center = adminCenterSession;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
       const rows = archiveReviews.filter(r => r.center === center);
       if(rows.length === 0) return showToast("لا يوجد أرشيف لتنزيله لهذا المركز.");
 
@@ -668,8 +682,9 @@
 
     // init
     adminCenterNameEl.textContent = LOCK_CENTER;
+    adminLogoutBtn.disabled = true;     // زر الخروج لا يعمل قبل الدخول
+    exitAdminWorkspace();              // يرجّع واجهة الدخول
     adminCurrentCenter.disabled = true;
-    exitAdminWorkspace();
     setView("current");
   </script>
 </body>
