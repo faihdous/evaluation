@@ -259,7 +259,6 @@
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
             </div>
 
-            <!-- ✅ حذف خانة "المركز الحالي (مركز ثابت)" بالكامل -->
             <div class="row two" style="align-items:end; margin-top:4px;">
               <div></div>
               <div>
@@ -446,7 +445,6 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // حساب التقييم النهائي
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
       if(r === "جيد") return 2;
@@ -536,11 +534,14 @@
       const answers = review?.questionAnswers || {};
       const finalRating = finalRatingFromAnswers(qs, answers);
 
+      const noteText = (review.comment && String(review.comment).trim()) ? review.comment : "—";
+
       reviewDetailsMeta.innerHTML = `
         <b>الموظف:</b> ${escapeHtml(review.employeeName || "")} &nbsp; | &nbsp;
         <b>المراجع:</b> ${escapeHtml(review.reviewerName || "")} &nbsp; | &nbsp;
-        <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} &nbsp; | &nbsp;
+        <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} <br>
         <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))} <br>
+        <b>الملاحظة:</b> ${escapeHtml(noteText)} <br>
         <b>التقييم النهائي:</b> <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
       `;
 
@@ -793,7 +794,7 @@
       });
     }
 
-    // Archive table (with questions + answers in columns)
+    // Archive table (with questions + answers in columns) + ✅ note column
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -807,6 +808,9 @@
       theadRow.push(`<th>الموظف</th>`);
       theadRow.push(`<th>التقييم</th>`);
 
+      // ✅ عمود الملاحظة
+      theadRow.push(`<th>الملاحظة</th>`);
+
       if(qs.length){
         qs.forEach(q=>{
           theadRow.push(`<th title="${escapeHtml(q.text)}">${escapeHtml(q.text)}</th>`);
@@ -819,8 +823,8 @@
       archiveTableThead.innerHTML = `<tr>${theadRow.join("")}</tr>`;
 
       if(arc.length === 0){
+        const colCount = 7 + (qs.length ? qs.length : 1); // + ملاحظة + إجراء
         const tr = document.createElement("tr");
-        const colCount = 6 + (qs.length ? qs.length : 1);
         tr.innerHTML = `<td colspan="${colCount}" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
         archiveReviewsTbody.appendChild(tr);
         return;
@@ -829,6 +833,8 @@
       for(const r of arc){
         const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
         const answers = r.questionAnswers || {};
+
+        const noteText = (r.comment && String(r.comment).trim()) ? r.comment : "—";
 
         const questionsCells = qs.length
           ? qs.map(q=>{
@@ -844,6 +850,7 @@
           <td>${escapeHtml(r.reviewerPhone)}</td>
           <td>${escapeHtml(r.employeeName)}</td>
           <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
+          <td>${escapeHtml(noteText)}</td>
           ${questionsCells}
           <td>
             <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
@@ -887,15 +894,17 @@
       }
     }
 
+    // ✅ CSV download with note column
     function downloadCSV(rows, filename){
       const qs = loadJson(LS_KEYS.questions, []);
-      const header = ["التاريخ والوقت","اسم المراجع","رقم الهاتف","المركز","الموظف","التقييم"];
+      const header = ["التاريخ والوقت","اسم المراجع","رقم الهاتف","المركز","الموظف","التقييم","الملاحظة"];
 
       const csv = [
         header.join(","),
         ...rows.map(r=>{
           const dt = formatDateTime(r.archivedAt || r.createdAt);
           const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          const note = (r.comment && String(r.comment).trim()) ? r.comment : "—";
 
           const cells = [
             dt,
@@ -903,7 +912,8 @@
             r.reviewerPhone,
             r.center,
             r.employeeName,
-            finalRating
+            finalRating,
+            note
           ].map(v=>{
             const s = String(v ?? "").replaceAll('"','""');
             return `"${s}"`;
