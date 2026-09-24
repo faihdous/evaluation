@@ -6,14 +6,13 @@
   <title>تقييم موظفين - الشامية</title>
   <style>
     :root{
-      /* فاتح/رسمي مناسب لهوية الجوازات/الجنسية */
       --panel: rgba(255,255,255,0.78);
-      --text: #0b1b2a;                 /* كتابة داكنة */
+      --text: #0b1b2a;
       --muted: rgba(11,27,42,0.65);
       --border: rgba(11,27,42,0.14);
 
-      --primaryBlue: #0b3d91;         /* أزرق رسمي */
-      --secondaryGreen: #0e7a4b;     /* أخضر رسمي */
+      --primaryBlue: #0b3d91;
+      --secondaryGreen: #0e7a4b;
       --yellow: #ffd24a;
 
       --shadow: 0 18px 45px rgba(2,6,23,0.16);
@@ -40,6 +39,97 @@
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
 
+    /* ✅ تحسين التمركز العام للبطاقة */
+    .card{
+      text-align: center;
+    }
+    .card .cardHead{
+      text-align: center;
+    }
+
+    /* ✅ نخلي محتوى الـ body متمركز ويشتغل داخل عرض محدد */
+    .cardBody{
+      padding: 14px !important;
+    }
+
+    .form-center-wrap{
+      width: 100%;
+      max-width: 720px;   /* ✅ عدّل الرقم إذا تبغى عرض أوسع/أضيق */
+      margin: 0 auto;     /* ✅ تمركز داخل البطاقة */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ✅ الحقول داخل الصفوف تكون centered */
+    .center-row{
+      width: 100%;
+    }
+    .center-row .row{
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 720px;
+      justify-content: center;
+      text-align: center;
+    }
+
+    label{
+      display:block;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 13px;
+      width: 100%;
+      text-align: center; /* ✅ label بالنص */
+    }
+
+    /* ✅ خلي المدخلات تكون بلوك بتمركز */
+    input, select, textarea{
+      width: 100%;
+      padding: calc(var(--fieldPad) + 2px) 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.9);
+      color: var(--text);
+      outline:none;
+      appearance: none;
+      -webkit-appearance: none;
+      font-size: 15px;
+
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: right; /* RTL للكتابة داخل الحقل */
+    }
+
+    select{
+      padding-left: 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
+        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
+      background-position:
+        calc(10px) 50%,
+        calc(18px) 50%,
+        calc(100% - 42px) 50%;
+      background-size:
+        8px 8px,
+        8px 8px,
+        1px 22px;
+      background-repeat: no-repeat;
+    }
+
+    option{ background:#f8fbff; color:#0b1b2a; }
+    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
+    textarea{ min-height: 86px; resize: vertical; }
+
+    .container-grid-fix{
+      /* لا نغيّر grid الخارجي؛ بس نخلي البطاقة تتصرف صح */
+      display: flex;
+      justify-content: center;
+    }
+
     header{
       display:flex;
       gap: 12px;
@@ -65,21 +155,6 @@
     .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
     .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
 
-    .card{
-      background: rgba(255,255,255,0.80);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      overflow:hidden;
-    }
-    .card .cardHead{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(11,27,42,0.10);
-      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
-    }
-    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; color: var(--text); }
-
     .grid{
       display:grid;
       grid-template-columns: 1fr;
@@ -87,12 +162,11 @@
       margin-top: 14px;
     }
 
-    label{
+    .cardHead h2{
+      text-align: center;
+      margin: 0;
+      padding: 0;
       display:block;
-      color: var(--muted);
-      font-weight: 800;
-      margin-bottom: 8px;
-      font-size: 13px;
     }
 
     .row{
@@ -100,50 +174,19 @@
       grid-template-columns: 1fr;
       gap: 12px;
       margin-bottom: 14px;
+      width: 100%;
     }
     @media(min-width: 720px){
       .row.two{ grid-template-columns: 1fr 1fr; }
     }
-
-    input, select, textarea{
-      width:100%;
-      padding: calc(var(--fieldPad) + 2px) 12px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(11,27,42,0.18);
-      background: rgba(255,255,255,0.9);
-      color: var(--text);
-      outline:none;
-      appearance: none;
-      -webkit-appearance: none;
-      font-size: 15px;
-    }
-
-    select{
-      padding-left: 40px;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
-        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
-      background-position:
-        calc(10px) 50%,
-        calc(18px) 50%,
-        calc(100% - 42px) 50%;
-      background-size:
-        8px 8px,
-        8px 8px,
-        1px 22px;
-      background-repeat: no-repeat;
-    }
-
-    option{ background:#f8fbff; color:#0b1b2a; }
-    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
-    textarea{ min-height: 86px; resize: vertical; }
 
     .btnRow{
       display:flex;
       gap: 10px;
       flex-wrap: wrap;
       align-items:center;
+      justify-content: center; /* ✅ الأزرار بالنص */
+      width: 100%;
     }
 
     .btn{
@@ -194,6 +237,8 @@
       font-weight: 850;
       font-size: 13px;
       display:none;
+      text-align:center;
+      width: 100%;
     }
 
     .fineprint{
@@ -201,12 +246,15 @@
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
+      text-align: center; /* ✅ الفاين پرنت بالنص */
+      width: 100%;
     }
 
     @media(max-width: 420px){
       header{ padding: 12px 12px; }
       .brand h1{ font-size: 15px; }
       .card .cardBody{ padding: 12px; }
+      .form-center-wrap{ max-width: 100%; }
     }
   </style>
 </head>
@@ -231,46 +279,50 @@
           <h2>قيم تجربتك اليوم</h2>
         </div>
 
-        <div class="cardBody" style="padding:14px;">
-          <div class="row two">
-            <div>
-              <label>اسم الموظف</label>
-              <select id="employeeSelect"></select>
+        <!-- ✅ wrapper لتوسيط كل المحتوى من العنوان لآخر شي -->
+        <div class="cardBody">
+          <div class="form-center-wrap">
+
+            <div class="row two">
+              <div>
+                <label>اسم الموظف</label>
+                <select id="employeeSelect"></select>
+              </div>
+              <div></div>
             </div>
-            <div></div>
-          </div>
 
-          <div class="row two">
-            <div>
-              <label>اسم المراجع</label>
-              <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
+            <div class="row two">
+              <div>
+                <label>اسم المراجع</label>
+                <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
+              </div>
+              <div>
+                <label>رقم الهاتف</label>
+                <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
+              </div>
             </div>
-            <div>
-              <label>رقم الهاتف</label>
-              <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
+
+            <div style="margin-top:8px; width:100%;">
+              <div class="fineprint" style="margin-top:0;"></div>
+              <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px; width:100%; align-items:center;"></div>
             </div>
-          </div>
 
-          <div style="margin-top:8px;">
-            <div class="fineprint" style="margin-top:0;"></div>
-            <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px;"></div>
-          </div>
-
-          <div class="row" style="margin-top:14px;">
-            <div>
-              <label>ملاحظة (اختياري)</label>
-              <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+            <div class="row" style="margin-top:14px;">
+              <div>
+                <label>ملاحظة (اختياري)</label>
+                <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+              </div>
             </div>
+
+            <div class="btnRow" style="margin-top:14px;">
+              <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
+              <button class="btn alt" id="clearBtn" type="button">مسح</button>
+            </div>
+
+            <div class="msg" id="toastMsg"></div>
+            <div class="fineprint"></div>
+
           </div>
-
-          <div class="btnRow" style="margin-top:14px;">
-            <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
-            <button class="btn alt" id="clearBtn" type="button">مسح</button>
-          </div>
-
-          <div class="msg" id="toastMsg"></div>
-
-          <div class="fineprint"></div>
         </div>
       </section>
     </div>
@@ -322,7 +374,6 @@
       return ["ممتاز","جيد","مقبول"];
     }
 
-    // -------- Elements --------
     const employeeSelect = document.getElementById("employeeSelect");
     const reviewerName = document.getElementById("reviewerName");
     const reviewerPhone = document.getElementById("reviewerPhone");
@@ -334,7 +385,6 @@
 
     const questionsContainer = document.getElementById("questionsContainer");
 
-    // -------- Employees render --------
     function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
       const list = employeesByCenter[center] || [];
@@ -359,9 +409,8 @@
       }
     }
 
-    // -------- Questions render (Dynamic) --------
     function loadQuestions(){
-      return loadJson(LS_KEYS.questions, []); // [{id,text}]
+      return loadJson(LS_KEYS.questions, []);
     }
 
     function renderQuestionDropdowns(){
@@ -383,11 +432,13 @@
           .join("");
 
         const wrap = document.createElement("div");
+        wrap.style.width = "100%";
+        wrap.style.display = "block";
         wrap.innerHTML = `
           <div class="row" style="margin-bottom:0;">
             <div>
               <label>${escapeHtml(q.text)}</label>
-              <select data-qid="${escapeHtml(q.id)}" class="questionSelect">
+              <select data-qid="${escapeHtml(q.id)}">
                 ${optionsHtml}
               </select>
             </div>
@@ -397,7 +448,6 @@
       });
     }
 
-    // -------- Submit --------
     submitReviewBtn.addEventListener("click", () => {
       const employeeName = employeeSelect.value;
 
@@ -417,7 +467,6 @@
         if(sel) questionAnswers[q.id] = sel.value;
       }
 
-      // ✅ التقييم العام (كما عندك سابقاً حسب أول سؤال)
       const rating = qs.length
         ? (questionAnswers[qs[0].id] || "مقبول")
         : "مقبول";
@@ -430,7 +479,7 @@
         center: center,
         employeeName,
         reviewerName: name,
-        reviewerId: "", // واجهة الاستبيان شالت الحقل
+        reviewerId: "",
         reviewerPhone: phone,
         rating,
         comment,
@@ -448,7 +497,6 @@
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
-    // -------- Clear --------
     clearBtn.addEventListener("click", () => {
       reviewerName.value = "";
       reviewerPhone.value = "";
@@ -457,7 +505,6 @@
       renderQuestionDropdowns();
     });
 
-    // init
     renderEmployeesForCenter();
     renderQuestionDropdowns();
   </script>
