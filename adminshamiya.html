@@ -204,20 +204,16 @@
       border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
 
-    /* ✅ Modal (تم إصلاحه ليكون مخفي افتراضيًا 100%) */
+    /* ✅ Modal (مخفي افتراضيًا) */
     #reviewDetailsModal{
       position: fixed;
       inset: 0;
       background: var(--modalBg);
       z-index: 9999;
-
-      /* المخفي افتراضيًا */
       display: none;
-
       align-items: center;
       justify-content: center;
     }
-    /* إذا تم إزالة hide => يظهر */
     #reviewDetailsModal:not(.hide){
       display: flex;
     }
@@ -478,6 +474,46 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    // ✅ حساب التقييم النهائي (من questionAnswers) - بدون تغيير الواجهة
+    function pointsForRating(r){
+      if(r === "ممتاز") return 1;
+      if(r === "جيد") return 2;
+      if(r === "مقبول") return 3;
+      return null;
+    }
+    function finalRatingFromAnswers(qs, answers){
+      if(!Array.isArray(qs) || qs.length === 0) return "—";
+      let sum = 0;
+      let count = 0;
+
+      for(const q of qs){
+        const ans = answers?.[q.id];
+        const p = pointsForRating(ans);
+        if(p == null) continue; // تجاهل غير معروف/—
+        sum += p;
+        count++;
+      }
+
+      if(count === 0) return "—";
+
+      // حسب طلبك: غالباً عندك 3 أسئلة (نستخدم عتبات 3–4 ممتاز / 5–6 جيد / 7–9 مقبول)
+      if(count === 3){
+        if(sum <= 4) return "ممتاز";
+        if(sum <= 6) return "جيد";
+        return "مقبول";
+      }
+
+      // احتياطي لو عدد الأسئلة تغير مستقبلاً:
+      // نحول لمقياس 0..1 حسب نطاق (count*1) إلى (count*3) ثم نقسم لثلاث فئات
+      const minSum = count * 1;
+      const maxSum = count * 3;
+      const t = (sum - minSum) / (maxSum - minSum || 1);
+
+      if(t <= 0.33) return "ممتاز";
+      if(t <= 0.66) return "جيد";
+      return "مقبول";
+    }
+
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
@@ -525,13 +561,16 @@
 
       const qs = loadJson(LS_KEYS.questions, []);
       const answers = review?.questionAnswers || {};
+      const finalRating = finalRatingFromAnswers(qs, answers);
 
       reviewDetailsMeta.innerHTML = `
         <b>الموظف:</b> ${escapeHtml(review.employeeName || "")} &nbsp; | &nbsp;
         <b>المراجع:</b> ${escapeHtml(review.reviewerName || "")} &nbsp; | &nbsp;
         <b>رقم المعاملة:</b> ${escapeHtml(review.reviewerId || "")} &nbsp; | &nbsp;
         <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} &nbsp; | &nbsp;
-        <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))}
+        <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))} <br>
+        <b>التقييم النهائي:</b>
+        <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
       `;
 
       if(!qs.length){
@@ -737,6 +776,7 @@
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
+      const qs = loadJson(LS_KEYS.questions, []);
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
@@ -744,6 +784,7 @@
         currentReviewsTbody.appendChild(tr);
       }else{
         for(const r of cur){
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${formatDateTime(r.createdAt)}</td>
@@ -751,7 +792,7 @@
             <td>${escapeHtml(r.reviewerId)}</td>
             <td>${escapeHtml(r.reviewerPhone)}</td>
             <td>${escapeHtml(r.employeeName)}</td>
-            <td><span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span></td>
+            <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
             <td>
               <div class="btnRow" style="justify-content:center;">
                 <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
@@ -783,6 +824,7 @@
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
+      const qs = loadJson(LS_KEYS.questions, []);
 
       if(arc.length === 0){
         const tr = document.createElement("tr");
@@ -790,6 +832,7 @@
         archiveReviewsTbody.appendChild(tr);
       }else{
         for(const r of arc){
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
           const tr = document.createElement("tr");
           tr.innerHTML = `
             <td>${formatDateTime(r.archivedAt || r.createdAt)}</td>
@@ -797,7 +840,7 @@
             <td>${escapeHtml(r.reviewerId)}</td>
             <td>${escapeHtml(r.reviewerPhone)}</td>
             <td>${escapeHtml(r.employeeName)}</td>
-            <td><span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span></td>
+            <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
             <td>
               <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
             </td>
@@ -842,12 +885,22 @@
     }
 
     function downloadCSV(rows, filename){
+      const qs = loadJson(LS_KEYS.questions, []);
       const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
       const csv = [
         header.join(","),
         ...rows.map(r=>{
           const dt = formatDateTime(r.archivedAt || r.createdAt);
-          const cells = [dt, r.reviewerName, r.reviewerId, r.reviewerPhone, r.center, r.employeeName, r.rating].map(v=>{
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          const cells = [
+            dt,
+            r.reviewerName,
+            r.reviewerId,
+            r.reviewerPhone,
+            r.center,
+            r.employeeName,
+            finalRating
+          ].map(v=>{
             const s = String(v ?? "").replaceAll('"','""');
             return `"${s}"`;
           });
