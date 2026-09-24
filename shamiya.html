@@ -37,12 +37,11 @@
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
 
-    /* ===== header fix (مناسب للجوال) ===== */
     header{
       display:flex;
       gap: 12px;
       align-items:center;
-      justify-content: center !important; /* ✅ متمركز */
+      justify-content: center !important;
       padding: 12px 14px;
       background: rgba(255,255,255,0.72);
       border: 1px solid var(--border);
@@ -60,8 +59,8 @@
       align-items:center;
       justify-content:center;
       position: relative;
-      padding-left: 72px;   /* مساحة للشعار يمين/يسار حسب RTL */
-      padding-right: 72px;  /* احتياط للجوال */
+      padding-left: 72px;
+      padding-right: 72px;
       min-width: 0;
     }
 
@@ -74,7 +73,7 @@
       flex: 0 0 auto;
 
       position: absolute;
-      right: 14px;   /* ✅ الشعار يمين */
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -97,7 +96,6 @@
       padding: 0 10px;
     }
 
-    /* ===== لو الشاشة صغيرة جدًا نخلي العنوان يظل واضح ===== */
     @media(max-width: 520px){
       header{ padding: 12px 12px; }
       header .brand{
@@ -120,11 +118,13 @@
       backdrop-filter: blur(12px);
       overflow:hidden;
     }
+
     .card .cardHead{
       padding: 12px 14px;
       border-bottom: 1px solid rgba(11,27,42,0.10);
       background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
     }
+
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; text-align:center; }
 
     .grid{
@@ -136,10 +136,9 @@
 
     .cardBody{ padding: 14px; }
 
-    /* ✅ تمركز من داخل الكرت */
     .form-center-wrap{
       width: 100%;
-      max-width: 680px; /* ✅ يضبط عرض النموذج على الجوال/الشاشة الصغيرة */
+      max-width: 680px;
       margin: 0 auto;
       display:flex;
       flex-direction: column;
@@ -168,7 +167,6 @@
       width: 100%;
     }
 
-    /* ✅ الحقول تكون وسط */
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
@@ -184,7 +182,7 @@
       display:block;
       margin-left:auto;
       margin-right:auto;
-      text-align: right; /* كتابة داخل الحقل RTL */
+      text-align: right;
     }
 
     select{
@@ -279,7 +277,6 @@
       width: 100%;
     }
 
-    /* مساحة أسفل الأسئلة */
     #questionsContainer{
       display:flex;
       flex-direction:column;
@@ -403,7 +400,6 @@
       return ["ممتاز","جيد","مقبول"];
     }
 
-    // -------- Elements --------
     const employeeSelect = document.getElementById("employeeSelect");
     const reviewerName = document.getElementById("reviewerName");
     const reviewerPhone = document.getElementById("reviewerPhone");
@@ -415,7 +411,6 @@
 
     const questionsContainer = document.getElementById("questionsContainer");
 
-    // -------- Employees render --------
     function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
       const list = employeesByCenter[center] || [];
@@ -432,6 +427,11 @@
         return;
       }
 
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "— اختر اسم الموظف —";
+      employeeSelect.appendChild(placeholder);
+
       for(const name of unique){
         const opt = document.createElement("option");
         opt.value = name;
@@ -440,11 +440,11 @@
       }
     }
 
-    // -------- Questions render (Dynamic) --------
     function loadQuestions(){
       return loadJson(LS_KEYS.questions, []); // [{id,text}]
     }
 
+    // ✅ الأسئلة إلزامية: أول خيار قيمة "" عشان يجبره يختار
     function renderQuestionDropdowns(){
       const qs = loadQuestions();
       questionsContainer.innerHTML = "";
@@ -458,10 +458,13 @@
         return;
       }
 
+      const ratingOptions = getRatingOptions();
+
       qs.forEach((q)=>{
-        const optionsHtml = getRatingOptions()
-          .map(opt => `<option value="${opt}">${opt}</option>`)
-          .join("");
+        const optionsHtml = `
+          <option value="" selected>— اختر التقييم —</option>
+          ${ratingOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+        `;
 
         const wrap = document.createElement("div");
         wrap.style.width = "100%";
@@ -480,29 +483,37 @@
       });
     }
 
-    // -------- Submit --------
     submitReviewBtn.addEventListener("click", () => {
       const employeeName = employeeSelect.value;
 
       const name = (reviewerName.value || "").trim();
       const phone = (reviewerPhone.value || "").trim();
-      const comment = (commentShort.value || "").trim();
+      const comment = (commentShort.value || "").trim(); // اختياري
 
       if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
       const qs = loadQuestions();
+      if(!qs.length) return showToast("❌ لا توجد أسئلة حالياً.");
+
       const questionAnswers = {};
 
+      // ✅ إلزامي: كل سؤال لازم يكون فيه اختيار حقيقي (قيمة ليست فارغة)
       for(const q of qs){
         const sel = document.querySelector(`select[data-qid="${q.id}"]`);
-        if(sel) questionAnswers[q.id] = sel.value;
+        if(!sel) return showToast("❌ حدث خطأ. لم يتم العثور على سؤال.");
+
+        const value = sel.value;
+
+        if(!value){
+          return showToast(`❌ الرجاء الإجابة على سؤال: <b>${escapeHtml(q.text)}</b>.`);
+        }
+
+        questionAnswers[q.id] = value;
       }
 
-      const rating = qs.length
-        ? (questionAnswers[qs[0].id] || "مقبول")
-        : "مقبول";
+      const rating = questionAnswers[qs[0].id]; // الآن مضمون أنه موجود
 
       const currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -515,7 +526,7 @@
         reviewerId: "",
         reviewerPhone: phone,
         rating,
-        comment,
+        comment, // اختياري
         questionAnswers
       };
 
@@ -530,16 +541,15 @@
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
-    // -------- Clear --------
     clearBtn.addEventListener("click", () => {
       reviewerName.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
+      employeeSelect.value = "";
       toastMsg.style.display = "none";
       renderQuestionDropdowns();
     });
 
-    // init
     renderEmployeesForCenter();
     renderQuestionDropdowns();
   </script>
