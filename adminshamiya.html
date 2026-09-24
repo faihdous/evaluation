@@ -470,7 +470,7 @@
             </div>
 
             <div class="subToolbarGrid" style="margin:6px 0 14px;">
-              <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
+              <button class="btn alt" id="showCurrentBtn" type="button">عرض الحالي</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
             </div>
 
@@ -502,7 +502,6 @@
                 </table>
               </div>
 
-              <!-- ✅ زر التقييم النهائي تحت الأرشيف -->
               <div class="btnRow" style="margin:14px 0 8px; justify-content:center;">
                 <button class="btn alt" id="showFinalRatingBtn" type="button">التقييم النهائي (إجمالي + تفاصيل)</button>
               </div>
@@ -697,7 +696,6 @@
       return "مقبول";
     }
 
-    // ✅ تحويل إجمالي عدّات الموظف إلى ناتج نهائي (بنفس منطق التطبيع)
     function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
       const n = excellentCount + goodCount + acceptableCount;
       if(n === 0) return "—";
@@ -718,7 +716,6 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
-    // ===== عناصر الصفحة =====
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -748,7 +745,6 @@
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
     const questionsAdminPanel = document.getElementById("questionsAdminPanel");
 
-    // ✅ عناصر التقييم النهائي
     const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
     const finalRatingSection = document.getElementById("finalRatingSection");
     const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
@@ -816,7 +812,6 @@
       }
     }
 
-    // ===== Employees =====
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -890,7 +885,6 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // ===== Questions =====
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
@@ -963,7 +957,6 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
-    // Tabs
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
@@ -973,7 +966,6 @@
       questionsAdminPanel.classList.remove("hide");
     });
 
-    // ===== Current Table =====
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -1020,7 +1012,6 @@
       });
     }
 
-    // ===== Archive Table =====
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -1146,7 +1137,6 @@
       renderQuestions();
     }
 
-    // ===== ✅ عرض التقييم النهائي + تفاصيل تقييمات الموظفين =====
     function renderFinalRatingForEmployees(center){
       const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
@@ -1171,7 +1161,6 @@
         return;
       }
 
-      // emp -> {counts, reviews:[]}
       const map = new Map();
 
       for(const r of all){
@@ -1219,7 +1208,6 @@
       }
 
       for(const x of rows){
-        // ترتيب مراجعات الموظف حسب الوقت (الأحدث أولاً)
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
 
         const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
@@ -1267,7 +1255,6 @@
       }
     }
 
-    // ===== Buttons =====
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace();
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -1293,13 +1280,10 @@
       adminAdjustPage.classList.add("hide");
       setView("archive");
       renderArchiveTablesForCenter(LOCK_CENTER);
-      // لا نخفي finalRating تلقائيًا هنا؛ فقط نخليه كما هو إذا المستخدم فتحه
     });
 
-    // ✅ فتح/عرض التقييم النهائي (تحت الأرشيف)
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
       finalRatingSection.classList.remove("hide");
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
@@ -1340,7 +1324,7 @@
       showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) ✅`);
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
-      // لو كان التقييم النهائي ظاهر، حدّثه
+
       if(!finalRatingSection.classList.contains("hide")){
         renderFinalRatingForEmployees(center);
       }
@@ -1378,7 +1362,6 @@
       }
     });
 
-    // init
     adminHeaderTitle.textContent = `لوحة الإدارة - ${LOCK_CENTER}`;
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
