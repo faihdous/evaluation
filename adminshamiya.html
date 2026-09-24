@@ -136,7 +136,6 @@
       .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
 
-      /* كبر اللوقو + رفعه لفوق ليغطي الفراغ */
       .loginLogo{
         width: 160px;
         height: 160px;
@@ -146,7 +145,6 @@
       }
     }
 
-    /* ✅ تنظيم الأزرار بشكل متناسق */
     .toolbarGrid{
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -346,7 +344,7 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
-    /* ألوان الأزرار حسب طلبك */
+    /* ✅ تعديل ألوان الأزرار حسب طلبك */
     #downloadArchiveBtn,
     #showArchiveBtn{
       background: rgba(14,122,75,0.16) !important;
@@ -359,6 +357,50 @@
       color: #3a2b00 !important;
       border: 1px solid rgba(255,210,74,0.55) !important;
       box-shadow: 0 10px 20px rgba(255,210,74,0.12) !important;
+    }
+
+    details.finalEmployeeDetails{
+      border: 1px solid rgba(11,27,42,0.12);
+      border-radius: 14px;
+      background: rgba(11,61,145,0.04);
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    details.finalEmployeeDetails summary{
+      cursor:pointer;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 950;
+    }
+    .finalEmployeeMeta{
+      padding: 10px 12px 14px;
+      border-top: 1px solid rgba(11,27,42,0.10);
+    }
+    .finalReviewsList{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .finalReviewItem{
+      border: 1px solid rgba(11,27,42,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.65);
+    }
+    .finalReviewItem .metaLine{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px 12px;
+      align-items:center;
+      justify-content:flex-start;
+      margin-bottom: 6px;
+      font-weight: 900;
+      color: rgba(11,27,42,0.75);
+      font-size: 12px;
     }
   </style>
 </head>
@@ -459,8 +501,23 @@
                   <tbody id="archiveReviewsTbody"></tbody>
                 </table>
               </div>
-              <div class="fineprint" style="margin-top:10px;">
-                ملاحظة: الملاحظة تُعرض داخل نافذة “تفاصيل” فقط (ولا تظهر في الجدول).
+
+              <!-- ✅ زر التقييم النهائي تحت الأرشيف -->
+              <div class="btnRow" style="margin:14px 0 8px; justify-content:center;">
+                <button class="btn alt" id="showFinalRatingBtn" type="button">التقييم النهائي (إجمالي + تفاصيل)</button>
+              </div>
+
+              <div id="finalRatingSection" class="hide" style="margin-top:10px;">
+                <h3>التقييم النهائي لكل موظف</h3>
+                <div class="fineprint" style="margin-top:0;">
+                  يتم تجميع (ممتاز/جيد/مقبول) من تقييم كل مراجعة، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
+                </div>
+
+                <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
+
+                <div class="fineprint" style="margin-top:12px;">
+                  ملاحظة: إذا لم يظهر موظف، فهذا يعني أن لديه تقييماً غير كافٍ أو لا توجد مراجعات باسمه.
+                </div>
               </div>
             </div>
 
@@ -469,11 +526,9 @@
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
               </div>
 
-              <!-- ✅ Tabs مع زر التقييم النهائي -->
               <div class="btnRow" style="margin:6px 0 14px;">
                 <button class="btn green" id="tabEmployeesBtn" type="button">أسماء الموظفين</button>
                 <button class="btn blue" id="tabQuestionsBtn" type="button">أسئلة التقييم</button>
-                <button class="btn alt" id="tabFinalRatingBtn" type="button">التقييم النهائي</button>
               </div>
 
               <div id="employeesAdminPanel">
@@ -527,40 +582,8 @@
                   </div>
                 </div>
               </div>
-
-              <!-- ✅ قسم التقييم النهائي (إجمالي) -->
-              <div id="finalRatingAdminPanel" class="hide">
-                <div class="card">
-                  <div class="cardHead"><h2>التقييم النهائي (إجمالي تقييمات كل موظف)</h2></div>
-                  <div class="cardBody">
-                    <div class="fineprint" style="margin-top:0;">
-                      الإجمالي داخل مركز: <b id="finalRatingCenterText"></b>
-                    </div>
-
-                    <div style="overflow:auto; border-radius:14px; margin-top:10px;">
-                      <table>
-                        <thead>
-                          <tr>
-                            <th>اسم الموظف</th>
-                            <th>ممتاز</th>
-                            <th>جيد</th>
-                            <th>مقبول</th>
-                            <th>المجموع</th>
-                            <th>الناتج النهائي</th>
-                          </tr>
-                        </thead>
-                        <tbody id="finalRatingTbody"></tbody>
-                      </table>
-                    </div>
-
-                    <div class="fineprint" style="margin-top:10px;">
-                      يتم تجميع (ممتاز/جيد/مقبول) من تقييم كل مراجعة ثم يتم حساب الناتج النهائي من الإجمالي.
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
+
           </div>
         </div>
       </section>
@@ -621,11 +644,13 @@
       if (Number.isNaN(d.getTime())) return "—";
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
+
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
       if(r === "جيد") return "good";
       return "acceptable";
     }
+
     function escapeHtml(str){
       return String(str ?? "")
         .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
@@ -672,8 +697,19 @@
       return "مقبول";
     }
 
-    // ✅ عناصر التقييم النهائي (زر + قسم)
-    let finalRatingAdminPanel, finalRatingCenterText, finalRatingTbody, tabFinalRatingBtn;
+    // ✅ تحويل إجمالي عدّات الموظف إلى ناتج نهائي (بنفس منطق التطبيع)
+    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
+      const n = excellentCount + goodCount + acceptableCount;
+      if(n === 0) return "—";
+      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+      const minSum = n * 1;
+      const maxSum = n * 3;
+
+      const t = (sumPoints - minSum) / (maxSum - minSum || 1);
+      if(t <= 0.33) return "ممتاز";
+      if(t <= 0.66) return "جيد";
+      return "مقبول";
+    }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
@@ -682,6 +718,7 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
+    // ===== عناصر الصفحة =====
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -711,16 +748,16 @@
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
     const questionsAdminPanel = document.getElementById("questionsAdminPanel");
 
-    // ✅ ربط زر/قسم التقييم النهائي
-    tabFinalRatingBtn = document.getElementById("tabFinalRatingBtn");
-    finalRatingAdminPanel = document.getElementById("finalRatingAdminPanel");
-    finalRatingCenterText = document.getElementById("finalRatingCenterText");
-    finalRatingTbody = document.getElementById("finalRatingTbody");
+    // ✅ عناصر التقييم النهائي
+    const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
+    const finalRatingSection = document.getElementById("finalRatingSection");
+    const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
 
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
+
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
     function openReviewDetails(review){
@@ -779,7 +816,7 @@
       }
     }
 
-    // Employees
+    // ===== Employees =====
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -853,7 +890,7 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // Questions
+    // ===== Questions =====
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
@@ -926,31 +963,17 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
+    // Tabs
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
-      finalRatingAdminPanel.classList.add("hide");
     });
-
     tabQuestionsBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.add("hide");
       questionsAdminPanel.classList.remove("hide");
-      finalRatingAdminPanel.classList.add("hide");
     });
 
-    // ✅ زر التقييم النهائي
-    tabFinalRatingBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
-      employeesAdminPanel.classList.add("hide");
-      questionsAdminPanel.classList.add("hide");
-      finalRatingAdminPanel.classList.remove("hide");
-
-      finalRatingCenterText.textContent = LOCK_CENTER;
-      renderFinalRatingsForCenter(LOCK_CENTER);
-    });
-
-    // Current
+    // ===== Current Table =====
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -997,7 +1020,7 @@
       });
     }
 
-    // Archive
+    // ===== Archive Table =====
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -1123,41 +1146,33 @@
       renderQuestions();
     }
 
-    // ✅ منطق حساب الناتج النهائي من إجمالي العدّات:
-    // ممتاز=1 ، جيد=2 ، مقبول=3 ثم نفس نمط finalRatingFromAnswers (تطبيع) لكن على العدّات فقط.
-    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
-      const n = excellentCount + goodCount + acceptableCount;
-      if(n === 0) return "—";
-
-      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
-      const minSum = n * 1;
-      const maxSum = n * 3;
-
-      const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
-      return "مقبول";
-    }
-
-    // ✅ تجميع التقييم النهائي لكل موظف (إجمالي)
-    function renderFinalRatingsForCenter(center){
+    // ===== ✅ عرض التقييم النهائي + تفاصيل تقييمات الموظفين =====
+    function renderFinalRatingForEmployees(center){
       const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
 
-      finalRatingTbody.innerHTML = "";
+      finalRatingEmployeesWrap.innerHTML = "";
 
-      if(!Array.isArray(qs) || qs.length === 0){
-        finalRatingTbody.innerHTML = `
-          <tr>
-            <td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">
-              لا توجد أسئلة تفعيلها أولاً (أسئلة التقييم).
-            </td>
-          </tr>
+      if(all.length === 0){
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد تقييمات (Current أو Archive) لهذا المركز.
+          </div>
         `;
         return;
       }
 
-      const map = new Map(); // employeeName => {excellent, good, acceptable}
+      if(!Array.isArray(qs) || qs.length === 0){
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد أسئلة تفعيلها أولاً (rating_questions_v1).
+          </div>
+        `;
+        return;
+      }
+
+      // emp -> {counts, reviews:[]}
+      const map = new Map();
 
       for(const r of all){
         const emp = String(r.employeeName || "").trim();
@@ -1167,51 +1182,92 @@
         if(finalRating === "—") continue;
 
         if(!map.has(emp)){
-          map.set(emp, { excellent:0, good:0, acceptable:0 });
+          map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
         }
         const item = map.get(emp);
 
         if(finalRating === "ممتاز") item.excellent++;
         else if(finalRating === "جيد") item.good++;
         else if(finalRating === "مقبول") item.acceptable++;
+
+        item.reviews.push({
+          id: r.id,
+          time: r.archivedAt || r.createdAt || "",
+          reviewer: r.reviewerName || "",
+          phone: r.reviewerPhone || "",
+          rating: finalRating,
+          comment: (r.comment && String(r.comment).trim()) ? r.comment : "—"
+        });
       }
 
       const rows = Array.from(map.entries())
-        .map(([emp, c]) => ({
+        .map(([emp, data]) => ({
           emp,
-          ...c,
-          total: c.excellent + c.good + c.acceptable
+          ...data,
+          total: data.excellent + data.good + data.acceptable
         }))
         .filter(x => x.total > 0)
         .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
 
       if(rows.length === 0){
-        finalRatingTbody.innerHTML = `
-          <tr>
-            <td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">
-              لا توجد بيانات كافية لعرض التقييم النهائي لهذا المركز.
-            </td>
-          </tr>
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد بيانات كافية لعرض التقييم النهائي لهذا المركز.
+          </div>
         `;
         return;
       }
 
       for(const x of rows){
+        // ترتيب مراجعات الموظف حسب الوقت (الأحدث أولاً)
+        x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
+
         const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
-        finalRatingTbody.innerHTML += `
-          <tr>
-            <td>${escapeHtml(x.emp)}</td>
-            <td>${x.excellent}</td>
-            <td>${x.good}</td>
-            <td>${x.acceptable}</td>
-            <td><b>${x.total}</b></td>
-            <td><span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span></td>
-          </tr>
+
+        finalRatingEmployeesWrap.innerHTML += `
+          <details class="finalEmployeeDetails">
+            <summary>
+              <span>
+                ${escapeHtml(x.emp)}
+                &nbsp;—&nbsp;
+                <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+              </span>
+              <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900;">
+                ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
+              </span>
+            </summary>
+
+            <div class="finalEmployeeMeta">
+              <div style="font-weight:950; color: rgba(11,27,42,0.75); font-size:13px;">
+                تفاصيل تقييماته السابقة:
+              </div>
+
+              <div class="finalReviewsList">
+                ${x.reviews.map(r=>{
+                  return `
+                    <div class="finalReviewItem">
+                      <div class="metaLine">
+                        <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
+                        <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
+                        <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+                        <span style="margin-inline-start:auto;">
+                          التقييم: <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                        </span>
+                      </div>
+                      <div style="font-size:13px; color: rgba(11,27,42,0.72); font-weight:850; line-height:1.6;">
+                        الملاحظة: ${escapeHtml(r.comment)}
+                      </div>
+                    </div>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          </details>
         `;
       }
     }
 
-    // Buttons
+    // ===== Buttons =====
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace();
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -1226,14 +1282,26 @@
 
     showCurrentBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+      adminAdjustPage.classList.add("hide");
+      finalRatingSection.classList.add("hide");
       setView("current");
       renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
     showArchiveBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+      adminAdjustPage.classList.add("hide");
       setView("archive");
       renderArchiveTablesForCenter(LOCK_CENTER);
+      // لا نخفي finalRating تلقائيًا هنا؛ فقط نخليه كما هو إذا المستخدم فتحه
+    });
+
+    // ✅ فتح/عرض التقييم النهائي (تحت الأرشيف)
+    showFinalRatingBtn.addEventListener("click", ()=>{
+      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
+      finalRatingSection.classList.remove("hide");
+      renderFinalRatingForEmployees(LOCK_CENTER);
     });
 
     adminAdjustBtn.addEventListener("click", ()=>{
@@ -1242,6 +1310,7 @@
       adminAdjustPage.classList.remove("hide");
       currentSection.classList.add("hide");
       archiveSection.classList.add("hide");
+      finalRatingSection.classList.add("hide");
       renderEmployeesForCenter(LOCK_CENTER);
       renderQuestions();
     });
@@ -1251,6 +1320,7 @@
       if(!adminCenterSession) return;
       archiveSection.classList.add("hide");
       currentSection.classList.remove("hide");
+      finalRatingSection.classList.add("hide");
     });
 
     archiveAllBtn.addEventListener("click", ()=>{
@@ -1270,6 +1340,10 @@
       showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) ✅`);
       renderCurrentTablesForCenter(center);
       renderArchiveTablesForCenter(center);
+      // لو كان التقييم النهائي ظاهر، حدّثه
+      if(!finalRatingSection.classList.contains("hide")){
+        renderFinalRatingForEmployees(center);
+      }
     });
 
     downloadArchiveBtn.addEventListener("click", ()=>{
@@ -1298,6 +1372,10 @@
 
       showToast(`✅ تم حذف أرشيف المركز: ${center}`);
       renderArchiveTablesForCenter(center);
+
+      if(!finalRatingSection.classList.contains("hide")){
+        renderFinalRatingForEmployees(center);
+      }
     });
 
     // init
