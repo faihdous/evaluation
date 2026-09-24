@@ -136,7 +136,7 @@
       .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
 
-      /* ✅ كبر اللوقو + رفعه لفوق ليغطي الفراغ */
+      /* كبر اللوقو + رفعه لفوق ليغطي الفراغ */
       .loginLogo{
         width: 160px;
         height: 160px;
@@ -346,7 +346,7 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
-    /* ✅ تعديل ألوان الأزرار حسب طلبك */
+    /* ألوان الأزرار حسب طلبك */
     #downloadArchiveBtn,
     #showArchiveBtn{
       background: rgba(14,122,75,0.16) !important;
@@ -469,9 +469,11 @@
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
               </div>
 
+              <!-- ✅ Tabs مع زر التقييم النهائي -->
               <div class="btnRow" style="margin:6px 0 14px;">
                 <button class="btn green" id="tabEmployeesBtn" type="button">أسماء الموظفين</button>
                 <button class="btn blue" id="tabQuestionsBtn" type="button">أسئلة التقييم</button>
+                <button class="btn alt" id="tabFinalRatingBtn" type="button">التقييم النهائي</button>
               </div>
 
               <div id="employeesAdminPanel">
@@ -525,8 +527,40 @@
                   </div>
                 </div>
               </div>
-            </div>
 
+              <!-- ✅ قسم التقييم النهائي (إجمالي) -->
+              <div id="finalRatingAdminPanel" class="hide">
+                <div class="card">
+                  <div class="cardHead"><h2>التقييم النهائي (إجمالي تقييمات كل موظف)</h2></div>
+                  <div class="cardBody">
+                    <div class="fineprint" style="margin-top:0;">
+                      الإجمالي داخل مركز: <b id="finalRatingCenterText"></b>
+                    </div>
+
+                    <div style="overflow:auto; border-radius:14px; margin-top:10px;">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>اسم الموظف</th>
+                            <th>ممتاز</th>
+                            <th>جيد</th>
+                            <th>مقبول</th>
+                            <th>المجموع</th>
+                            <th>الناتج النهائي</th>
+                          </tr>
+                        </thead>
+                        <tbody id="finalRatingTbody"></tbody>
+                      </table>
+                    </div>
+
+                    <div class="fineprint" style="margin-top:10px;">
+                      يتم تجميع (ممتاز/جيد/مقبول) من تقييم كل مراجعة ثم يتم حساب الناتج النهائي من الإجمالي.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </section>
@@ -638,6 +672,9 @@
       return "مقبول";
     }
 
+    // ✅ عناصر التقييم النهائي (زر + قسم)
+    let finalRatingAdminPanel, finalRatingCenterText, finalRatingTbody, tabFinalRatingBtn;
+
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
@@ -673,6 +710,12 @@
     const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
     const questionsAdminPanel = document.getElementById("questionsAdminPanel");
+
+    // ✅ ربط زر/قسم التقييم النهائي
+    tabFinalRatingBtn = document.getElementById("tabFinalRatingBtn");
+    finalRatingAdminPanel = document.getElementById("finalRatingAdminPanel");
+    finalRatingCenterText = document.getElementById("finalRatingCenterText");
+    finalRatingTbody = document.getElementById("finalRatingTbody");
 
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
@@ -886,10 +929,25 @@
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
+      finalRatingAdminPanel.classList.add("hide");
     });
+
     tabQuestionsBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.add("hide");
       questionsAdminPanel.classList.remove("hide");
+      finalRatingAdminPanel.classList.add("hide");
+    });
+
+    // ✅ زر التقييم النهائي
+    tabFinalRatingBtn.addEventListener("click", ()=>{
+      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
+      employeesAdminPanel.classList.add("hide");
+      questionsAdminPanel.classList.add("hide");
+      finalRatingAdminPanel.classList.remove("hide");
+
+      finalRatingCenterText.textContent = LOCK_CENTER;
+      renderFinalRatingsForCenter(LOCK_CENTER);
     });
 
     // Current
@@ -1063,6 +1121,94 @@
       renderArchiveTablesForCenter(LOCK_CENTER);
       renderEmployeesForCenter(LOCK_CENTER);
       renderQuestions();
+    }
+
+    // ✅ منطق حساب الناتج النهائي من إجمالي العدّات:
+    // ممتاز=1 ، جيد=2 ، مقبول=3 ثم نفس نمط finalRatingFromAnswers (تطبيع) لكن على العدّات فقط.
+    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
+      const n = excellentCount + goodCount + acceptableCount;
+      if(n === 0) return "—";
+
+      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+      const minSum = n * 1;
+      const maxSum = n * 3;
+
+      const t = (sumPoints - minSum) / (maxSum - minSum || 1);
+      if(t <= 0.33) return "ممتاز";
+      if(t <= 0.66) return "جيد";
+      return "مقبول";
+    }
+
+    // ✅ تجميع التقييم النهائي لكل موظف (إجمالي)
+    function renderFinalRatingsForCenter(center){
+      const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
+      const qs = loadJson(LS_KEYS.questions, []);
+
+      finalRatingTbody.innerHTML = "";
+
+      if(!Array.isArray(qs) || qs.length === 0){
+        finalRatingTbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">
+              لا توجد أسئلة تفعيلها أولاً (أسئلة التقييم).
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      const map = new Map(); // employeeName => {excellent, good, acceptable}
+
+      for(const r of all){
+        const emp = String(r.employeeName || "").trim();
+        if(!emp) continue;
+
+        const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+        if(finalRating === "—") continue;
+
+        if(!map.has(emp)){
+          map.set(emp, { excellent:0, good:0, acceptable:0 });
+        }
+        const item = map.get(emp);
+
+        if(finalRating === "ممتاز") item.excellent++;
+        else if(finalRating === "جيد") item.good++;
+        else if(finalRating === "مقبول") item.acceptable++;
+      }
+
+      const rows = Array.from(map.entries())
+        .map(([emp, c]) => ({
+          emp,
+          ...c,
+          total: c.excellent + c.good + c.acceptable
+        }))
+        .filter(x => x.total > 0)
+        .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
+
+      if(rows.length === 0){
+        finalRatingTbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">
+              لا توجد بيانات كافية لعرض التقييم النهائي لهذا المركز.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      for(const x of rows){
+        const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+        finalRatingTbody.innerHTML += `
+          <tr>
+            <td>${escapeHtml(x.emp)}</td>
+            <td>${x.excellent}</td>
+            <td>${x.good}</td>
+            <td>${x.acceptable}</td>
+            <td><b>${x.total}</b></td>
+            <td><span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span></td>
+          </tr>
+        `;
+      }
     }
 
     // Buttons
