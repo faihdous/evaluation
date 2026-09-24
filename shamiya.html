@@ -6,12 +6,10 @@
   <title>تقييم موظفين - الشامية</title>
   <style>
     :root{
-      --panel: rgba(255,255,255,0.78);
       --text: #0b1b2a;
       --muted: rgba(11,27,42,0.65);
       --border: rgba(11,27,42,0.14);
 
-      --primaryBlue: #0b3d91;
       --secondaryGreen: #0e7a4b;
       --yellow: #ffd24a;
 
@@ -39,39 +37,125 @@
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
 
-    /* ✅ تحسين التمركز العام للبطاقة */
-    .card{
+    /* ===== header fix (مناسب للجوال) ===== */
+    header{
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content: center !important; /* ✅ متمركز */
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+
+      position: relative;
       text-align: center;
+    }
+
+    header .brand{
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      padding-left: 72px;   /* مساحة للشعار يمين/يسار حسب RTL */
+      padding-right: 72px;  /* احتياط للجوال */
+      min-width: 0;
+    }
+
+    .logo{
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid rgba(11,61,145,0.25);
+      background: rgba(11,61,145,0.08);
+      object-fit: cover;
+      flex: 0 0 auto;
+
+      position: absolute;
+      right: 14px;   /* ✅ الشعار يمين */
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:16px;
+      line-height:1.35;
+      letter-spacing:0.2px;
+      text-align:center;
+      width: 100%;
+      padding: 0 10px;
+    }
+    .brand p{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size:12px;
+      text-align:center;
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    /* ===== لو الشاشة صغيرة جدًا نخلي العنوان يظل واضح ===== */
+    @media(max-width: 520px){
+      header{ padding: 12px 12px; }
+      header .brand{
+        padding-left: 66px;
+        padding-right: 66px;
+      }
+      .logo{
+        width: 52px; height: 52px;
+        right: 10px;
+      }
+      .brand h1{ font-size: 15px; }
+      .brand p{ font-size: 12px; }
+    }
+
+    .card{
+      background: rgba(255,255,255,0.80);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
     }
     .card .cardHead{
-      text-align: center;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(11,27,42,0.10);
+      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+    }
+    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; text-align:center; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-top: 14px;
     }
 
-    /* ✅ نخلي محتوى الـ body متمركز ويشتغل داخل عرض محدد */
-    .cardBody{
-      padding: 14px !important;
-    }
+    .cardBody{ padding: 14px; }
 
+    /* ✅ تمركز من داخل الكرت */
     .form-center-wrap{
       width: 100%;
-      max-width: 720px;   /* ✅ عدّل الرقم إذا تبغى عرض أوسع/أضيق */
-      margin: 0 auto;     /* ✅ تمركز داخل البطاقة */
-      display: flex;
+      max-width: 680px; /* ✅ يضبط عرض النموذج على الجوال/الشاشة الصغيرة */
+      margin: 0 auto;
+      display:flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
     }
 
-    /* ✅ الحقول داخل الصفوف تكون centered */
-    .center-row{
+    .row{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
       width: 100%;
     }
-    .center-row .row{
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 720px;
-      justify-content: center;
-      text-align: center;
+    @media(min-width: 720px){
+      .row.two{ grid-template-columns: 1fr 1fr; }
     }
 
     label{
@@ -80,13 +164,13 @@
       font-weight: 800;
       margin-bottom: 8px;
       font-size: 13px;
+      text-align: center;
       width: 100%;
-      text-align: center; /* ✅ label بالنص */
     }
 
-    /* ✅ خلي المدخلات تكون بلوك بتمركز */
+    /* ✅ الحقول تكون وسط */
     input, select, textarea{
-      width: 100%;
+      width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
       border: 1px solid rgba(11,27,42,0.18);
@@ -97,10 +181,10 @@
       -webkit-appearance: none;
       font-size: 15px;
 
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      text-align: right; /* RTL للكتابة داخل الحقل */
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+      text-align: right; /* كتابة داخل الحقل RTL */
     }
 
     select{
@@ -124,69 +208,14 @@
     input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
     textarea{ min-height: 86px; resize: vertical; }
 
-    .container-grid-fix{
-      /* لا نغيّر grid الخارجي؛ بس نخلي البطاقة تتصرف صح */
-      display: flex;
-      justify-content: center;
-    }
-
-    header{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid var(--border);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-
-    .brand{ display:flex; gap: 12px; align-items:center; min-width: 0; }
-    .logo{
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      border: 2px solid rgba(11,61,145,0.25);
-      background: rgba(11,61,145,0.08);
-      object-fit: cover;
-      flex: 0 0 auto;
-    }
-    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
-    .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: var(--gap);
-      margin-top: 14px;
-    }
-
-    .cardHead h2{
-      text-align: center;
-      margin: 0;
-      padding: 0;
-      display:block;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-      width: 100%;
-    }
-    @media(min-width: 720px){
-      .row.two{ grid-template-columns: 1fr 1fr; }
-    }
-
     .btnRow{
       display:flex;
       gap: 10px;
       flex-wrap: wrap;
       align-items:center;
-      justify-content: center; /* ✅ الأزرار بالنص */
+      justify-content: center;
       width: 100%;
+      margin-top: 14px;
     }
 
     .btn{
@@ -246,15 +275,18 @@
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
-      text-align: center; /* ✅ الفاين پرنت بالنص */
+      text-align: center;
       width: 100%;
     }
 
-    @media(max-width: 420px){
-      header{ padding: 12px 12px; }
-      .brand h1{ font-size: 15px; }
-      .card .cardBody{ padding: 12px; }
-      .form-center-wrap{ max-width: 100%; }
+    /* مساحة أسفل الأسئلة */
+    #questionsContainer{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:10px;
+      width:100%;
+      align-items:center;
     }
   </style>
 </head>
@@ -264,12 +296,11 @@
     <header>
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
-        <div style="min-width:0;">
+        <div>
           <h1>إدارة الهوية الوطنية - مركز الشامية</h1>
           <p>تقييم الموظف</p>
         </div>
       </div>
-      <div></div>
     </header>
 
     <div class="grid">
@@ -279,10 +310,8 @@
           <h2>قيم تجربتك اليوم</h2>
         </div>
 
-        <!-- ✅ wrapper لتوسيط كل المحتوى من العنوان لآخر شي -->
         <div class="cardBody">
           <div class="form-center-wrap">
-
             <div class="row two">
               <div>
                 <label>اسم الموظف</label>
@@ -302,9 +331,9 @@
               </div>
             </div>
 
-            <div style="margin-top:8px; width:100%;">
+            <div style="width:100%; margin-top:8px;">
               <div class="fineprint" style="margin-top:0;"></div>
-              <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px; width:100%; align-items:center;"></div>
+              <div id="questionsContainer"></div>
             </div>
 
             <div class="row" style="margin-top:14px;">
@@ -314,14 +343,13 @@
               </div>
             </div>
 
-            <div class="btnRow" style="margin-top:14px;">
+            <div class="btnRow">
               <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
               <button class="btn alt" id="clearBtn" type="button">مسح</button>
             </div>
 
             <div class="msg" id="toastMsg"></div>
             <div class="fineprint"></div>
-
           </div>
         </div>
       </section>
@@ -365,6 +393,7 @@
     }
 
     function showToast(html){
+      const toastMsg = document.getElementById("toastMsg");
       toastMsg.style.display = "block";
       toastMsg.innerHTML = html;
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
@@ -374,6 +403,7 @@
       return ["ممتاز","جيد","مقبول"];
     }
 
+    // -------- Elements --------
     const employeeSelect = document.getElementById("employeeSelect");
     const reviewerName = document.getElementById("reviewerName");
     const reviewerPhone = document.getElementById("reviewerPhone");
@@ -385,6 +415,7 @@
 
     const questionsContainer = document.getElementById("questionsContainer");
 
+    // -------- Employees render --------
     function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
       const list = employeesByCenter[center] || [];
@@ -409,8 +440,9 @@
       }
     }
 
+    // -------- Questions render (Dynamic) --------
     function loadQuestions(){
-      return loadJson(LS_KEYS.questions, []);
+      return loadJson(LS_KEYS.questions, []); // [{id,text}]
     }
 
     function renderQuestionDropdowns(){
@@ -448,6 +480,7 @@
       });
     }
 
+    // -------- Submit --------
     submitReviewBtn.addEventListener("click", () => {
       const employeeName = employeeSelect.value;
 
@@ -497,6 +530,7 @@
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
+    // -------- Clear --------
     clearBtn.addEventListener("click", () => {
       reviewerName.value = "";
       reviewerPhone.value = "";
@@ -505,6 +539,7 @@
       renderQuestionDropdowns();
     });
 
+    // init
     renderEmployeesForCenter();
     renderQuestionDropdowns();
   </script>
