@@ -7,25 +7,23 @@
 
   <style>
     :root{
-      /* ستايل فاتح مثل صفحة الاستبيان */
       --panel: rgba(255,255,255,0.78);
       --text: #0b1b2a;
       --muted: rgba(11,27,42,0.65);
       --border: rgba(11,27,42,0.14);
 
-      --blue: #0b3d91;          /* أزرق رسمي */
-      --green: #0e7a4b;         /* أخضر رسمي */
+      --blue: #0b3d91;
+      --green: #0e7a4b;
       --danger: #ff4d4d;
       --yellow: #ffd24a;
 
       --shadow: 0 18px 45px rgba(2,6,23,0.16);
-      --modalBg: rgba(0,0,0,0.35); /* خلفية المودال */
+      --modalBg: rgba(0,0,0,0.35);
       --radius2: 22px;
 
       --pillBg: rgba(255,255,255,0.78);
       --pillBorder: rgba(11,61,145,0.22);
 
-      --gap: 14px;
       --fieldPad: 12px;
       --radius: 14px;
     }
@@ -35,13 +33,11 @@
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-
       color: var(--text);
       background:
         radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
         radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
         linear-gradient(180deg, #f3f6ff, #eef3ff);
-
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -72,7 +68,6 @@
       box-shadow: 0 18px 35px rgba(0,0,0,0.08);
       max-width: 100%;
     }
-
     .brandPill .logo{
       width: 56px; height: 56px;
       border-radius: 50%;
@@ -81,7 +76,6 @@
       background: rgba(11,61,145,0.08);
       flex: 0 0 auto;
     }
-
     .brandPill .title{
       margin:0;
       font-weight: 950;
@@ -112,6 +106,27 @@
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; color: var(--text); }
     .card .cardBody{ padding: 14px; }
 
+    /* ✅ التعديل المهم (تمركز المحتوى داخل بطاقة الدخول على الموبايل) */
+    .loginStage{
+      /* خذ مساحة كافية لتتمركز بالوسط */
+      min-height: 58vh;
+      display:flex;
+      flex-direction: column;
+      justify-content:center; /* عموديًا */
+      align-items:center;      /* أفقيًا */
+      text-align:center;
+      padding: 10px 0;
+      gap: 10px;
+    }
+
+    /* اجعلها تمركز كامل تقريبًا على الشاشات الصغيرة */
+    @media (max-width: 520px){
+      .loginStage{
+        min-height: 62vh;
+      }
+      .card .cardBody{ padding: 12px; }
+    }
+
     .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
     .btn{
@@ -126,20 +141,11 @@
       box-shadow: 0 10px 20px rgba(255,210,74,0.18);
       background: var(--yellow);
     }
-
     .btn:hover{ transform: translateY(-1px); }
     .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
 
-    .btn.blue{
-      background: var(--blue);
-      color: #fff;
-      box-shadow: 0 10px 20px rgba(11,61,145,0.22);
-    }
-    .btn.green{
-      background: var(--green);
-      color: #fff;
-      box-shadow: 0 10px 20px rgba(14,122,75,0.22);
-    }
+    .btn.blue{ background: var(--blue); color: #fff; box-shadow: 0 10px 20px rgba(11,61,145,0.22); }
+    .btn.green{ background: var(--green); color: #fff; box-shadow: 0 10px 20px rgba(14,122,75,0.22); }
     .btn.alt{
       background: rgba(11,27,42,0.06);
       color: var(--text);
@@ -147,7 +153,6 @@
       box-shadow: none;
     }
     .btn.alt:hover{ background: rgba(11,27,42,0.10); }
-
     .btn.danger{
       background: var(--danger);
       color: #180404;
@@ -218,7 +223,6 @@
 
     option{ background:#f8fbff; color:#0b1b2a; }
     input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
-    textarea{ min-height: 86px; resize: vertical; }
 
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
@@ -240,6 +244,7 @@
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
+      text-align:center;
     }
 
     .ratingTag{
@@ -267,6 +272,7 @@
       color: rgba(11,27,42,0.72);
       line-height:1.7; font-weight:850; font-size:13px;
       display:none;
+      text-align:center;
     }
 
     .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
@@ -292,6 +298,7 @@
       display: none;
       align-items: center;
       justify-content: center;
+      padding: 14px;
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
   </style>
@@ -315,8 +322,11 @@
 
         <div class="cardBody">
           <div id="adminLoginBox">
-            <div style="text-align:center;">
-              <div class="admin-login-title" style="font-weight:950; font-size:20px; margin-top:10px; color: var(--text);">إدارة الهوية الوطنية</div>
+            <!-- ✅ التعديل: لفّ محتوى الدخول داخل loginStage للتمركز عموديًا على الموبايل -->
+            <div class="loginStage">
+              <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
+                إدارة الهوية الوطنية
+              </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
                 background: rgba(11,61,145,0.06);
@@ -325,9 +335,9 @@
                 border-radius: 14px;
                 font-weight: 950;
                 display: inline-block;
-                margin-top: 10px;
                 color: var(--text);
-              "></div>
+                ">
+              </div>
 
               <div class="fineprint"></div>
 
@@ -421,7 +431,7 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
 
                     <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
                     <div id="employeesList" class="employeeChipRow"></div>
@@ -447,7 +457,7 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0;">سيتم إنشاء DropDown في صفحة التقييم.</div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم إنشاء DropDown في صفحة التقييم.</div>
 
                     <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
                     <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
@@ -479,7 +489,7 @@
         <div style="font-weight:950;">تفاصيل التقييم</div>
         <button class="btn alt" id="closeReviewDetailsBtn" type="button">إغلاق</button>
       </div>
-      <div id="reviewDetailsMeta" class="fineprint" style="margin-top:0;"></div>
+      <div id="reviewDetailsMeta" class="fineprint" style="margin-top:0; text-align:right;"></div>
 
       <div style="
         margin-top: 10px;
@@ -610,7 +620,6 @@
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
-
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
     function openReviewDetails(review){
@@ -783,7 +792,7 @@
             <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
             <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
           </div>
-          <div class="fineprint" style="margin-top:6px;">الاختيارات: ممتاز / جيد / مقبول</div>
+          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد / مقبول</div>
         `;
 
         wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
@@ -844,7 +853,7 @@
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.50); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
         currentReviewsTbody.appendChild(tr);
         return;
       }
@@ -901,7 +910,7 @@
 
       if(arc.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.50); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
         archiveReviewsTbody.appendChild(tr);
         return;
       }
@@ -980,8 +989,7 @@
         })
       ].join("\n");
 
-      const bom = "\uFEFF";
-      const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+      const blob = new Blob(["\uFEFF"+csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
