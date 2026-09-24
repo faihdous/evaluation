@@ -136,9 +136,10 @@
       .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
 
+      /* ✅ كبر اللوقو بالموبايل */
       .loginLogo{
-        width: 72px;
-        height: 72px;
+        width: 120px;
+        height: 120px;
       }
     }
 
@@ -343,7 +344,6 @@
     #reviewDetailsModal:not(.hide){ display: flex; }
 
     /* ✅ تعديل ألوان الأزرار حسب طلبك */
-    /* زر تنزيل الأرشيف + عرض الأرشيف: أخضر ناعم */
     #downloadArchiveBtn,
     #showArchiveBtn{
       background: rgba(14,122,75,0.16) !important;
@@ -351,7 +351,6 @@
       border: 1px solid rgba(14,122,75,0.35) !important;
       box-shadow: 0 10px 20px rgba(14,122,75,0.10) !important;
     }
-    /* زر عرض Current: بيج ناعم */
     #showCurrentBtn{
       background: rgba(255,210,74,0.22) !important;
       color: #3a2b00 !important;
@@ -893,7 +892,7 @@
       questionsAdminPanel.classList.remove("hide");
     });
 
-    // Current table
+    // Current
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -940,6 +939,7 @@
       });
     }
 
+    // Archive
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -1075,7 +1075,7 @@
       adminAdjustPage.classList.add("hide");
       setView("current");
       exitAdminWorkspace();
-      showToast("تم تسجيل الخروج من الإدارة");
+      showToast("تم تسجيل الخروج من الإدارة.");
     });
 
     showCurrentBtn.addEventListener("click", ()=>{
@@ -1090,12 +1090,10 @@
       renderArchiveTablesForCenter(LOCK_CENTER);
     });
 
-    const adminAdjustWrapper = document.getElementById("adminAdjustPage");
     adminAdjustBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       tabEmployeesBtn.click();
-      // إظهار صفحة التعديلات
-      adminAdjustWrapper.classList.remove("hide");
+      adminAdjustPage.classList.remove("hide");
       currentSection.classList.add("hide");
       archiveSection.classList.add("hide");
       renderEmployeesForCenter(LOCK_CENTER);
@@ -1103,7 +1101,7 @@
     });
 
     backToReviewsBtn.addEventListener("click", ()=>{
-      adminAdjustWrapper.classList.add("hide");
+      adminAdjustPage.classList.add("hide");
       if(!adminCenterSession) return;
       archiveSection.classList.add("hide");
       currentSection.classList.remove("hide");
