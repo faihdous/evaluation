@@ -99,6 +99,7 @@
     .card .cardBody{ padding: 14px; }
 
     .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
     .btn{
       border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
       font-weight:950; color:#071018; transition:0.2s; white-space: nowrap;
@@ -204,7 +205,6 @@
       border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
 
-    /* ✅ Modal (مخفي افتراضيًا) */
     #reviewDetailsModal{
       position: fixed;
       inset: 0;
@@ -295,7 +295,6 @@
                     <tr>
                       <th>التاريخ والوقت</th>
                       <th>اسم المراجع</th>
-                      <th>رقم المعاملة</th>
                       <th>رقم الهاتف</th>
                       <th>الموظف</th>
                       <th>التقييم</th>
@@ -315,7 +314,6 @@
                     <tr>
                       <th>التاريخ والوقت</th>
                       <th>اسم المراجع</th>
-                      <th>رقم المعاملة</th>
                       <th>رقم الهاتف</th>
                       <th>الموظف</th>
                       <th>التقييم</th>
@@ -395,7 +393,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div id="reviewDetailsModal" class="hide">
     <div style="
       width: min(900px, 94vw);
@@ -474,7 +471,7 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // ✅ حساب التقييم النهائي (من questionAnswers) - بدون تغيير الواجهة
+    // حساب التقييم النهائي من questionAnswers
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
       if(r === "جيد") return 2;
@@ -489,26 +486,21 @@
       for(const q of qs){
         const ans = answers?.[q.id];
         const p = pointsForRating(ans);
-        if(p == null) continue; // تجاهل غير معروف/—
+        if(p == null) continue;
         sum += p;
         count++;
       }
-
       if(count === 0) return "—";
 
-      // حسب طلبك: غالباً عندك 3 أسئلة (نستخدم عتبات 3–4 ممتاز / 5–6 جيد / 7–9 مقبول)
       if(count === 3){
         if(sum <= 4) return "ممتاز";
         if(sum <= 6) return "جيد";
         return "مقبول";
       }
 
-      // احتياطي لو عدد الأسئلة تغير مستقبلاً:
-      // نحول لمقياس 0..1 حسب نطاق (count*1) إلى (count*3) ثم نقسم لثلاث فئات
       const minSum = count * 1;
       const maxSum = count * 3;
       const t = (sum - minSum) / (maxSum - minSum || 1);
-
       if(t <= 0.33) return "ممتاز";
       if(t <= 0.66) return "جيد";
       return "مقبول";
@@ -547,9 +539,7 @@
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
 
-    closeReviewDetailsBtn.addEventListener("click", ()=>{
-      reviewDetailsModal.classList.add("hide");
-    });
+    closeReviewDetailsBtn.addEventListener("click", ()=>{ reviewDetailsModal.classList.add("hide"); });
 
     function openReviewDetails(review){
       if(!review){
@@ -566,11 +556,9 @@
       reviewDetailsMeta.innerHTML = `
         <b>الموظف:</b> ${escapeHtml(review.employeeName || "")} &nbsp; | &nbsp;
         <b>المراجع:</b> ${escapeHtml(review.reviewerName || "")} &nbsp; | &nbsp;
-        <b>رقم المعاملة:</b> ${escapeHtml(review.reviewerId || "")} &nbsp; | &nbsp;
         <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} &nbsp; | &nbsp;
         <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))} <br>
-        <b>التقييم النهائي:</b>
-        <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
+        <b>التقييم النهائي:</b> <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
       `;
 
       if(!qs.length){
@@ -776,11 +764,12 @@
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
+
       const qs = loadJson(LS_KEYS.questions, []);
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="7" style="color: rgba(234,240,255,0.6); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(234,240,255,0.6); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
         currentReviewsTbody.appendChild(tr);
       }else{
         for(const r of cur){
@@ -789,7 +778,6 @@
           tr.innerHTML = `
             <td>${formatDateTime(r.createdAt)}</td>
             <td>${escapeHtml(r.reviewerName)}</td>
-            <td>${escapeHtml(r.reviewerId)}</td>
             <td>${escapeHtml(r.reviewerPhone)}</td>
             <td>${escapeHtml(r.employeeName)}</td>
             <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
@@ -824,11 +812,12 @@
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
+
       const qs = loadJson(LS_KEYS.questions, []);
 
       if(arc.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="7" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
         archiveReviewsTbody.appendChild(tr);
       }else{
         for(const r of arc){
@@ -837,7 +826,6 @@
           tr.innerHTML = `
             <td>${formatDateTime(r.archivedAt || r.createdAt)}</td>
             <td>${escapeHtml(r.reviewerName)}</td>
-            <td>${escapeHtml(r.reviewerId)}</td>
             <td>${escapeHtml(r.reviewerPhone)}</td>
             <td>${escapeHtml(r.employeeName)}</td>
             <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
@@ -884,18 +872,20 @@
       }
     }
 
+    // ✅ CSV معدل: بدون رقم المعاملة
     function downloadCSV(rows, filename){
       const qs = loadJson(LS_KEYS.questions, []);
-      const header = ["التاريخ والوقت","اسم المراجع","رقم المعاملة","رقم الهاتف","المركز","الموظف","التقييم"];
+      const header = ["التاريخ والوقت","اسم المراجع","رقم الهاتف","المركز","الموظف","التقييم"];
+
       const csv = [
         header.join(","),
         ...rows.map(r=>{
           const dt = formatDateTime(r.archivedAt || r.createdAt);
           const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+
           const cells = [
             dt,
             r.reviewerName,
-            r.reviewerId,
             r.reviewerPhone,
             r.center,
             r.employeeName,
@@ -904,6 +894,7 @@
             const s = String(v ?? "").replaceAll('"','""');
             return `"${s}"`;
           });
+
           return cells.join(",");
         })
       ].join("\n");
@@ -928,8 +919,6 @@
 
       adminLoginBox.style.display = "block";
       adminWorkspace.classList.add("hide");
-
-      // ✅ حماية إضافية
       reviewDetailsModal.classList.add("hide");
     }
 
@@ -1054,7 +1043,6 @@
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
 
-    // ✅ ضمان إضافي (حتى لو حصل أي تعارض)
     reviewDetailsModal.classList.add("hide");
 
     exitAdminWorkspace();
