@@ -303,7 +303,9 @@
                   <tbody id="archiveReviewsTbody"></tbody>
                 </table>
               </div>
-              <div class="fineprint" style="margin-top:10px;">ملاحظة: يتم عرض إجابات الأسئلة داخل جدول الأرشيف.</div>
+              <div class="fineprint" style="margin-top:10px;">
+                ملاحظة: الملاحظة تُعرض داخل نافذة “تفاصيل” فقط (ولا تظهر في الجدول).
+              </div>
             </div>
 
             <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
@@ -439,6 +441,7 @@
         .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
         .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
+
     function showToast(html){
       toastMsg.style.display = "block";
       toastMsg.innerHTML = html;
@@ -451,6 +454,7 @@
       if(r === "مقبول") return 3;
       return null;
     }
+
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
       let sum = 0;
@@ -478,7 +482,6 @@
       return "مقبول";
     }
 
-    // Data
     let currentReviews = loadJson(LS_KEYS.current, []);
     let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
@@ -522,7 +525,6 @@
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
-    // Modal open
     function openReviewDetails(review){
       if(!review){
         reviewDetailsMeta.innerHTML = "";
@@ -569,7 +571,6 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
-    // Adjust page
     function showAdjustPage(defaultTab="employees"){
       adminAdjustPage.classList.remove("hide");
       currentSection.classList.add("hide");
@@ -583,6 +584,7 @@
         employeesAdminPanel.classList.remove("hide");
       }
     }
+
     function backToReviews(){
       adminAdjustPage.classList.add("hide");
       if(!adminCenterSession) return;
@@ -750,7 +752,6 @@
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
-
       const qs = loadJson(LS_KEYS.questions, []);
 
       if(cur.length === 0){
@@ -794,66 +795,45 @@
       });
     }
 
-    // Archive table (with questions + answers in columns) + ✅ note column
+    // Archive table (بدون الملاحظة في الجدول نهائيًا)
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
 
       const qs = loadJson(LS_KEYS.questions, []);
 
+      // ✅ الترويسة: 6 أعمدة فقط (بدون ملاحظة)
       const theadRow = [];
       theadRow.push(`<th>التاريخ والوقت</th>`);
       theadRow.push(`<th>اسم المراجع</th>`);
       theadRow.push(`<th>رقم الهاتف</th>`);
       theadRow.push(`<th>الموظف</th>`);
       theadRow.push(`<th>التقييم</th>`);
-
-      // ✅ عمود الملاحظة
-      theadRow.push(`<th>الملاحظة</th>`);
-
-      if(qs.length){
-        qs.forEach(q=>{
-          theadRow.push(`<th title="${escapeHtml(q.text)}">${escapeHtml(q.text)}</th>`);
-        });
-      }else{
-        theadRow.push(`<th>لا توجد أسئلة</th>`);
-      }
-
       theadRow.push(`<th>إجراء</th>`);
       archiveTableThead.innerHTML = `<tr>${theadRow.join("")}</tr>`;
 
       if(arc.length === 0){
-        const colCount = 7 + (qs.length ? qs.length : 1); // + ملاحظة + إجراء
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="${colCount}" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(234,240,255,0.6); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
         archiveReviewsTbody.appendChild(tr);
         return;
       }
 
       for(const r of arc){
         const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-        const answers = r.questionAnswers || {};
-
-        const noteText = (r.comment && String(r.comment).trim()) ? r.comment : "—";
-
-        const questionsCells = qs.length
-          ? qs.map(q=>{
-              const ans = answers[q.id] ?? "—";
-              return `<td><span class="ratingTag ${ratingClass(ans)}" style="font-size:12px;">${escapeHtml(ans)}</span></td>`;
-            }).join("")
-          : `<td>—</td>`;
-
         const tr = document.createElement("tr");
+
+        // ✅ لا يوجد أي <td> للملاحظة هنا
         tr.innerHTML = `
           <td>${formatDateTime(r.archivedAt || r.createdAt)}</td>
           <td>${escapeHtml(r.reviewerName)}</td>
           <td>${escapeHtml(r.reviewerPhone)}</td>
           <td>${escapeHtml(r.employeeName)}</td>
           <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
-          <td>${escapeHtml(noteText)}</td>
-          ${questionsCells}
           <td>
-            <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
+            <div class="btnRow" style="justify-content:center;">
+              <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
+            </div>
           </td>
         `;
         archiveReviewsTbody.appendChild(tr);
@@ -894,8 +874,8 @@
       }
     }
 
-    // ✅ CSV download with note column
     function downloadCSV(rows, filename){
+      // CSV يبقى يشمل الملاحظة (اختياري)، لكن الجدول نفسه بدونها
       const qs = loadJson(LS_KEYS.questions, []);
       const header = ["التاريخ والوقت","اسم المراجع","رقم الهاتف","المركز","الموظف","التقييم","الملاحظة"];
 
@@ -906,18 +886,11 @@
           const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
           const note = (r.comment && String(r.comment).trim()) ? r.comment : "—";
 
-          const cells = [
-            dt,
-            r.reviewerName,
-            r.reviewerPhone,
-            r.center,
-            r.employeeName,
-            finalRating,
-            note
-          ].map(v=>{
-            const s = String(v ?? "").replaceAll('"','""');
-            return `"${s}"`;
-          });
+          const cells = [dt, r.reviewerName, r.reviewerPhone, r.center, r.employeeName, finalRating, note]
+            .map(v=>{
+              const s = String(v ?? "").replaceAll('"','""');
+              return `"${s}"`;
+            });
 
           return cells.join(",");
         })
@@ -963,7 +936,6 @@
       renderQuestions();
     }
 
-    // Events
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace();
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
