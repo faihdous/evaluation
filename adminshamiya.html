@@ -132,15 +132,11 @@
     @media (max-width: 520px){
       .loginStage{ min-height: 62vh; }
       .card .cardBody{ padding: 12px; }
-
       .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
-
       .loginLogo{
-        width: 160px;
-        height: 160px;
-        margin-top: -6px;
-        margin-bottom: -10px;
+        width: 160px; height: 160px;
+        margin-top: -6px; margin-bottom: -10px;
         transform: translateY(-28px);
       }
     }
@@ -344,7 +340,7 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
-    /* ✅ تعديل ألوان الأزرار حسب طلبك */
+    /* ✅ تعديل ألوان الأزرار */
     #downloadArchiveBtn,
     #showArchiveBtn{
       background: rgba(14,122,75,0.16) !important;
@@ -352,7 +348,7 @@
       border: 1px solid rgba(14,122,75,0.35) !important;
       box-shadow: 0 10px 20px rgba(14,122,75,0.10) !important;
     }
-    /* زر العرض الحالي */
+
     #showCurrentBtn{
       background: rgba(255,210,74,0.22) !important;
       color: #3a2b00 !important;
@@ -360,7 +356,6 @@
       box-shadow: 0 10px 20px rgba(255,210,74,0.12) !important;
     }
 
-    /* ✅ زر التقييم النهائي باللون البرتقالي الناعم */
     #showFinalRatingBtn{
       background: rgba(255, 165, 0, 0.18) !important;
       color: #5a2b00 !important;
@@ -483,18 +478,19 @@
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
             </div>
 
-            <!-- ✅ زر التقييم النهائي الآن ضمن الأدوات -->
+            <!-- ✅ زر التقييم النهائي ضمن الأدوات -->
             <div class="toolbarGrid" style="margin:0 0 14px;">
               <button class="btn alt" id="showFinalRatingBtn" type="button">
                 التقييم النهائي (إجمالي + تفاصيل)
               </button>
-              <!-- زر فارغ عشان يحافظ على نفس شبكة 2 أعمدة -->
               <button class="btn alt" type="button" disabled style="opacity:0; pointer-events:none;"></button>
             </div>
 
+            <!-- ===== Current ===== -->
             <div id="currentSection">
               <h3>التقييمات الحالية</h3>
-              <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
+              <!-- نضع wrapper عشان نقدر نخفيه بسرعة عند التقييم النهائي -->
+              <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead>
                     <tr>
@@ -511,17 +507,19 @@
               </div>
             </div>
 
+            <!-- ===== Archive + Final inside same container ===== -->
             <div id="archiveSection" class="hide">
-              <h3>أرشيف التقييمات (مركز الشامية)</h3>
-              <div style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
+              <h3 id="archiveTitle">أرشيف التقييمات (مركز الشامية)</h3>
+
+              <!-- wrapper عشان نخفي جدول الأرشيف فقط عند التقييم النهائي -->
+              <div id="archiveTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead id="archiveTableThead"></thead>
                   <tbody id="archiveReviewsTbody"></tbody>
                 </table>
               </div>
 
-              <!-- زر التقييم النهائي تم نقله للأعلى (ضمن الأدوات) -->
-
+              <!-- ===== Final rating (يظهر عند ضغط الزر) ===== -->
               <div id="finalRatingSection" class="hide" style="margin-top:10px;">
                 <h3>التقييم النهائي لكل موظف</h3>
                 <div class="fineprint" style="margin-top:0;">
@@ -536,7 +534,7 @@
               </div>
             </div>
 
-            <!-- ملاحظة: هذا القسم موجود أصلاً في كودك -->
+            <!-- ===== Admin Adjust Page ===== -->
             <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
               <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
@@ -754,6 +752,11 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
+    // wrappers (للإخفاء عند التقييم النهائي)
+    const currentTableWrap = document.getElementById("currentTableWrap");
+    const archiveTableWrap = document.getElementById("archiveTableWrap");
+    const archiveTitle = document.getElementById("archiveTitle");
+
     const adminAdjustBtn = document.getElementById("adminAdjustBtn");
     const backToReviewsBtn = document.getElementById("backToReviewsBtn");
     const adminAdjustPage = document.getElementById("adminAdjustPage");
@@ -817,16 +820,6 @@
       }
 
       reviewDetailsModal.classList.remove("hide");
-    }
-
-    function setView(view){
-      if(view === "archive"){
-        currentSection.classList.add("hide");
-        archiveSection.classList.remove("hide");
-      }else{
-        archiveSection.classList.add("hide");
-        currentSection.classList.remove("hide");
-      }
     }
 
     // ===== Employees =====
@@ -976,6 +969,7 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
+    // Tabs
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
@@ -1036,7 +1030,6 @@
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
-
       const qs = loadJson(LS_KEYS.questions, []);
 
       const theadRow = [];
@@ -1151,18 +1144,33 @@
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
-      setView("current");
+      setInitialView();
       renderCurrentTablesForCenter(LOCK_CENTER);
       renderArchiveTablesForCenter(LOCK_CENTER);
       renderEmployeesForCenter(LOCK_CENTER);
       renderQuestions();
-
-      // عند الدخول: اجعل التقييم النهائي مخفي
-      finalRatingSection.classList.add("hide");
-      finalRatingSection.style.display = "";
     }
 
-    // ===== عرض التقييم النهائي + تفاصيل تقييمات الموظفين =====
+    function setInitialView(){
+      setView("current");
+      finalRatingSection.classList.add("hide");
+      // إعادة إظهار الجداول
+      currentTableWrap.classList.remove("hide");
+      archiveTableWrap.classList.remove("hide");
+      archiveTitle.classList.remove("hide");
+    }
+
+    function setView(view){
+      if(view === "archive"){
+        currentSection.classList.add("hide");
+        archiveSection.classList.remove("hide");
+      }else{
+        archiveSection.classList.add("hide");
+        currentSection.classList.remove("hide");
+      }
+    }
+
+    // ===== Final rating =====
     function renderFinalRatingForEmployees(center){
       const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
@@ -1297,8 +1305,12 @@
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
 
-      // عند عرض current: اخفِ التقييم النهائي
+      // إظهار Current / إخفاء Final
       finalRatingSection.classList.add("hide");
+
+      currentTableWrap.classList.remove("hide");
+      archiveTableWrap.classList.remove("hide");
+      archiveTitle.classList.remove("hide");
 
       setView("current");
       renderCurrentTablesForCenter(LOCK_CENTER);
@@ -1308,30 +1320,36 @@
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
 
-      // عند عرض archive: اخفِ التقييم النهائي
+      // إظهار Archive / إخفاء Final
       finalRatingSection.classList.add("hide");
+
+      currentTableWrap.classList.remove("hide");
+      archiveTableWrap.classList.remove("hide");
+      archiveTitle.classList.remove("hide");
 
       setView("archive");
       renderArchiveTablesForCenter(LOCK_CENTER);
     });
 
-    // ✅ زر التقييم النهائي: يخفي Current و Archive ويظهر التقييم النهائي للقراءة براحة
+    // ✅ زر التقييم النهائي: يخفي Current وجدول الأرشيف ويظهر فقط النهائي
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
 
-      // إخفاء Current و Archive (حسب طلبك)
+      adminAdjustPage.classList.add("hide");
+
+      // اجعل Archive visible (لأن finalRatingSection موجود داخل archiveSection)
+      setView("archive");
+
+      // أخفي current بالكامل
       currentSection.classList.add("hide");
-      archiveSection.classList.add("hide");
 
-      // إظهار صندوق التقييم النهائي داخل archiveSection (لذلك نعرض archiveSection مؤقتاً)
-      archiveSection.classList.remove("hide");
+      // ✅ أخفِ جدول الأرشيف والعنوان حتى ما تزحم
+      archiveTableWrap.classList.add("hide");
+      archiveTitle.classList.add("hide");
+
+      // ✅ إظهار القسم النهائي
       finalRatingSection.classList.remove("hide");
-
       renderFinalRatingForEmployees(LOCK_CENTER);
-      // لا نحتاج archive الجدول ليكون ظاهر، لكنه سيكون داخل archiveSection.
-      // للتخفيف: اخفِ جدول الأرشيف تلقائياً عند عرض التقييم النهائي:
-      // (سنخفي محتوى الجدول بالـ CSS عبر الترتيب؟ هنا نعملها بدون CSS: نتركها، لكن finalRatingSection يظهر للراحة)
-      // إذا تحب نخفي الجدول نفسه 100% أخبرني.
     });
 
     adminAdjustBtn.addEventListener("click", ()=>{
@@ -1347,10 +1365,13 @@
       adminAdjustPage.classList.add("hide");
       if(!adminCenterSession) return;
 
-      // ارجع لعرض current (وتأكد إخفاء التقييم النهائي)
-      archiveSection.classList.add("hide");
-      currentSection.classList.remove("hide");
+      // رجوع افتراضي: إظهار Current + إخفاء Final
       finalRatingSection.classList.add("hide");
+      archiveTableWrap.classList.remove("hide");
+      archiveTitle.classList.remove("hide");
+      currentTableWrap.classList.remove("hide");
+
+      setView("current");
     });
 
     archiveAllBtn.addEventListener("click", ()=>{
@@ -1415,7 +1436,8 @@
 
     reviewDetailsModal.classList.add("hide");
     exitAdminWorkspace();
-    setView("current");
+    // نبدأ بـ Current
+    setInitialView();
     renderQuestions();
   </script>
 </body>
