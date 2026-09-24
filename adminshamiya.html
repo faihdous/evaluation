@@ -57,47 +57,42 @@
       backdrop-filter: blur(10px);
     }
 
-    /* ✅ تعديل تمركز عنوان الـbrandPill بالنص (ما ينزاح يمين) */
+    /* ✅ الشريط بدون الشعار الآن */
     .brandPill{
-      position: relative;
+      width: 100%;
       display:flex;
       align-items:center;
-      justify-content: center; /* تمركز النص */
+      justify-content:center;
       padding: 10px 14px;
       border-radius: 999px;
       background: var(--pillBg);
       border: 1px solid var(--pillBorder);
       box-shadow: 0 18px 35px rgba(0,0,0,0.08);
       max-width: 100%;
-      width: 100%;
     }
-
-    /* الشعار ما يأثر على تمركز العنوان */
-    .brandPill .logo{
-      position: absolute;
-      right: 14px;   /* لأن dir="rtl" */
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(11,61,145,0.25);
-      background: rgba(11,61,145,0.08);
-      flex: 0 0 auto;
-    }
-
     .brandPill .title{
-      margin: 0;
+      margin:0;
       font-weight: 950;
       font-size: 18px;
       letter-spacing: 0.2px;
       color: var(--text);
       white-space: nowrap;
-      overflow: hidden;
+      overflow:hidden;
       text-overflow: ellipsis;
+      text-align:center;
+    }
 
-      /* خليه يتمركز فعلياً داخل المساحة */
-      text-align: center;
-      width: 100%;
-      padding: 0 70px; /* احتياطي بسيط يمين/يسار عشان ما يصطدم مع الشعار */
+    /* ✅ شعار تسجيل الدخول فوق العنوان */
+    .loginLogo{
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(11,61,145,0.25);
+      background: rgba(11,61,145,0.08);
+      box-shadow: 0 10px 25px rgba(11,61,145,0.15);
+      margin-top: 4px;
+      margin-bottom: 2px;
     }
 
     .card{
@@ -119,32 +114,28 @@
     .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; color: var(--text); }
     .card .cardBody{ padding: 14px; }
 
-    /* ✅ التعديل المهم (تمركز المحتوى داخل بطاقة الدخول على الموبايل) */
+    /* ✅ تمركز المحتوى داخل بطاقة الدخول */
     .loginStage{
       min-height: 58vh;
       display:flex;
       flex-direction: column;
-      justify-content:center; /* عموديًا */
-      align-items:center;      /* أفقيًا */
+      justify-content:center;
+      align-items:center;
       text-align:center;
       padding: 10px 0;
       gap: 10px;
     }
 
     @media (max-width: 520px){
-      .loginStage{
-        min-height: 62vh;
-      }
+      .loginStage{ min-height: 62vh; }
       .card .cardBody{ padding: 12px; }
 
-      .brandPill .title{
-        font-size: 16px;
-        padding: 0 60px; /* تقليل البادينغ على الموبايل */
-      }
-      .brandPill .logo{
-        right: 12px;
-        width:50px;
-        height:50px;
+      .brandPill{ padding: 10px 12px; }
+      .brandPill .title{ font-size:16px; }
+
+      .loginLogo{
+        width: 64px;
+        height: 64px;
       }
     }
 
@@ -248,13 +239,6 @@
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
 
-    @media(max-width:720px){
-      .container{ width: 100%; margin: 8px auto 14px; padding: 0 10px; }
-      header{ padding: 12px 12px; }
-      .brandPill{ padding: 10px 12px; }
-      .card .cardBody{ padding: 12px; }
-    }
-
     h3{ margin:14px 0 8px; font-size:15px; color: rgba(11,27,42,0.70); }
     .hide{ display:none; }
 
@@ -327,7 +311,7 @@
   <div class="container">
     <header>
       <div class="brandPill">
-        <img class="logo" alt="Logo" src="logo.png" />
+        <!-- ✅ حذف الشعار من أعلى -->
         <h1 class="title" id="adminHeaderTitle">لوحة الإدارة - مركز الشامية</h1>
       </div>
       <div></div>
@@ -342,6 +326,9 @@
         <div class="cardBody">
           <div id="adminLoginBox">
             <div class="loginStage">
+              <!-- ✅ الشعار فوق كلمة إدارة الهوية الوطنية -->
+              <img class="loginLogo" alt="Logo" src="logo.png" />
+
               <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
                 إدارة الهوية الوطنية
               </div>
@@ -910,7 +897,7 @@
       });
     }
 
-    // Archive table (بدون الملاحظة في الجدول نهائيًا)
+    // Archive table
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
