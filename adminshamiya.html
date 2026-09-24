@@ -136,10 +136,13 @@
       .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
 
-      /* ✅ كبر اللوقو بالموبايل */
+      /* ✅ كبر اللوقو + رفعه لفوق ليغطي الفراغ */
       .loginLogo{
-        width: 120px;
-        height: 120px;
+        width: 160px;
+        height: 160px;
+        margin-top: -6px;
+        margin-bottom: -10px;
+        transform: translateY(-28px);
       }
     }
 
@@ -406,7 +409,6 @@
           </div>
 
           <div id="adminWorkspace" class="hide">
-            <!-- ✅ خروج / التعديلات (Grid) -->
             <div class="toolbarGrid" style="margin-bottom:10px;">
               <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
@@ -417,7 +419,6 @@
               <div>
                 <label>أدوات</label>
 
-                <!-- ✅ أدوات (Grid) -->
                 <div class="toolbarGrid">
                   <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
                   <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
@@ -426,7 +427,6 @@
               </div>
             </div>
 
-            <!-- ✅ عرض Current / عرض أرشيف (Grid) -->
             <div class="subToolbarGrid" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
@@ -527,8 +527,8 @@
               </div>
             </div>
 
-          </div><!-- /adminWorkspace -->
-        </div><!-- /cardBody -->
+          </div>
+        </div>
       </section>
     </div>
   </div>
