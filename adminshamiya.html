@@ -57,7 +57,6 @@
       backdrop-filter: blur(10px);
     }
 
-    /* ✅ الشريط بدون الشعار الآن */
     .brandPill{
       width: 100%;
       display:flex;
@@ -82,10 +81,9 @@
       text-align:center;
     }
 
-    /* ✅ شعار تسجيل الدخول فوق العنوان (كبّرته شوي) */
     .loginLogo{
-      width: 88px;   /* ✅ كان 74 */
-      height: 88px;  /* ✅ كان 74 */
+      width: 88px;
+      height: 88px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid rgba(11,61,145,0.25);
@@ -111,18 +109,15 @@
       background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
     }
 
-    /* ✅ تمركز "تسجيل دخول الإدارة" */
     .card h2{
       margin:0;
       font-size:15px;
       letter-spacing:0.2px;
       color: var(--text);
-      text-align:center; /* ✅ */
+      text-align:center;
     }
-
     .card .cardBody{ padding: 14px; }
 
-    /* ✅ تمركز المحتوى داخل بطاقة الدخول */
     .loginStage{
       min-height: 58vh;
       display:flex;
@@ -142,9 +137,40 @@
       .brandPill .title{ font-size:16px; }
 
       .loginLogo{
-        width: 72px;  /* ✅ كان 64 */
-        height: 72px; /* ✅ كان 64 */
+        width: 72px;
+        height: 72px;
       }
+    }
+
+    /* ✅ تنظيم الأزرار بشكل متناسق */
+    .toolbarGrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+    }
+    @media (max-width: 720px){
+      .toolbarGrid{ grid-template-columns: 1fr; }
+    }
+    .toolbarGrid .btn{
+      width: 100%;
+      justify-content: center;
+    }
+
+    .subToolbarGrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+    }
+    @media (max-width: 720px){
+      .subToolbarGrid{ grid-template-columns: 1fr; }
+    }
+    .subToolbarGrid .btn{
+      width: 100%;
+      justify-content: center;
     }
 
     .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
@@ -347,7 +373,7 @@
                 font-weight: 950;
                 display: inline-block;
                 color: var(--text);
-                ">
+              ">
               </div>
 
               <div class="fineprint"></div>
@@ -361,7 +387,8 @@
           </div>
 
           <div id="adminWorkspace" class="hide">
-            <div class="btnRow" style="justify-content: flex-start; margin-bottom:10px;">
+            <!-- ✅ خروج / التعديلات (Grid) -->
+            <div class="toolbarGrid" style="margin-bottom:10px;">
               <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
             </div>
@@ -370,7 +397,9 @@
               <div></div>
               <div>
                 <label>أدوات</label>
-                <div class="btnRow">
+
+                <!-- ✅ أدوات (Grid) -->
+                <div class="toolbarGrid">
                   <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
                   <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
                   <button class="btn danger" id="deleteArchiveCenterBtn" type="button">حذف أرشيف مركز الشامية</button>
@@ -378,7 +407,8 @@
               </div>
             </div>
 
-            <div class="btnRow" style="margin:6px 0 14px;">
+            <!-- ✅ عرض Current / عرض أرشيف (Grid) -->
+            <div class="subToolbarGrid" style="margin:6px 0 14px;">
               <button class="btn alt" id="showCurrentBtn" type="button">عرض Current</button>
               <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
             </div>
@@ -442,15 +472,11 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0; text-align:center;">
-                      سيتم حفظ الأسماء للمركز في جهازك (localStorage).
-                    </div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
 
                     <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
                     <div id="employeesList" class="employeeChipRow"></div>
-                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">
-                      لا توجد أسماء موظفين. أضف اسم أولاً.
-                    </div>
+                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">لا توجد أسماء موظفين. أضف اسم أولاً.</div>
                   </div>
                 </div>
               </div>
@@ -472,15 +498,11 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0; text-align:center;">
-                      سيتم إنشاء DropDown في صفحة التقييم.
-                    </div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم إنشاء DropDown في صفحة التقييم.</div>
 
                     <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
                     <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
-                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">
-                      لا توجد أسئلة. أضف سؤال أولاً.
-                    </div>
+                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">لا توجد أسئلة. أضف سؤال أولاً.</div>
                   </div>
                 </div>
               </div>
@@ -492,7 +514,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div id="reviewDetailsModal" class="hide">
     <div style="
       width: min(900px, 94vw);
@@ -605,7 +626,6 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
-    // Elements
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -708,7 +728,6 @@
       currentSection.classList.remove("hide");
     }
 
-    // Employees
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -782,7 +801,6 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // Questions Admin
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
@@ -864,7 +882,6 @@
       questionsAdminPanel.classList.remove("hide");
     });
 
-    // Current table
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -911,7 +928,6 @@
       });
     }
 
-    // Archive table
     function renderArchiveTablesForCenter(center){
       const arc = archiveReviews.filter(r => r.center === center);
       archiveReviewsTbody.innerHTML = "";
@@ -1047,7 +1063,6 @@
       renderQuestions();
     }
 
-    // Buttons
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace();
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -1129,7 +1144,6 @@
 
     backToReviewsBtn.addEventListener("click", backToReviews);
 
-    // init
     adminHeaderTitle.textContent = `لوحة الإدارة - ${LOCK_CENTER}`;
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
