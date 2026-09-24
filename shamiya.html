@@ -234,20 +234,12 @@
               <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
             </div>
             <div>
-              <label>رقم المعاملة</label>
-              <input id="reviewerId" placeholder="مثال: رقم المعاملة" inputmode="text" />
-            </div>
-          </div>
-
-          <div class="row two">
-            <div>
+              <!-- ✅ رقم المعاملة تم حذفه -->
               <label>رقم الهاتف</label>
               <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
             </div>
-            <div></div>
           </div>
 
-          <!-- ✅ أسئلة التقييم الديناميكية (فوق الملاحظات) -->
           <div style="margin-top:8px;">
             <div class="fineprint" style="margin-top:0;">
               سيتم عرض أسئلة التقييم التي أضافها الإداري (إذا وُجدت).
@@ -255,7 +247,6 @@
             <div id="questionsContainer" style="display:flex; flex-direction:column; gap:14px; margin-top:10px;"></div>
           </div>
 
-          <!-- الملاحظات تحت الأسئلة -->
           <div class="row" style="margin-top:14px;">
             <div>
               <label>ملاحظة (اختياري)</label>
@@ -271,8 +262,7 @@
           <div class="msg" id="toastMsg"></div>
 
           <div class="fineprint">
-             <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف،
-          
+             <b>التاريخ والوقت</b> + اسم المراجع + رقم الهاتف + اسم الموظف
           </div>
         </div>
       </section>
@@ -328,7 +318,6 @@
     // -------- Elements --------
     const employeeSelect = document.getElementById("employeeSelect");
     const reviewerName = document.getElementById("reviewerName");
-    const reviewerId = document.getElementById("reviewerId");
     const reviewerPhone = document.getElementById("reviewerPhone");
     const commentShort = document.getElementById("commentShort");
 
@@ -406,13 +395,11 @@
       const employeeName = employeeSelect.value;
 
       const name = (reviewerName.value || "").trim();
-      const dealNo = (reviewerId.value || "").trim();
       const phone = (reviewerPhone.value || "").trim();
       const comment = (commentShort.value || "").trim();
 
       if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
-      if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
       const qs = loadQuestions();
@@ -423,8 +410,7 @@
         if(sel) questionAnswers[q.id] = sel.value;
       }
 
-      // ✅ التقييم العام ملغي نهائياً:
-      // التقييم يُؤخذ فقط من أول سؤال إن وُجد، وإلا يكون "مقبول"
+      // ✅ التقييم العام (كما عندك سابقاً حسب أول سؤال)
       const rating = qs.length
         ? (questionAnswers[qs[0].id] || "مقبول")
         : "مقبول";
@@ -437,7 +423,10 @@
         center: center,
         employeeName,
         reviewerName: name,
-        reviewerId: dealNo,
+
+        // ✅ خليه فارغ لأن واجهة الاستبيان شالت الحقل
+        reviewerId: "",
+
         reviewerPhone: phone,
         rating,
         comment,
@@ -448,19 +437,16 @@
       saveJson(LS_KEYS.current, currentReviews);
 
       reviewerName.value = "";
-      reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
 
       renderQuestionDropdowns();
-
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
     // -------- Clear --------
     clearBtn.addEventListener("click", () => {
       reviewerName.value = "";
-      reviewerId.value = "";
       reviewerPhone.value = "";
       commentShort.value = "";
       toastMsg.style.display = "none";
