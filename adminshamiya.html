@@ -761,7 +761,6 @@
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
-    // wrappers (للإخفاء عند التقييم النهائي)
     const currentTableWrap = document.getElementById("currentTableWrap");
     const archiveTableWrap = document.getElementById("archiveTableWrap");
     const archiveTitle = document.getElementById("archiveTitle");
@@ -792,6 +791,7 @@
         reviewDetailsModal.classList.remove("hide");
         return;
       }
+
       const qs = loadJson(LS_KEYS.questions, []);
       const answers = review?.questionAnswers || {};
       const finalRating = finalRatingFromAnswers(qs, answers);
@@ -831,12 +831,12 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
-    // ===== ✅ الطباعة (جديد) =====
+    // ===== ✅ الطباعة (مغلق صحيح للأقواس والباكتك)
     function printFinalForEmployee(center, empObj){
       const w = window.open("", "_blank");
       if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
 
-      const htmlReviews = empObj.reviews.map(r => `
+      const htmlReviews = (empObj.reviews || []).map(r => `
         <div style="border:1px solid #e6e6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
           <div style="font-weight:900;color:#1d1b4b;font-size:13px;">
             التاريخ: ${escapeHtml(formatDateTime(r.time))} &nbsp; | &nbsp;
@@ -852,7 +852,7 @@
         </div>
       `).join("");
 
-      w.document.write(`
+      const finalHtml = `
         <html lang="ar" dir="rtl">
           <head>
             <meta charset="UTF-8" />
@@ -889,7 +889,7 @@
                 font-size:13px;
               }
               .reviews{ margin-top:10px; }
-              @media print{ .noPrint{ display:none; } }
+              @media print{ .noPrint{ display:none !important; } }
               button{
                 cursor:pointer;
                 background:#8b5cf6;
@@ -932,11 +932,13 @@
 
             <script>
               window.onload = () => { window.print(); };
-            </script>
+            <\/script>
           </body>
         </html>
-      `);
+      `;
 
+      w.document.open();
+      w.document.write(finalHtml);
       w.document.close();
     }
 
@@ -1372,7 +1374,6 @@
                   <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
                 </span>
 
-                <!-- ✅ زر طباعة جنب الاسم -->
                 <button
                   class="btn printPurple"
                   type="button"
@@ -1417,12 +1418,10 @@
         `;
       }
 
-      // ربط حدث زر الطباعة
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
-          e.stopPropagation(); // مهم: لا يفتح/يغلق الـ details
+          e.stopPropagation();
           const empName = btn.getAttribute('data-print-emp');
-
           const empObj = rows.find(r => r.emp === empName);
           if(!empObj) return;
 
@@ -1581,7 +1580,7 @@
 
     reviewDetailsModal.classList.add("hide");
     exitAdminWorkspace();
-    // نبدأ بـ Current
+
     setInitialView();
     renderQuestions();
   </script>
