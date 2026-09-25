@@ -7,247 +7,418 @@
 
   <style>
     :root{
-      --text:#0b1b2a;
-      --muted:rgba(11,27,42,0.65);
-      --border:rgba(11,27,42,0.14);
-      --blue:#0b3d91;
-      --green:#0e7a4b;
-      --danger:#ff4d4d;
-      --yellow:#ffd24a;
-      --shadow:0 18px 45px rgba(2,6,23,0.16);
-      --modalBg:rgba(0,0,0,0.35);
-      --radius2:22px;
-      --pillBg:rgba(255,255,255,0.78);
-      --pillBorder:rgba(11,61,145,0.22);
-      --fieldPad:12px;
-      --radius:14px;
+      --panel: rgba(255,255,255,0.78);
+      --text: #0b1b2a;
+      --muted: rgba(11,27,42,0.65);
+      --border: rgba(11,27,42,0.14);
+
+      --blue: #0b3d91;
+      --green: #0e7a4b;
+      --danger: #ff4d4d;
+      --yellow: #ffd24a;
+
+      --shadow: 0 18px 45px rgba(2,6,23,0.16);
+      --modalBg: rgba(0,0,0,0.35);
+      --radius2: 22px;
+
+      --pillBg: rgba(255,255,255,0.78);
+      --pillBorder: rgba(11,61,145,0.22);
+
+      --fieldPad: 12px;
+      --radius: 14px;
     }
-    *{ box-sizing:border-box; }
+
+    *{ box-sizing: border-box; }
+
     body{
       margin:0;
-      font-family:"Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-      color:var(--text);
+      font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
+      color: var(--text);
       background:
         radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
         radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
-        linear-gradient(180deg,#f3f6ff,#eef3ff);
-      min-height:100vh;
-      overflow-x:hidden;
+        linear-gradient(180deg, #f3f6ff, #eef3ff);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .container{ width:min(1200px,96vw); margin:12px auto 26px; }
+
+    .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
+
     header{
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
-      padding:12px 14px;
-      background:rgba(255,255,255,0.72);
-      border:1px solid var(--border);
-      border-radius:var(--radius2);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(10px);
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
+
     .brandPill{
-      width:100%;
-      display:flex; align-items:center; justify-content:center;
-      padding:10px 14px; border-radius:999px;
-      background:var(--pillBg);
-      border:1px solid var(--pillBorder);
-      box-shadow:0 18px 35px rgba(0,0,0,0.08);
-      max-width:100%;
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--pillBg);
+      border: 1px solid var(--pillBorder);
+      box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+      max-width: 100%;
     }
     .brandPill .title{
-      margin:0; font-weight:950; font-size:18px;
-      color:var(--text);
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      margin:0;
+      font-weight: 950;
+      font-size: 18px;
+      letter-spacing: 0.2px;
+      color: var(--text);
+      white-space: nowrap;
+      overflow:hidden;
+      text-overflow: ellipsis;
       text-align:center;
     }
 
+    .loginLogo{
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(11,61,145,0.25);
+      background: rgba(11,61,145,0.08);
+      box-shadow: 0 10px 25px rgba(11,61,145,0.15);
+      margin-top: 4px;
+      margin-bottom: 2px;
+    }
+
     .card{
-      background:rgba(255,255,255,0.80);
-      border:1px solid var(--border);
-      border-radius:var(--radius2);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
+      background: rgba(255,255,255,0.80);
+      border: 1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
       overflow:hidden;
-      width:100%;
+      width: 100%;
     }
+
     .card .cardHead{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(11,27,42,0.10);
-      background:linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(11,27,42,0.10);
+      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
     }
+
     .card h2{
       margin:0;
       font-size:15px;
       letter-spacing:0.2px;
-      color:var(--text);
+      color: var(--text);
       text-align:center;
-      font-weight:950;
     }
-    .card .cardBody{ padding:14px; }
+    .card .cardBody{ padding: 14px; }
 
     .loginStage{
-      min-height:58vh;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      text-align:center; padding:10px 0; gap:10px;
+      min-height: 58vh;
+      display:flex;
+      flex-direction: column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding: 10px 0;
+      gap: 10px;
     }
-    @media (max-width:520px){
-      .loginStage{ min-height:62vh; }
-      .card .cardBody{ padding:12px; }
+
+    @media (max-width: 520px){
+      .loginStage{ min-height: 62vh; }
+      .card .cardBody{ padding: 12px; }
+      .brandPill{ padding: 10px 12px; }
       .brandPill .title{ font-size:16px; }
+      .loginLogo{
+        width: 160px; height: 160px;
+        margin-top: -6px; margin-bottom: -10px;
+        transform: translateY(-28px);
+      }
     }
 
-    .loginLogo{
-      width:88px; height:88px; border-radius:50%;
-      object-fit:cover;
-      border:2px solid rgba(11,61,145,0.25);
-      background:rgba(11,61,145,0.08);
-      box-shadow:0 10px 25px rgba(11,61,145,0.15);
+    .toolbarGrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
     }
-    @media (max-width:520px){
-      .loginLogo{ width:160px; height:160px; transform:translateY(-28px); }
+    @media (max-width: 720px){
+      .toolbarGrid{ grid-template-columns: 1fr; }
+    }
+    .toolbarGrid .btn{
+      width: 100%;
+      justify-content: center;
     }
 
-    .toolbarGrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; }
-    @media (max-width:720px){ .toolbarGrid{ grid-template-columns:1fr; } }
-    .subToolbarGrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; width:100%; margin-top:6px; }
-    @media (max-width:720px){ .subToolbarGrid{ grid-template-columns:1fr; } }
+    .subToolbarGrid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: stretch;
+      width: 100%;
+    }
+    @media (max-width: 720px){
+      .subToolbarGrid{ grid-template-columns: 1fr; }
+    }
+    .subToolbarGrid .btn{
+      width: 100%;
+      justify-content: center;
+    }
 
     .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
     .btn{
-      border:none; cursor:pointer;
-      padding:12px 14px; border-radius:16px;
+      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
       font-weight:950;
-      color:#071018;
+      color: #071018;
       transition:0.2s;
-      white-space:nowrap;
+      white-space: nowrap;
       user-select:none;
-      min-height:46px;
+      min-height: 46px;
       width:auto;
-      box-shadow:0 10px 20px rgba(255,210,74,0.18);
-      background:var(--yellow);
-      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      background: var(--yellow);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
     }
-    .btn:hover{ transform:translateY(-1px); }
-    .btn:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
-    .btn.blue{ background:var(--blue); color:#fff; box-shadow:0 10px 20px rgba(11,61,145,0.22); }
-    .btn.green{ background:var(--green); color:#fff; box-shadow:0 10px 20px rgba(14,122,75,0.22); }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
+
+    .btn.blue{ background: var(--blue); color: #fff; box-shadow: 0 10px 20px rgba(11,61,145,0.22); }
+    .btn.green{ background: var(--green); color: #fff; box-shadow: 0 10px 20px rgba(14,122,75,0.22); }
     .btn.alt{
-      background:rgba(11,27,42,0.06); color:var(--text);
-      border:1px solid rgba(11,27,42,0.16);
-      box-shadow:none;
+      background: rgba(11,27,42,0.06);
+      color: var(--text);
+      border: 1px solid rgba(11,27,42,0.16);
+      box-shadow: none;
     }
-    .btn.alt:hover{ background:rgba(11,27,42,0.10); }
-    .btn.danger{ background:var(--danger); color:#180404; box-shadow:0 10px 20px rgba(255,77,77,0.20); }
+    .btn.alt:hover{ background: rgba(11,27,42,0.10); }
+    .btn.danger{
+      background: var(--danger);
+      color: #180404;
+      box-shadow: 0 10px 20px rgba(255,77,77,0.20);
+    }
 
     table{
       width:100%;
-      border-collapse:collapse;
+      border-collapse: collapse;
       border-radius:14px;
       overflow:hidden;
       border:1px solid rgba(11,27,42,0.12);
-      background:rgba(255,255,255,0.78);
+      background: rgba(255,255,255,0.78);
     }
-    th,td{
+    th, td{
       padding:10px 10px;
       border-bottom:1px solid rgba(11,27,42,0.10);
       text-align:center;
       font-size:13px;
-      vertical-align:middle;
-      white-space:nowrap;
+      vertical-align: middle;
+      white-space: nowrap;
     }
-    th{ background:rgba(11,61,145,0.06); color:var(--muted); font-weight:900; }
-    td{ color:var(--text); }
+    th{
+      background: rgba(11,61,145,0.06);
+      color: var(--muted);
+      font-weight:900;
+    }
+    td{ color: var(--text); }
     tr:last-child td{ border-bottom:none; }
 
-    label{ display:block; color:var(--muted); font-weight:800; margin-bottom:8px; font-size:13px; }
-    input, select, textarea{
-      width:100%;
-      padding:calc(var(--fieldPad) + 2px) 12px;
-      border-radius:var(--radius);
-      border:1px solid rgba(11,27,42,0.18);
-      background:rgba(255,255,255,0.9);
-      color:var(--text);
-      outline:none;
-      font-size:15px;
+    label{
+      display:block;
+      color: var(--muted);
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 13px;
     }
 
-    .row{ display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:14px; }
-    @media(min-width:720px){ .row.two{ grid-template-columns:1fr 1fr; } }
+    input, select, textarea{
+      width:100%;
+      padding: calc(var(--fieldPad) + 2px) 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.9);
+      color: var(--text);
+      outline:none;
+      appearance: none;
+      -webkit-appearance: none;
+      font-size: 15px;
+    }
 
-    h3{ margin:14px 0 8px; font-size:15px; color:rgba(11,27,42,0.70); }
+    select{
+      padding-left: 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
+        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
+      background-position:
+        calc(10px) 50%,
+        calc(18px) 50%,
+        calc(100% - 42px) 50%;
+      background-size:
+        8px 8px,
+        8px 8px,
+        1px 22px;
+      background-repeat: no-repeat;
+    }
+
+    option{ background:#f8fbff; color:#0b1b2a; }
+    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
+
+    .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
+    @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
+
+    h3{ margin:14px 0 8px; font-size:15px; color: rgba(11,27,42,0.70); }
     .hide{ display:none; }
 
     .fineprint{
-      color:rgba(11,27,42,0.58);
-      font-size:12px;
-      margin-top:10px;
-      line-height:1.7;
+      color: rgba(11,27,42,0.58);
+      font-size: 12px;
+      margin-top: 10px;
+      line-height: 1.7;
       text-align:center;
-      font-weight:850;
     }
 
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
-      border:1px solid rgba(11,27,42,0.14);
-      background:rgba(11,27,42,0.05);
-      color:var(--text);
-      white-space:nowrap;
+      border: 1px solid rgba(11,27,42,0.14);
+      background: rgba(11,27,42,0.05); white-space:nowrap;
+      color: var(--text);
     }
-    .ratingTag.excellent{ border-color:rgba(14,122,75,0.55); background:rgba(14,122,75,0.08); }
-    .ratingTag.good{ border-color:rgba(11,61,145,0.55); background:rgba(11,61,145,0.08); }
-    .ratingTag.acceptable{ border-color:rgba(255,210,74,0.70); background:rgba(255,210,74,0.10); }
+    .ratingTag.excellent{ border-color: rgba(14,122,75,0.55); background: rgba(14,122,75,0.08); }
+    .ratingTag.good{ border-color: rgba(11,61,145,0.55); background: rgba(11,61,145,0.08); }
+    .ratingTag.acceptable{ border-color: rgba(255,210,74,0.70); background: rgba(255,210,74,0.10); }
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
-      background:rgba(11,27,42,0.06); color:var(--text);
+      background: rgba(11,27,42,0.06); color: var(--text);
       border:1px solid rgba(11,27,42,0.16); box-shadow:none;
-      white-space:nowrap; min-height:40px;
+      white-space:nowrap; min-height: 40px;
     }
 
     .msg{
       margin-top:12px; padding:12px; border-radius:14px;
       border:1px solid rgba(11,27,42,0.14);
-      background:rgba(255,255,255,0.78);
-      color:rgba(11,27,42,0.72);
+      background: rgba(255,255,255,0.78);
+      color: rgba(11,27,42,0.72);
       line-height:1.7; font-weight:850; font-size:13px;
-      display:none; text-align:center;
+      display:none;
+      text-align:center;
     }
 
     .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
     .employeeChip{
       display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
       border-radius:999px;
-      background:rgba(11,61,145,0.06);
-      border:1px solid rgba(11,61,145,0.14);
-      color:var(--text); font-weight:900; font-size:13px;
+      background: rgba(11,61,145,0.06);
+      border: 1px solid rgba(11,61,145,0.14);
+      color: var(--text); font-weight:900; font-size:13px;
     }
     .employeeChip button{
-      min-height:34px; min-width:34px; padding:0 10px; border-radius:999px;
+      min-height: 34px; min-width: 34px; padding:0 10px; border-radius: 999px;
       border:none; cursor:pointer;
-      background:rgba(255,77,77,0.18); color:#b61f1f;
-      border:1px solid rgba(255,77,77,0.35); font-weight:950;
+      background: rgba(255,77,77,0.18); color: #b61f1f;
+      border: 1px solid rgba(255,77,77,0.35); font-weight:950;
     }
 
     #reviewDetailsModal{
-      position:fixed; inset:0;
-      background:var(--modalBg);
-      z-index:9999;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:14px;
+      position: fixed;
+      inset: 0;
+      background: var(--modalBg);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
     }
-    #reviewDetailsModal:not(.hide){ display:flex; }
+    #reviewDetailsModal:not(.hide){ display: flex; }
 
-    .btn.printPurple{
-      background:rgba(139,92,246,0.16) !important;
-      color:#3b1c84 !important;
-      border:1px solid rgba(139,92,246,0.38) !important;
-      box-shadow:0 10px 20px rgba(139,92,246,0.12) !important;
-      padding:8px 10px !important;
-      border-radius:14px !important;
-      min-height:40px !important;
+    /* ✅ تعديل ألوان الأزرار */
+    #downloadArchiveBtn,
+    #showArchiveBtn{
+      background: rgba(14,122,75,0.16) !important;
+      color: #0b3f25 !important;
+      border: 1px solid rgba(14,122,75,0.35) !important;
+      box-shadow: 0 10px 20px rgba(14,122,75,0.10) !important;
     }
+
+    #showCurrentBtn{
+      background: rgba(255,210,74,0.22) !important;
+      color: #3a2b00 !important;
+      border: 1px solid rgba(255,210,74,0.55) !important;
+      box-shadow: 0 10px 20px rgba(255,210,74,0.12) !important;
+    }
+
+    #showFinalRatingBtn{
+      background: rgba(255, 165, 0, 0.18) !important;
+      color: #5a2b00 !important;
+      border: 1px solid rgba(255, 165, 0, 0.42) !important;
+      box-shadow: 0 10px 20px rgba(255, 165, 0, 0.14) !important;
+    }
+    #showFinalRatingBtn:hover{ transform: translateY(-1px); }
+
+    details.finalEmployeeDetails{
+      border: 1px solid rgba(11,27,42,0.12);
+      border-radius: 14px;
+      background: rgba(11,61,145,0.04);
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    details.finalEmployeeDetails summary{
+      cursor:pointer;
+      padding: 10px 12px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 950;
+    }
+    .finalEmployeeMeta{
+      padding: 10px 12px 14px;
+      border-top: 1px solid rgba(11,27,42,0.10);
+    }
+    .finalReviewsList{
+      display:flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .finalReviewItem{
+      border: 1px solid rgba(11,27,42,0.12);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: rgba(255,255,255,0.65);
+    }
+    .finalReviewItem .metaLine{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px 12px;
+      align-items:center;
+      justify-content:flex-start;
+      margin-bottom: 6px;
+      font-weight: 900;
+      color: rgba(11,27,42,0.75);
+      font-size: 12px;
+    }
+
+    /* ✅ زر الطباعة بنفسجي ناعم */
+    .btn.printPurple{
+      background: rgba(139,92,246,0.16) !important;
+      color: #3b1c84 !important;
+      border: 1px solid rgba(139,92,246,0.38) !important;
+      box-shadow: 0 10px 20px rgba(139,92,246,0.12) !important;
+      padding: 8px 10px !important;
+      border-radius: 14px !important;
+      min-height: 40px !important;
+    }
+    .btn.printPurple:hover{ transform: translateY(-1px); }
   </style>
 </head>
 
@@ -263,23 +434,26 @@
     <div style="margin-top:14px;">
       <section class="card">
         <div class="cardHead">
-          <h2>تسجيل دخول الإدارة</h2>
+          <h2>تسجيل دخول الإدارة </h2>
         </div>
 
         <div class="cardBody">
           <div id="adminLoginBox">
             <div class="loginStage">
               <img class="loginLogo" alt="Logo" src="logo.png" />
-              <div style="font-weight:950; font-size:20px; color:var(--text);">إدارة الهوية الوطنية</div>
 
-              <div id="adminCenterName" style="
-                background:rgba(11,61,145,0.06);
-                border:1px solid rgba(11,61,145,0.18);
-                padding:10px 16px;
-                border-radius:14px;
-                font-weight:950;
-                display:inline-block;
-                color:var(--text);
+              <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
+                إدارة الهوية الوطنية
+              </div>
+
+              <div id="adminCenterName" class="admin-center-name" style="
+                background: rgba(11,61,145,0.06);
+                border: 1px solid rgba(11,61,145,0.18);
+                padding: 10px 16px;
+                border-radius: 14px;
+                font-weight: 950;
+                display: inline-block;
+                color: var(--text);
               "></div>
 
               <div class="fineprint"></div>
@@ -302,6 +476,7 @@
               <div></div>
               <div>
                 <label>أدوات</label>
+
                 <div class="toolbarGrid">
                   <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
                   <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
@@ -316,13 +491,15 @@
             </div>
 
             <div class="toolbarGrid" style="margin:0 0 14px;">
-              <button class="btn alt" id="showFinalRatingBtn" type="button">التقييم النهائي (إجمالي + تفاصيل)</button>
+              <button class="btn alt" id="showFinalRatingBtn" type="button">
+                التقييم النهائي (إجمالي + تفاصيل)
+              </button>
               <button class="btn alt" type="button" disabled style="opacity:0; pointer-events:none;"></button>
             </div>
 
             <div id="currentSection">
               <h3>التقييمات الحالية</h3>
-              <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling:touch;">
+              <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead>
                     <tr>
@@ -341,7 +518,8 @@
 
             <div id="archiveSection" class="hide">
               <h3 id="archiveTitle">أرشيف التقييمات (مركز مشرف)</h3>
-              <div id="archiveTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling:touch;">
+
+              <div id="archiveTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead id="archiveTableThead"></thead>
                   <tbody id="archiveReviewsTbody"></tbody>
@@ -353,7 +531,9 @@
                 <div class="fineprint" style="margin-top:0;">
                   يتم تجميع (ممتاز/جيد/مقبول) من تقييم كل مراجعة، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
                 </div>
+
                 <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
+
                 <div class="fineprint" style="margin-top:12px;">
                   ملاحظة: إذا لم يظهر موظف، فهذا يعني أن لديه تقييماً غير كافٍ أو لا توجد مراجعات باسمه.
                 </div>
@@ -421,6 +601,7 @@
                   </div>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -431,34 +612,37 @@
 
   <div id="reviewDetailsModal" class="hide">
     <div style="
-      width:min(900px,94vw);
-      background:rgba(255,255,255,0.86);
-      border:1px solid rgba(11,27,42,0.18);
-      border-radius:22px;
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(12px);
-      padding:14px;
-      color:var(--text);
+      width: min(900px, 94vw);
+      background: rgba(255,255,255,0.86);
+      border: 1px solid rgba(11,27,42,0.18);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding: 14px;
+      color: var(--text);
     ">
-      <div class="btnRow" style="justify-content:space-between; margin-bottom:10px;">
+      <div class="btnRow" style="justify-content:space-between; margin-bottom: 10px;">
         <div style="font-weight:950;">تفاصيل التقييم</div>
         <button class="btn alt" id="closeReviewDetailsBtn" type="button">إغلاق</button>
       </div>
       <div id="reviewDetailsMeta" class="fineprint" style="margin-top:0; text-align:right;"></div>
+
       <div style="
-        margin-top:10px;
-        max-height:55vh;
+        margin-top: 10px;
+        max-height: 55vh;
         overflow:auto;
-        border-radius:14px;
-        border:1px solid rgba(11,27,42,0.14);
-        background:rgba(255,255,255,0.55);
+        border-radius: 14px;
+        border: 1px solid rgba(11,27,42,0.14);
+        background: rgba(255,255,255,0.55);
       ">
-        <div id="reviewDetailsQuestions" style="padding:12px; display:flex; flex-direction:column; gap:10px;"></div>
+        <div id="reviewDetailsQuestions" style="padding: 12px; display:flex; flex-direction:column; gap:10px;"></div>
       </div>
     </div>
   </div>
 
   <script>
+    // ✅ هنا الربط الحقيقي لصفحة استبيان مشرف:
+    // يجب أن يكون نص center مطابق تمامًا لصفحة الاستبيان (const center = "مركز مشرف";)
     const LOCK_CENTER = "مركز مشرف";
 
     const LS_KEYS = {
@@ -479,8 +663,11 @@
 
     function formatDateTime(iso){
       const d = new Date(iso);
-      if(Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+      if (Number.isNaN(d.getTime())) return "—";
+      return d.toLocaleString("ar-KW", {
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit"
+      });
     }
 
     function ratingClass(r){
@@ -509,11 +696,9 @@
       return null;
     }
 
-    // نفس منطق ملفاتك: إذا الأسئلة = 3 معاملات (sum<=4 ممتاز، sum<=6 جيد، غير كذا مقبول)
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
-      let sum = 0;
-      let count = 0;
+      let sum = 0, count = 0;
 
       for(const q of qs){
         const ans = answers?.[q.id];
@@ -523,6 +708,7 @@
       }
       if(count === 0) return "—";
 
+      // نفس منطق ملف الشامية/صفحة الاستبيان عندما عدد الأسئلة = 3
       if(count === 3){
         if(sum <= 4) return "ممتاز";
         if(sum <= 6) return "جيد";
@@ -557,12 +743,24 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
+    let questions = loadJson(LS_KEYS.questions, []);
+
+    // ===== DOM =====
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
     const adminLoginBox = document.getElementById("adminLoginBox");
     const adminWorkspace = document.getElementById("adminWorkspace");
+
+    const adminAdjustBtn = document.getElementById("adminAdjustBtn");
+    const backToReviewsBtn = document.getElementById("backToReviewsBtn");
+    const adminAdjustPage = document.getElementById("adminAdjustPage");
+
+    const tabEmployeesBtn = document.getElementById("tabEmployeesBtn");
+    const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
+    const employeesAdminPanel = document.getElementById("employeesAdminPanel");
+    const questionsAdminPanel = document.getElementById("questionsAdminPanel");
 
     const currentReviewsTbody = document.getElementById("currentReviewsTbody");
     const archiveReviewsTbody = document.getElementById("archiveReviewsTbody");
@@ -574,25 +772,17 @@
 
     const showCurrentBtn = document.getElementById("showCurrentBtn");
     const showArchiveBtn = document.getElementById("showArchiveBtn");
+    const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
+
     const currentSection = document.getElementById("currentSection");
     const archiveSection = document.getElementById("archiveSection");
 
-    const currentTableWrap = document.getElementById("currentTableWrap");
-    const archiveTableWrap = document.getElementById("archiveTableWrap");
-    const archiveTitle = document.getElementById("archiveTitle");
-
-    const adminAdjustBtn = document.getElementById("adminAdjustBtn");
-    const backToReviewsBtn = document.getElementById("backToReviewsBtn");
-    const adminAdjustPage = document.getElementById("adminAdjustPage");
-
-    const tabEmployeesBtn = document.getElementById("tabEmployeesBtn");
-    const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
-    const employeesAdminPanel = document.getElementById("employeesAdminPanel");
-    const questionsAdminPanel = document.getElementById("questionsAdminPanel");
-
-    const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
     const finalRatingSection = document.getElementById("finalRatingSection");
     const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
+    const archiveTitle = document.getElementById("archiveTitle");
+
+    const currentTableWrap = document.getElementById("currentTableWrap");
+    const archiveTableWrap = document.getElementById("archiveTableWrap");
 
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
@@ -620,22 +810,23 @@
         <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} <br>
         <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))} <br>
         <b>الملاحظة:</b> ${escapeHtml(noteText)} <br>
-        <b>التقييم النهائي:</b> <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
+        <b>التقييم النهائي:</b>
+        <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
       `;
 
       if(!qs.length){
         reviewDetailsQuestions.innerHTML = `<div class="fineprint">لا توجد أسئلة مضافة حالياً.</div>`;
       }else{
-        reviewDetailsQuestions.innerHTML = qs.map((q,i)=>{
+        reviewDetailsQuestions.innerHTML = qs.map((q, i)=>{
           const ans = (answers && answers[q.id] != null) ? answers[q.id] : "—";
           return `
             <div style="
               border:1px solid rgba(11,27,42,0.12);
               border-radius:14px;
               padding:10px 12px;
-              background:rgba(11,61,145,0.04);
+              background: rgba(11,61,145,0.04);
             ">
-              <div style="font-weight:950;margin-bottom:6px;color:var(--text)">${i+1}) ${escapeHtml(q.text)}</div>
+              <div style="font-weight:950; margin-bottom:6px; color: var(--text);">${i+1}) ${escapeHtml(q.text)}</div>
               <div class="ratingTag ${ratingClass(ans)}" style="font-size:13px; display:inline-flex;">
                 ${escapeHtml(ans)}
               </div>
@@ -658,7 +849,7 @@
             المراجع: ${escapeHtml(r.reviewer)} &nbsp; | &nbsp;
             الهاتف: ${escapeHtml(r.phone)}
           </div>
-          <div style="margin-top:6px;font-weight:900;">
+          <div style="margin-top:6px; font-weight:900;">
             التقييم: <span style="font-weight:950;">${escapeHtml(r.rating)}</span>
           </div>
           <div style="margin-top:6px;color:#2b2a6b;font-weight:800;line-height:1.7;">
@@ -674,15 +865,46 @@
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <title>طباعة التقييم النهائي</title>
             <style>
-              body{ font-family:"Tajawal","Cairo","Segoe UI",Arial,sans-serif;background:#fff;color:#0b1b2a;padding:18px; }
-              .header{text-align:center;margin-bottom:14px;}
-              .title{ font-weight:950;font-size:20px; }
-              .sub{ color:rgba(11,27,42,0.65);font-weight:900;margin-top:6px; }
-              .box{ border:1px solid rgba(139,92,246,0.35); border-radius:18px; padding:14px; background:rgba(139,92,246,0.04); }
-              .tag{ display:inline-block;padding:6px 12px;border-radius:999px;font-weight:950;border:1px solid rgba(139,92,246,0.35);background:rgba(139,92,246,0.10); }
-              .meta{ margin-top:10px;color:rgba(11,27,42,0.72);font-weight:900;font-size:13px; }
+              body{
+                font-family:"Tajawal","Cairo","Segoe UI",Arial,sans-serif;
+                background:#fff;
+                color:#0b1b2a;
+                padding:18px;
+              }
+              .header{ text-align:center; margin-bottom:14px; }
+              .title{ font-weight:950; font-size:20px; }
+              .sub{ color:rgba(11,27,42,0.65); font-weight:900; margin-top:6px; }
+              .box{
+                border:1px solid rgba(139,92,246,0.35);
+                border-radius:18px;
+                padding:14px;
+                background:rgba(139,92,246,0.04);
+              }
+              .tag{
+                display:inline-block;
+                padding:6px 12px;
+                border-radius:999px;
+                font-weight:950;
+                border:1px solid rgba(139,92,246,0.35);
+                background:rgba(139,92,246,0.10);
+              }
+              .meta{
+                margin-top:10px;
+                color:rgba(11,27,42,0.72);
+                font-weight:900;
+                font-size:13px;
+              }
               .reviews{ margin-top:10px; }
               @media print{ .noPrint{ display:none !important; } }
+              button{
+                cursor:pointer;
+                background:#8b5cf6;
+                color:#fff;
+                border:none;
+                border-radius:14px;
+                padding:10px 16px;
+                font-weight:950;
+              }
             </style>
           </head>
           <body>
@@ -696,17 +918,21 @@
                 <div style="font-weight:950;font-size:18px;">${escapeHtml(empObj.emp)}</div>
                 <div class="tag">التقييم النهائي: ${escapeHtml(empObj.final)}</div>
               </div>
+
               <div class="meta">
                 ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
               </div>
+
               <div class="reviews">${htmlReviews}</div>
             </div>
 
             <div class="noPrint" style="text-align:center;margin-top:12px;">
-              <button onclick="window.print()" style="cursor:pointer;background:#8b5cf6;color:#fff;border:none;border-radius:14px;padding:10px 16px;font-weight:950;">طباعة الآن</button>
+              <button onclick="window.print()">طباعة الآن</button>
             </div>
 
-            <script>window.onload = () => { window.print(); };</script>
+            <script>
+              window.onload = () => { window.print(); };
+            <\/script>
           </body>
         </html>
       `;
@@ -716,7 +942,7 @@
       w.document.close();
     }
 
-    // ===== Employees admin =====
+    // ===== Employees =====
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -726,6 +952,7 @@
     function renderEmployeesForCenter(center){
       const list = employeesByCenter[center] || [];
       employeesList.innerHTML = "";
+
       const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
       if(unique.length === 0){
         noEmployeesMsg.style.display = "block";
@@ -775,6 +1002,7 @@
     function clearEmployeesForCenter(){
       const center = adminCenterSession || LOCK_CENTER;
       if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
       const ok = confirm(`هل أنت متأكد؟ سيتم مسح كل أسماء الموظفين لهذا المركز فقط:\n${center}`);
       if(!ok) return;
 
@@ -785,45 +1013,47 @@
     }
 
     addEmployeeBtn.addEventListener("click", addEmployee);
-    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addEmployee(); });
+    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // ===== Questions admin =====
+    // ===== Questions =====
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
     const addQuestionBtn = document.getElementById("addQuestionBtn");
     const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
 
-    let questions = loadJson(LS_KEYS.questions, []);
-
     function renderQuestions(){
       questionsListEl.innerHTML = "";
+      questions = loadJson(LS_KEYS.questions, []);
+
       if(!questions.length){
         noQuestionsMsg.style.display = "block";
         return;
       }
       noQuestionsMsg.style.display = "none";
 
-      questions.forEach((q,index)=>{
+      questions.forEach((q, index)=>{
         const wrap = document.createElement("div");
         wrap.style.border="1px solid rgba(11,27,42,0.14)";
         wrap.style.borderRadius="14px";
         wrap.style.padding="10px 12px";
         wrap.style.background="rgba(11,61,145,0.04)";
         wrap.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
-            <div style="font-weight:950;color:var(--text)">#${index+1} - ${escapeHtml(q.text)}</div>
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div style="font-weight:950; color:var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
             <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
           </div>
-          <div class="fineprint" style="margin-top:6px;text-align:center;">الاختيارات: ممتاز / جيد / مقبول</div>
+          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد / مقبول</div>
         `;
+
         wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
           questions = questions.filter(x => x.id !== q.id);
           saveJson(LS_KEYS.questions, questions);
           renderQuestions();
           showToast("✅ تم حذف السؤال.");
         });
+
         questionsListEl.appendChild(wrap);
       });
     }
@@ -831,9 +1061,11 @@
     function addQuestion(){
       const text = (newQuestionText.value || "").trim();
       if(!text) return showToast("❌ اكتب اسم السؤال أولاً.");
+
       const q = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), text };
       questions.push(q);
       saveJson(LS_KEYS.questions, questions);
+
       newQuestionText.value = "";
       renderQuestions();
       showToast("✅ تم إضافة سؤال.");
@@ -842,8 +1074,10 @@
     function clearQuestions(){
       questions = loadJson(LS_KEYS.questions, []);
       if(!questions.length) return showToast("لا توجد أسئلة لمسحها.");
+
       const ok = confirm("هل أنت متأكد؟ سيتم مسح كل أسئلة التقييم.");
       if(!ok) return;
+
       questions = [];
       saveJson(LS_KEYS.questions, questions);
       renderQuestions();
@@ -854,6 +1088,7 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
+    // Tabs
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
@@ -863,7 +1098,7 @@
       questionsAdminPanel.classList.remove("hide");
     });
 
-    // ===== Render tables =====
+    // ===== Tables =====
     function renderCurrentTablesForCenter(center){
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
@@ -871,7 +1106,7 @@
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color:rgba(11,27,42,0.55);font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
         currentReviewsTbody.appendChild(tr);
         return;
       }
@@ -880,7 +1115,7 @@
         const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${formatDateTime(r.createdAt)}</td>
+          <td>${escapeHtml(formatDateTime(r.createdAt))}</td>
           <td>${escapeHtml(r.reviewerName)}</td>
           <td>${escapeHtml(r.reviewerPhone)}</td>
           <td>${escapeHtml(r.employeeName)}</td>
@@ -915,20 +1150,18 @@
       archiveReviewsTbody.innerHTML = "";
       const qs = loadJson(LS_KEYS.questions, []);
 
-      archiveTableThead.innerHTML = `
-        <tr>
-          <th>التاريخ والوقت</th>
-          <th>اسم المراجع</th>
-          <th>رقم الهاتف</th>
-          <th>الموظف</th>
-          <th>التقييم</th>
-          <th>إجراء</th>
-        </tr>
-      `;
+      const theadRow = [];
+      theadRow.push(`<th>التاريخ والوقت</th>`);
+      theadRow.push(`<th>اسم المراجع</th>`);
+      theadRow.push(`<th>رقم الهاتف</th>`);
+      theadRow.push(`<th>الموظف</th>`);
+      theadRow.push(`<th>التقييم</th>`);
+      theadRow.push(`<th>إجراء</th>`);
+      archiveTableThead.innerHTML = `<tr>${theadRow.join("")}</tr>`;
 
       if(arc.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color:rgba(11,27,42,0.55);font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
         archiveReviewsTbody.appendChild(tr);
         return;
       }
@@ -937,7 +1170,7 @@
         const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${formatDateTime(r.archivedAt || r.createdAt)}</td>
+          <td>${escapeHtml(formatDateTime(r.archivedAt || r.createdAt))}</td>
           <td>${escapeHtml(r.reviewerName)}</td>
           <td>${escapeHtml(r.reviewerPhone)}</td>
           <td>${escapeHtml(r.employeeName)}</td>
@@ -1009,7 +1242,55 @@
       URL.revokeObjectURL(url);
     }
 
-    // ===== Final rating =====
+    function exitAdminWorkspace(){
+      adminCenterSession = "";
+      localStorage.removeItem(LS_KEYS.adminCenter);
+      adminLogoutBtn.disabled = true;
+
+      adminLoginBox.style.display = "block";
+      adminWorkspace.classList.add("hide");
+      reviewDetailsModal.classList.add("hide");
+    }
+
+    function enterAdminWorkspace(){
+      adminCenterSession = LOCK_CENTER;
+      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
+
+      adminCenterNameEl.textContent = LOCK_CENTER;
+
+      adminLoginBox.style.display = "none";
+      adminWorkspace.classList.remove("hide");
+      adminLogoutBtn.disabled = false;
+
+      // reload latest
+      currentReviews = loadJson(LS_KEYS.current, []);
+      archiveReviews = loadJson(LS_KEYS.archive, []);
+      employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+      if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
+      questions = loadJson(LS_KEYS.questions, []);
+
+      setInitialView();
+      renderCurrentTablesForCenter(LOCK_CENTER);
+      renderArchiveTablesForCenter(LOCK_CENTER);
+      renderEmployeesForCenter(LOCK_CENTER);
+      renderQuestions();
+    }
+
+    function setInitialView(){
+      setView("current");
+      finalRatingSection.classList.add("hide");
+    }
+
+    function setView(view){
+      if(view === "archive"){
+        currentSection.classList.add("hide");
+        archiveSection.classList.remove("hide");
+      }else{
+        archiveSection.classList.add("hide");
+        currentSection.classList.remove("hide");
+      }
+    }
+
     function renderFinalRatingForEmployees(center){
       const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
@@ -1017,11 +1298,20 @@
       finalRatingEmployeesWrap.innerHTML = "";
 
       if(all.length === 0){
-        finalRatingEmployeesWrap.innerHTML = `<div class="fineprint" style="margin-top:0;">لا توجد تقييمات (Current أو Archive) لهذا المركز.</div>`;
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد تقييمات (Current أو Archive) لهذا المركز.
+          </div>
+        `;
         return;
       }
+
       if(!Array.isArray(qs) || qs.length === 0){
-        finalRatingEmployeesWrap.innerHTML = `<div class="fineprint" style="margin-top:0;">لا توجد أسئلة تفعيلها أولاً (rating_questions_v1).</div>`;
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد أسئلة تفعيلها أولاً (rating_questions_v1).
+          </div>
+        `;
         return;
       }
 
@@ -1063,7 +1353,11 @@
         .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
 
       if(rows.length === 0){
-        finalRatingEmployeesWrap.innerHTML = `<div class="fineprint" style="margin-top:0;">لا توجد بيانات كافية لعرض التقييم النهائي لهذا المركز.</div>`;
+        finalRatingEmployeesWrap.innerHTML = `
+          <div class="fineprint" style="margin-top:0;">
+            لا توجد بيانات كافية لعرض التقييم النهائي لهذا المركز.
+          </div>
+        `;
         return;
       }
 
@@ -1072,41 +1366,52 @@
         const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
 
         finalRatingEmployeesWrap.innerHTML += `
-          <details style="border:1px solid rgba(11,27,42,0.12);border-radius:14px;background:rgba(11,61,145,0.04);margin-top:10px;overflow:hidden;">
-            <summary style="cursor:pointer;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:950;">
-              <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
+          <details class="finalEmployeeDetails">
+            <summary>
+              <span style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-start;">
                 <span>
                   ${escapeHtml(x.emp)}
                   &nbsp;—&nbsp;
                   <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
                 </span>
-                <button class="btn printPurple" type="button" data-print-emp="${escapeHtml(x.emp)}">🖨️ طباعة</button>
+
+                <button
+                  class="btn printPurple"
+                  type="button"
+                  title="طباعة التقييم النهائي لهذا الموظف"
+                  data-print-emp="${escapeHtml(x.emp)}"
+                >
+                  🖨️ طباعة
+                </button>
               </span>
-              <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
-                ممتاز:${x.excellent} | جيد:${x.good} | مقبول:${x.acceptable} | المجموع:${x.total}
+
+              <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900; white-space:nowrap;">
+                ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
 
-            <div style="padding:10px 12px 14px;border-top:1px solid rgba(11,27,42,0.10);">
-              <div style="font-weight:950;color:rgba(11,27,42,0.75);font-size:13px;">تفاصيل تقييماته السابقة:</div>
-              <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
-                ${x.reviews.map(r=>{
-                  return `
-                    <div style="border:1px solid rgba(11,27,42,0.12);border-radius:12px;padding:10px 12px;background:rgba(255,255,255,0.65);">
-                      <div style="display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:flex-start;margin-bottom:6px;font-weight:900;color:rgba(11,27,42,0.75);font-size:12px;">
-                        <span>التاريخ:<b>${escapeHtml(formatDateTime(r.time))}</b></span>
-                        <span>المراجع:<b>${escapeHtml(r.reviewer)}</b></span>
-                        <span>الهاتف:<b>${escapeHtml(r.phone)}</b></span>
-                        <span style="margin-inline-start:auto;">التقييم:
-                          <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
-                        </span>
-                      </div>
-                      <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
-                        الملاحظة: ${escapeHtml(r.comment)}
-                      </div>
+            <div class="finalEmployeeMeta">
+              <div style="font-weight:950; color: rgba(11,27,42,0.75); font-size:13px;">
+                تفاصيل تقييماته السابقة:
+              </div>
+
+              <div class="finalReviewsList">
+                ${x.reviews.map(r=>`
+                  <div class="finalReviewItem">
+                    <div class="metaLine">
+                      <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
+                      <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
+                      <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+                      <span style="margin-inline-start:auto;">
+                        التقييم:
+                        <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                      </span>
                     </div>
-                  `;
-                }).join("")}
+                    <div style="font-size:13px; color: rgba(11,27,42,0.72); font-weight:850; line-height:1.6;">
+                      الملاحظة: ${escapeHtml(r.comment)}
+                    </div>
+                  </div>
+                `).join("")}
               </div>
             </div>
           </details>
@@ -1114,14 +1419,14 @@
       }
 
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
-        btn.addEventListener("click",(e)=>{
+        btn.addEventListener('click',(e)=>{
           e.stopPropagation();
-          const empName = btn.getAttribute("data-print-emp");
+          const empName = btn.getAttribute('data-print-emp');
+
           const empObj = rows.find(r => r.emp === empName);
           if(!empObj) return;
 
           const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
-
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
@@ -1135,54 +1440,7 @@
       });
     }
 
-    // ===== UI Navigation =====
-    function exitAdminWorkspace(){
-      adminCenterSession = "";
-      localStorage.removeItem(LS_KEYS.adminCenter);
-      adminLogoutBtn.disabled = true;
-
-      adminLoginBox.style.display = "block";
-      adminWorkspace.classList.add("hide");
-      reviewDetailsModal.classList.add("hide");
-    }
-
-    function enterAdminWorkspace(){
-      adminCenterSession = LOCK_CENTER;
-      localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
-
-      adminCenterNameEl.textContent = LOCK_CENTER;
-
-      adminLoginBox.style.display = "none";
-      adminWorkspace.classList.remove("hide");
-      adminLogoutBtn.disabled = false;
-
-      setInitialView();
-      renderCurrentTablesForCenter(LOCK_CENTER);
-      renderArchiveTablesForCenter(LOCK_CENTER);
-      renderEmployeesForCenter(LOCK_CENTER);
-
-      questions = loadJson(LS_KEYS.questions, []);
-      renderQuestions();
-    }
-
-    function setInitialView(){
-      setView("current");
-      finalRatingSection.classList.add("hide");
-      currentTableWrap.classList.remove("hide");
-      archiveTableWrap.classList.remove("hide");
-      archiveTitle.classList.remove("hide");
-    }
-
-    function setView(view){
-      if(view === "archive"){
-        currentSection.classList.add("hide");
-        archiveSection.classList.remove("hide");
-      }else{
-        archiveSection.classList.add("hide");
-        currentSection.classList.remove("hide");
-      }
-    }
-
+    // ===== Buttons =====
     adminLoginBtn.addEventListener("click", ()=>{
       enterAdminWorkspace();
       showToast(`✅ تم فتح لوحة الإدارة للمركز: <b>${escapeHtml(LOCK_CENTER)}</b>`);
@@ -1198,35 +1456,33 @@
     showCurrentBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
+
       finalRatingSection.classList.add("hide");
+      archiveSection.classList.add("hide");
+      currentSection.classList.remove("hide");
 
-      currentTableWrap.classList.remove("hide");
-      archiveTableWrap.classList.remove("hide");
-      archiveTitle.classList.remove("hide");
-
-      setView("current");
       renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
     showArchiveBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
+
       finalRatingSection.classList.add("hide");
+      currentSection.classList.add("hide");
+      archiveSection.classList.remove("hide");
 
-      currentTableWrap.classList.remove("hide");
-      archiveTableWrap.classList.remove("hide");
-      archiveTitle.classList.remove("hide");
-
-      setView("archive");
       renderArchiveTablesForCenter(LOCK_CENTER);
     });
 
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
       adminAdjustPage.classList.add("hide");
 
       setView("archive");
       currentSection.classList.add("hide");
+
       archiveTableWrap.classList.add("hide");
       archiveTitle.classList.add("hide");
 
@@ -1253,6 +1509,7 @@
       currentTableWrap.classList.remove("hide");
 
       setView("current");
+      renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
     archiveAllBtn.addEventListener("click", ()=>{
@@ -1314,11 +1571,18 @@
     adminHeaderTitle.textContent = `لوحة الإدارة - ${LOCK_CENTER}`;
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
+
     reviewDetailsModal.classList.add("hide");
     exitAdminWorkspace();
 
+    archiveTitle.textContent = `أرشيف التقييمات (${LOCK_CENTER})`;
+
+    // عرض افتراضي
+    currentSection.classList.remove("hide");
+    archiveSection.classList.add("hide");
+    finalRatingSection.classList.add("hide");
+
     setInitialView();
-    questions = loadJson(LS_KEYS.questions, []);
     renderQuestions();
   </script>
 </body>
