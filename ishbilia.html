@@ -3,237 +3,270 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>مركز اشبيلية - التقييم</title>
-
+  <title>تقييم موظفين - إشبيلية</title>
   <style>
     :root{
-      --panel: rgba(255,255,255,0.06);
-      --text: #eaf0ff;
-      --muted: rgba(234,240,255,0.7);
-      --border: rgba(255,255,255,0.14);
-      --shadow: 0 12px 30px rgba(0,0,0,0.35);
+      --text: #0b1b2a;
+      --muted: rgba(11,27,42,0.65);
+      --border: rgba(11,27,42,0.14);
+
+      --secondaryGreen: #0e7a4b;
+      --yellow: #ffd24a;
+
+      --shadow: 0 18px 45px rgba(2,6,23,0.16);
       --radius2: 22px;
 
-      --blue: rgba(58,160,255,1);
-      --green: rgba(24,195,126,1);
-      --danger: #ff4d4d;
+      --gap: 14px;
+      --fieldPad: 12px;
+      --radius: 14px;
     }
-    *{ box-sizing:border-box; }
+    *{ box-sizing: border-box; }
     body{
       margin:0;
-      font-family:"Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-      background:
-        radial-gradient(900px 500px at 10% 0%, rgba(58,160,255,0.20), transparent 60%),
-        radial-gradient(900px 500px at 90% 0%, rgba(24,195,126,0.16), transparent 60%),
-        linear-gradient(180deg, #070b14, #0b1220);
+      font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
       color: var(--text);
-      min-height:100vh;
-      padding: 18px 12px 40px;
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
+        linear-gradient(180deg, #f3f6ff, #eef3ff);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-    .container{ width:min(1000px, 98vw); margin:0 auto; }
+    .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
     header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      padding:12px 14px;
-      background: var(--panel);
-      border:1px solid var(--border);
+      display:flex;
+      gap: 12px;
+      align-items:center;
+      justify-content: center !important;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
-      margin-bottom:14px;
+      position: relative;
+      text-align: center;
     }
-    .title{
-      display:flex; gap:12px; align-items:center;
+    header .brand{
+      width: 100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position: relative;
+      padding-left: 72px;
+      padding-right: 72px;
+      min-width: 0;
     }
     .logo{
-      width:54px; height:54px; border-radius:50%;
-      border:2px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.05);
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid rgba(11,61,145,0.25);
+      background: rgba(11,61,145,0.08);
+      object-fit: cover;
+      flex: 0 0 auto;
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
     }
-    h1{ margin:0; font-size:16px; letter-spacing:0.2px; }
-    .sub{ margin-top:4px; color: var(--muted); font-size:12px; }
-
+    .brand h1{
+      margin:0;
+      font-size:16px;
+      line-height:1.35;
+      letter-spacing:0.2px;
+      text-align:center;
+      width: 100%;
+      padding: 0 10px;
+    }
+    .brand p{
+      margin:6px 0 0;
+      color: var(--muted);
+      font-size:12px;
+      text-align:center;
+      width: 100%;
+      padding: 0 10px;
+    }
+    @media(max-width: 520px){
+      header{ padding: 12px 12px; }
+      header .brand{ padding-left: 66px; padding-right: 66px; }
+      .logo{ width: 52px; height: 52px; right: 10px; }
+      .brand h1{ font-size: 15px; }
+      .brand p{ font-size: 12px; }
+    }
     .card{
-      background: var(--panel);
-      border:1px solid var(--border);
+      background: rgba(255,255,255,0.80);
+      border: 1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       overflow:hidden;
     }
-    .cardHead{
-      padding:12px 14px;
-      border-bottom:1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08));
-      display:flex; justify-content:space-between; align-items:center; gap:10px;
-      flex-wrap:wrap;
+    .card .cardHead{
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(11,27,42,0.10);
+      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
     }
-    .cardHead h2{ margin:0; font-size:15px; }
-    .cardBody{ padding:14px; }
-
-    .row{ display:grid; gap:12px; grid-template-columns:1fr; }
-    @media(min-width:800px){ .row.two{ grid-template-columns: 1fr 1fr; } }
-    .row.three{ grid-template-columns: 1fr; }
-    @media(min-width:900px){ .row.three{ grid-template-columns: 1fr 1fr 1fr; } }
-
+    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; text-align:center; }
+    .grid{ display:grid; grid-template-columns: 1fr; gap: var(--gap); margin-top: 14px; }
+    .cardBody{ padding: 14px; }
+    .form-center-wrap{
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+    @media(min-width: 720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
     label{
       display:block;
       color: var(--muted);
-      font-weight:900;
-      margin-bottom:8px;
-      font-size:13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      font-size: 13px;
+      text-align: center;
+      width: 100%;
     }
     input, select, textarea{
       width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.30);
+      padding: calc(var(--fieldPad) + 2px) 12px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.9);
       color: var(--text);
       outline:none;
-      appearance:none;
-      -webkit-appearance:none;
-      font-size:15px;
+      appearance: none;
+      -webkit-appearance: none;
+      font-size: 15px;
+      display:block;
+      margin-left:auto;
+      margin-right:auto;
+      text-align: right;
     }
-    input::placeholder, textarea::placeholder{ color: rgba(234,240,255,0.45); }
-
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    select{
+      padding-left: 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
+        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
+      background-position:
+        calc(10px) 50%,
+        calc(18px) 50%,
+        calc(100% - 42px) 50%;
+      background-size:
+        8px 8px,
+        8px 8px,
+        1px 22px;
+      background-repeat: no-repeat;
+    }
+    option{ background:#f8fbff; color:#0b1b2a; }
+    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
+    textarea{ min-height: 86px; resize: vertical; }
+    .btnRow{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; justify-content: center; width: 100%; margin-top: 14px; }
     .btn{
-      border:none; cursor:pointer;
-      padding:12px 14px;
-      border-radius:16px;
-      font-weight:950;
-      color:#071018;
-      transition:0.2s;
-      white-space:nowrap;
-      user-select:none;
-      min-height:46px;
-    }
-    .btn.blue{ background: var(--blue); box-shadow: 0 10px 20px rgba(58,160,255,0.22); }
-    .btn.green{ background: var(--green); box-shadow: 0 10px 20px rgba(24,195,126,0.20); }
-    .btn.alt{
-      background: rgba(255,255,255,0.10);
-      color: var(--text);
-      border:1px solid rgba(255,255,255,0.18);
-      box-shadow:none;
+      border:none; cursor:pointer; padding: 12px 14px; border-radius: 16px;
+      font-weight: 950; color: #071018;
+      background: var(--yellow);
+      transition: 0.2s;
+      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      user-select:none; white-space: nowrap; min-height: 46px; width: auto;
     }
     .btn:hover{ transform: translateY(-1px); }
-    .fineprint{
-      color: rgba(234,240,255,0.55);
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.7;
-    }
-    .ratingWrap{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top:6px;
-    }
-    .ratingBtn{
-      padding:10px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,0.18);
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      cursor:pointer;
-      font-weight:950;
-      user-select:none;
-      min-height:40px;
-    }
-    .ratingBtn.active{
-      border-color: rgba(255,255,255,0.45);
-      background: rgba(255,255,255,0.14);
-    }
+    @media(max-width: 480px){ .btnRow .btn{ width: 100%; } .btnRow{ gap: 12px; } }
+    .btn.alt{ background: rgba(11,27,42,0.06); color: var(--text); border: 1px solid rgba(11,27,42,0.16); box-shadow: none; }
+    .btn.alt:hover{ background: rgba(11,27,42,0.10); }
+    .btn.green{ background: rgba(14,122,75,1); color: #fff; box-shadow: 0 10px 20px rgba(14,122,75,0.22); }
     .msg{
-      margin-top:12px;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: var(--muted);
-      line-height:1.7;
-      font-weight:850;
-      font-size:13px;
-      display:none;
+      margin-top: 12px; padding: 12px; border-radius: 14px;
+      border: 1px solid rgba(11,27,42,0.14); background: rgba(255,255,255,0.78);
+      color: rgba(11,27,42,0.72); line-height: 1.7; font-weight: 850; font-size: 13px;
+      display:none; text-align:center; width: 100%;
     }
+    .fineprint{ color: rgba(11,27,42,0.58); font-size: 12px; margin-top: 10px; line-height: 1.7; text-align: center; width: 100%; }
+    #questionsContainer{ display:flex; flex-direction:column; gap:14px; margin-top:10px; width:100%; align-items:center; }
   </style>
 </head>
 
 <body>
   <div class="container">
     <header>
-      <div class="title">
-        <div class="logo"></div>
+      <div class="brand">
+        <img class="logo" alt="Logo" src="logo.png" />
         <div>
-          <h1>التقييم - مركز اشبيلية</h1>
-          <div class="sub">KWAIT | صفحة تقييم تجريبية (LocalStorage)</div>
+          <h1>إدارة الهوية الوطنية - مركز إشبيلية</h1>
+          <p>تقييم الموظف</p>
         </div>
-      </div>
-      <div>
-        <button class="btn alt" type="button" onclick="history.back()">رجوع</button>
       </div>
     </header>
 
-    <section class="card">
-      <div class="cardHead">
-        <h2>أدخل بيانات التقييم</h2>
-      </div>
-      <div class="cardBody">
-        <div class="row two">
-          <div>
-            <label>اسم المراجع</label>
-            <input id="reviewerName" placeholder="مثال: محمد" autocomplete="off"/>
-          </div>
-          <div>
-            <label>رقم المعاملة</label>
-            <input id="reviewerId" placeholder="مثال: 12345" inputmode="numeric" autocomplete="off"/>
-          </div>
+    <div class="grid">
+      <section class="card">
+        <div class="cardHead">
+          <h2>رأيك يصنع الفرق</h2>
+          <h2>قيم تجربتك اليوم</h2>
         </div>
 
-        <div class="row two" style="margin-top:12px;">
-          <div>
-            <label>رقم الهاتف</label>
-            <input id="reviewerPhone" placeholder="مثال: 50000000" inputmode="tel" autocomplete="off"/>
-          </div>
-          <div>
-            <label>اسم الموظف</label>
-            <select id="employeeName"></select>
-            <div class="fineprint" id="employeeHint" style="margin-top:8px;">
-              إذا القائمة فاضية، راجع لوحة الإدارة وأضف أسماء الموظفين لهذا المركز.
+        <div class="cardBody">
+          <div class="form-center-wrap">
+            <div class="row two">
+              <div>
+                <label>اسم الموظف</label>
+                <select id="employeeSelect"></select>
+              </div>
+              <div></div>
             </div>
+
+            <div class="row two">
+              <div>
+                <label>اسم المراجع</label>
+                <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
+              </div>
+              <div>
+                <label>رقم الهاتف</label>
+                <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
+              </div>
+            </div>
+
+            <div style="width:100%; margin-top:8px;">
+              <div class="fineprint" style="margin-top:0;"></div>
+              <div id="questionsContainer"></div>
+            </div>
+
+            <div class="row" style="margin-top:14px;">
+              <div>
+                <label>ملاحظة (اختياري)</label>
+                <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+              </div>
+            </div>
+
+            <div class="btnRow">
+              <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
+              <button class="btn alt" id="clearBtn" type="button">مسح</button>
+            </div>
+
+            <div class="msg" id="toastMsg"></div>
+            <div class="fineprint"></div>
           </div>
         </div>
-
-        <div style="margin-top:12px;">
-          <label>اختر التقييم</label>
-          <div class="ratingWrap">
-            <div class="ratingBtn" data-rating="ممتاز" role="button" tabindex="0">ممتاز</div>
-            <div class="ratingBtn" data-rating="جيد" role="button" tabindex="0">جيد</div>
-            <div class="ratingBtn" data-rating="مقبول" role="button" tabindex="0">مقبول</div>
-          </div>
-          <input type="hidden" id="ratingValue" value=""/>
-          <div class="fineprint">ملاحظة: سيتم حفظ التقييم للتجهيز داخل Current.</div>
-        </div>
-
-        <div class="btnRow">
-          <button class="btn green" id="submitBtn" type="button">إرسال التقييم</button>
-          <button class="btn alt" id="clearBtn" type="button">مسح الحقول</button>
-        </div>
-
-        <div class="msg" id="toastMsg"></div>
-      </div>
-    </section>
-
-    <div class="fineprint">
-      يتم حفظ البيانات محلياً في جهاز المستخدم. لوحة الإدارة عندك تقرأ نفس المفاتيح.
+      </section>
     </div>
   </div>
 
   <script>
-    const CENTER = "مركز اشبيلية";
+    const center = "مركز إشبيلية";
 
     const LS_KEYS = {
       current: "reviews_current_v3",
-      employeesByCenter: "employees_by_center_v1"
+      employeesByCenter: "employees_by_center_v1",
+      questions: "rating_questions_v1"
     };
 
     function loadJson(key, fallback){
@@ -251,128 +284,178 @@
 
     function escapeHtml(str){
       return String(str ?? "")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
-    const reviewerName = document.getElementById("reviewerName");
-    const reviewerId = document.getElementById("reviewerId");
-    const reviewerPhone = document.getElementById("reviewerPhone");
-    const employeeName = document.getElementById("employeeName");
-
-    const ratingValue = document.getElementById("ratingValue");
-    const ratingBtns = document.querySelectorAll(".ratingBtn");
-    const submitBtn = document.getElementById("submitBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const toastMsg = document.getElementById("toastMsg");
-    const employeeHint = document.getElementById("employeeHint");
-
-    ratingBtns.forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        ratingBtns.forEach(b=>b.classList.remove("active"));
-        btn.classList.add("active");
-        ratingValue.value = btn.dataset.rating;
+    function formatDateTime(iso){
+      const d = new Date(iso);
+      return d.toLocaleString("ar-KW", {
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit"
       });
-      btn.addEventListener("keydown", (e)=>{
-        if(e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          btn.click();
-        }
-      });
-    });
+    }
 
     function showToast(html){
+      const toastMsg = document.getElementById("toastMsg");
       toastMsg.style.display = "block";
       toastMsg.innerHTML = html;
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    function renderEmployees(){
+    function getRatingOptions(){
+      return ["ممتاز","جيد","مقبول"];
+    }
+
+    const employeeSelect = document.getElementById("employeeSelect");
+    const reviewerName = document.getElementById("reviewerName");
+    const reviewerPhone = document.getElementById("reviewerPhone");
+    const commentShort = document.getElementById("commentShort");
+
+    const submitReviewBtn = document.getElementById("submitReviewBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const questionsContainer = document.getElementById("questionsContainer");
+
+    function renderEmployeesForCenter(){
       const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-      const list = employeesByCenter[CENTER] || [];
+      const list = employeesByCenter[center] || [];
 
-      employeeName.innerHTML = "";
+      employeeSelect.innerHTML = "";
 
-      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+      const unique = Array.from(new Set(list.map(x => String(x).trim()).filter(Boolean)));
 
       if(unique.length === 0){
-        employeeHint.style.display = "block";
         const opt = document.createElement("option");
         opt.value = "";
-        opt.textContent = "لا توجد موظفين - أضف من الإدارة";
-        employeeName.appendChild(opt);
-        employeeName.value = "";
+        opt.textContent = "لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
+        employeeSelect.appendChild(opt);
         return;
       }
 
-      employeeHint.style.display = "none";
-
       const placeholder = document.createElement("option");
       placeholder.value = "";
-      placeholder.textContent = "اختر الموظف";
-      employeeName.appendChild(placeholder);
+      placeholder.textContent = "— اختر اسم الموظف —";
+      employeeSelect.appendChild(placeholder);
 
       for(const name of unique){
         const opt = document.createElement("option");
         opt.value = name;
         opt.textContent = name;
-        employeeName.appendChild(opt);
+        employeeSelect.appendChild(opt);
       }
     }
 
-    function clearFields(){
-      reviewerName.value = "";
-      reviewerId.value = "";
-      reviewerPhone.value = "";
-      employeeName.value = "";
-      ratingValue.value = "";
-      ratingBtns.forEach(b=>b.classList.remove("active"));
-      showToast("تم مسح الحقول ✅");
+    function loadQuestions(){
+      return loadJson(LS_KEYS.questions, []);
     }
 
-    function submitReview(){
-      const data = {
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-        center: CENTER,
+    function renderQuestionDropdowns(){
+      const qs = loadQuestions();
+      questionsContainer.innerHTML = "";
 
+      if(!qs.length){
+        const info = document.createElement("div");
+        info.className = "fineprint";
+        info.style.marginTop = "0";
+        info.textContent = "لا توجد أسئلة مضافة حالياً.";
+        questionsContainer.appendChild(info);
+        return;
+      }
+
+      const ratingOptions = getRatingOptions();
+
+      qs.forEach((q)=>{
+        const optionsHtml = `
+          <option value="" selected>— اختر التقييم —</option>
+          ${ratingOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+        `;
+
+        const wrap = document.createElement("div");
+        wrap.style.width = "100%";
+        wrap.style.display = "block";
+        wrap.innerHTML = `
+          <div class="row" style="margin-bottom:0;">
+            <div>
+              <label>${escapeHtml(q.text)}</label>
+              <select data-qid="${escapeHtml(q.id)}">
+                ${optionsHtml}
+              </select>
+            </div>
+          </div>
+        `;
+        questionsContainer.appendChild(wrap);
+      });
+    }
+
+    submitReviewBtn.addEventListener("click", () => {
+      const employeeName = employeeSelect.value;
+
+      const name = (reviewerName.value || "").trim();
+      const phone = (reviewerPhone.value || "").trim();
+      const comment = (commentShort.value || "").trim();
+
+      if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
+      if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
+      if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
+
+      const qs = loadQuestions();
+      if(!qs.length) return showToast("❌ لا توجد أسئلة حالياً.");
+
+      const questionAnswers = {};
+
+      for(const q of qs){
+        const sel = document.querySelector(`select[data-qid="${q.id}"]`);
+        if(!sel) return showToast("❌ حدث خطأ. لم يتم العثور على سؤال.");
+
+        const value = sel.value;
+
+        if(!value){
+          return showToast(`❌ الرجاء الإجابة على سؤال: <b>${escapeHtml(q.text)}</b>.`);
+        }
+
+        questionAnswers[q.id] = value;
+      }
+
+      const rating = questionAnswers[qs[0].id];
+
+      const currentReviews = loadJson(LS_KEYS.current, []);
+
+      const review = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
         createdAt: new Date().toISOString(),
-        archivedAt: null,
-
-        reviewerName: (reviewerName.value || "").trim(),
-        reviewerId: (reviewerId.value || "").trim(),
-        reviewerPhone: (reviewerPhone.value || "").trim(),
-
-        employeeName: employeeName.value || "",
-        rating: ratingValue.value || ""
+        center: center,
+        employeeName,
+        reviewerName: name,
+        reviewerId: "",
+        reviewerPhone: phone,
+        rating,
+        comment,
+        questionAnswers
       };
 
-      if(!data.reviewerName) return showToast("❌ اكتب <b>اسم المراجع</b> أولاً.");
-      if(!data.reviewerId) return showToast("❌ اكتب <b>رقم المعاملة</b> أولاً.");
-      if(!data.reviewerPhone) return showToast("❌ اكتب <b>رقم الهاتف</b> أولاً.");
-      if(!data.employeeName) return showToast("❌ اختر <b>اسم الموظف</b> أولاً.");
-      if(!data.rating) return showToast("❌ اختر <b>التقييم</b> أولاً.");
+      currentReviews.unshift(review);
+      saveJson(LS_KEYS.current, currentReviews);
 
-      const current = loadJson(LS_KEYS.current, []);
-      current.push(data);
-      saveJson(LS_KEYS.current, current);
+      reviewerName.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
 
-      showToast(
-        `✅ تم الإرسال!<br/>
-         المركز: <b>${escapeHtml(CENTER)}</b><br/>
-         الموظف: <b>${escapeHtml(data.employeeName)}</b><br/>
-         التقييم: <b>${escapeHtml(data.rating)}</b>`
-      );
+      renderQuestionDropdowns();
+      showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
+    });
 
-      clearFields();
-    }
+    clearBtn.addEventListener("click", () => {
+      reviewerName.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
+      employeeSelect.value = "";
+      document.getElementById("toastMsg").style.display = "none";
+      renderQuestionDropdowns();
+    });
 
-    submitBtn.addEventListener("click", submitReview);
-    clearBtn.addEventListener("click", clearFields);
-
-    renderEmployees();
+    renderEmployeesForCenter();
+    renderQuestionDropdowns();
   </script>
 </body>
 </html>
