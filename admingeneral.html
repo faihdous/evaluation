@@ -3,22 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>الإدارة العامة - التقييم النهائي لكل مركز</title>
+  <title>دخول الإدارة - الهوية الوطنية</title>
+
+  <!-- ================== CSS للصفحة كلها ================== -->
   <style>
     :root{
       --text:#0b1b2a;
       --muted: rgba(11,27,42,0.65);
       --border: rgba(11,27,42,0.14);
-
-      --blue:#0b3d91;
-      --green:#0e7a4b;
       --yellow:#ffd24a;
       --shadow:0 18px 45px rgba(2,6,23,0.16);
-
       --radius2:22px;
-      --radius:14px;
-      --fieldPad:12px;
-      --panel: rgba(255,255,255,0.78);
     }
     *{box-sizing:border-box;}
     body{
@@ -31,6 +26,106 @@
         linear-gradient(180deg, #f3f6ff, #eef3ff);
       min-height:100vh;
       overflow-x:hidden;
+    }
+    .wrap{ width:min(1100px,96vw); margin:28px auto; }
+
+    /* --- شاشة الدخول --- */
+    .loginCard{
+      background: rgba(255,255,255,0.82);
+      border:1px solid var(--border);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height: 60vh;
+    }
+    .loginInner{
+      width:min(560px,92vw);
+      text-align:center;
+    }
+    .logoBox{
+      width:120px;
+      height:120px;
+      margin:0 auto 14px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(11,61,145,0.16), rgba(255,210,74,0.14));
+      border:1px solid rgba(11,61,145,0.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 18px 45px rgba(11,61,145,0.10);
+      overflow:hidden;
+    }
+    .logoBox img{
+      width:78%;
+      height:78%;
+      object-fit:contain;
+    }
+    h1{
+      margin:0;
+      font-size:18px;
+      font-weight:950;
+      letter-spacing:0.2px;
+    }
+    .sub{
+      margin-top:8px;
+      color: var(--muted);
+      font-weight:900;
+      font-size:13px;
+      line-height:1.6;
+    }
+    .btn{
+      margin-top:18px;
+      border:none;
+      cursor:pointer;
+      padding:14px 18px;
+      border-radius: 16px;
+      font-weight:950;
+      background: var(--yellow);
+      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      transition:0.2s;
+      min-width: 220px;
+      color:#071018;
+      font-size:15px;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+
+    /* --- شاشة التفاصيل --- */
+    .detailsPage{ display:none; }
+    .topBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin:14px auto 0;
+      width:min(1200px,96vw);
+    }
+    .logoutBtn{
+      border:1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.85);
+      color:#0b1b2a;
+      padding:10px 14px;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:950;
+      box-shadow: 0 10px 20px rgba(2,6,23,0.06);
+      white-space:nowrap;
+    }
+
+    /* ============ CSS صفحة التفاصيل (نفس كودك) ============ */
+    :root{
+      --blue:#0b3d91;
+      --green:#0e7a4b;
+      --yellow:#ffd24a;
+      --shadow:0 18px 45px rgba(2,6,23,0.16);
+      --radius2:22px;
+      --radius:14px;
+      --fieldPad:12px;
+      --panel: rgba(255,255,255,0.78);
     }
     .container{ width:min(1200px,96vw); margin:12px auto 22px; }
     header{
@@ -46,15 +141,22 @@
       gap:12px;
       flex-wrap:wrap;
     }
-    h1{
+    h2{
+      margin:0;
+      font-size:15px;
+      letter-spacing:0.2px;
+      font-weight:950;
+      text-align:right;
+    }
+    h3{
       margin:0;
       font-size:16px;
       font-weight:950;
       letter-spacing:0.2px;
     }
-    .sub{
+    .sub2{
       margin-top:6px;
-      color: var(--muted);
+      color: rgba(11,27,42,0.65);
       font-weight:900;
       font-size:12px;
     }
@@ -66,7 +168,7 @@
     }
     label{
       display:block;
-      color: var(--muted);
+      color: rgba(11,27,42,0.65);
       font-weight:800;
       margin-bottom:8px;
       font-size:13px;
@@ -86,7 +188,7 @@
       direction: rtl;
     }
     .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .btn{
+    .btnDetail{
       border:none; cursor:pointer;
       padding:12px 14px; border-radius:16px;
       font-weight:950;
@@ -96,14 +198,13 @@
       transition:0.2s;
       min-height:46px;
     }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn.alt{
+    .btnDetail:hover{ transform: translateY(-1px); }
+    .btnDetail.alt{
       background: rgba(11,27,42,0.06);
       border:1px solid rgba(11,27,42,0.16);
       box-shadow:none;
-      color:var(--text);
+      color:rgba(11,27,42,0.8);
     }
-
     .card{
       margin-top:14px;
       background: var(--panel);
@@ -123,15 +224,6 @@
       gap:12px;
       flex-wrap:wrap;
     }
-    .cardHead h2{
-      margin:0;
-      font-size:15px;
-      letter-spacing:0.2px;
-      font-weight:950;
-      text-align:right;
-    }
-    .cardBody{ padding:14px; }
-
     .fineprint{
       color: rgba(11,27,42,0.58);
       font-size: 12px;
@@ -190,7 +282,6 @@
       color: rgba(11,27,42,0.75);
       font-size:12px;
     }
-
     .btn.printPurple{
       background: rgba(139,92,246,0.16) !important;
       color:#3b1c84 !important;
@@ -201,7 +292,6 @@
       min-height:40px !important;
       white-space:nowrap;
     }
-
     .toast{
       display:none;
       margin-top:12px;
@@ -218,39 +308,104 @@
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <div>
-        <h1>الإدارة العامة - التقييم النهائي لكل مركز</h1>
-        <div class="sub">يعرض التجميع من (Current + Archive) مع تفاصيل تقييمات كل موظف</div>
-      </div>
 
-      <div class="toolbar">
+  <!-- ================== شاشة الدخول ================== -->
+  <div class="wrap" id="loginView">
+    <div class="loginCard">
+      <div class="loginInner">
+        <div class="logoBox">
+          <img src="logo.png" alt="لوغو" />
+        </div>
+
+        <h1>إدارة الهوية الوطنية</h1>
+        <div class="sub">اضغط زر “دخول الإدارة” لعرض تفاصيل التقييمات.</div>
+
+        <button class="btn" id="enterAdminBtn" type="button">دخول الإدارة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================== شاشة التفاصيل ================== -->
+  <div class="detailsPage" id="detailsView">
+    <div class="topBar">
+      <div style="font-weight:950;">لوحة الإدارة</div>
+      <button class="logoutBtn" id="logoutBtn" type="button">تسجيل خروج</button>
+    </div>
+
+    <div class="container">
+      <header>
         <div>
-          <label>اختر المركز</label>
-          <select id="centerSelect"></select>
+          <h3>الإدارة العامة - التقييم النهائي لكل مركز</h3>
+          <div class="sub2">يعرض التجميع من (Current + Archive) مع تفاصيل تقييمات كل موظف</div>
         </div>
-        <div class="btnRow" style="align-self:flex-end;">
-          <button class="btn alt" id="refreshBtn" type="button">تحديث البيانات</button>
-        </div>
-      </div>
-    </header>
 
-    <div class="card">
-      <div class="cardHead">
-        <h2 id="centerTitle">—</h2>
-        <div class="sub" id="statusLine">جارٍ التحميل...</div>
-      </div>
-      <div class="cardBody">
-        <div id="finalRatingEmployeesWrap"></div>
-        <div class="fineprint" id="emptyMsg" style="display:none;"></div>
-        <div class="toast" id="toastMsg"></div>
+        <div class="toolbar">
+          <div>
+            <label>اختر المركز</label>
+            <select id="centerSelect"></select>
+          </div>
+          <div class="btnRow" style="align-self:flex-end;">
+            <button class="btnDetail alt" id="refreshBtn" type="button">تحديث البيانات</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="cardHead">
+          <h2 id="centerTitle">—</h2>
+          <div class="sub2" id="statusLine">جارٍ التحميل...</div>
+        </div>
+        <div class="cardBody">
+          <div id="finalRatingEmployeesWrap"></div>
+          <div class="fineprint" id="emptyMsg" style="display:none;"></div>
+          <div class="toast" id="toastMsg"></div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // ========= أسماء المراكز (مطابقة حرفيًا لصفحات الاستبيان) =========
+    // --------- صلاحية الدخول (بدون كلمة مرور الآن) ---------
+    const SESSION_KEY = "admin_session_ok_v1_no_pw";
+
+    const loginView = document.getElementById("loginView");
+    const detailsView = document.getElementById("detailsView");
+    const enterAdminBtn = document.getElementById("enterAdminBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    function isAuthed(){
+      return localStorage.getItem(SESSION_KEY) === "1";
+    }
+
+    function showDetails(){
+      loginView.style.display = "none";
+      detailsView.style.display = "block";
+    }
+
+    function showLogin(){
+      detailsView.style.display = "none";
+      loginView.style.display = "block";
+    }
+
+    enterAdminBtn.addEventListener("click", ()=>{
+      localStorage.setItem(SESSION_KEY, "1");
+      showDetails();
+    });
+
+    logoutBtn.addEventListener("click", ()=>{
+      localStorage.removeItem(SESSION_KEY);
+      showLogin();
+    });
+
+    if(isAuthed()){
+      showDetails();
+    }else{
+      showLogin();
+    }
+
+    // ============ كود صفحة التفاصيل (مأخوذ من ملفك كما هو) ============
+    // لنفادي خطأ عندما تكون شاشة التفاصيل مخفية، نترك الكود يبدأ دائمًا لأن العناصر موجودة في DOM.
+
     const CENTERS = [
       "مركز القصر",
       "مركز إشبيلية",
@@ -306,7 +461,6 @@
       });
     }
 
-    // --- منطق تحويل الإجابة النهائية إلى نقاط ---
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
       if(r === "جيد") return 2;
@@ -319,7 +473,6 @@
       return "acceptable";
     }
 
-    // --- حساب التقييم النهائي لكل مراجعة (حسب أسئلة rating_questions_v1) ---
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
 
@@ -332,7 +485,6 @@
       }
       if(count === 0) return "—";
 
-      // نفس منطق صفحاتك عندما الأسئلة=3
       if(count === 3){
         if(sum <= 4) return "ممتاز";
         if(sum <= 6) return "جيد";
@@ -347,7 +499,6 @@
       return "مقبول";
     }
 
-    // --- حساب التقييم النهائي للموظف بناءً على أعداد (ممتاز/جيد/مقبول) ---
     function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
       const n = excellentCount + goodCount + acceptableCount;
       if(n === 0) return "—";
@@ -483,7 +634,7 @@
         return;
       }
 
-      const map = new Map(); // emp -> aggregate
+      const map = new Map();
 
       for(const r of all){
         const emp = String(r.employeeName || "").trim();
@@ -583,7 +734,6 @@
         `;
       }
 
-      // ربط طباعة الموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener('click',(e)=>{
           e.stopPropagation();
