@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
   <title>دخول الإدارة - الهوية الوطنية</title>
 
-  <!-- ================== CSS للصفحة كلها ================== -->
   <style>
     :root{
       --text:#0b1b2a;
@@ -14,8 +14,11 @@
       --yellow:#ffd24a;
       --shadow:0 18px 45px rgba(2,6,23,0.16);
       --radius2:22px;
+      --radius:14px;
     }
-    *{box-sizing:border-box;}
+
+    *{ box-sizing:border-box; }
+
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
@@ -24,32 +27,47 @@
         radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
         radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
         linear-gradient(180deg, #f3f6ff, #eef3ff);
-      min-height:100vh;
+      min-height:100vh;     /* مهم */
       overflow-x:hidden;
+      overflow-y:auto;      /* بدل القص */
     }
-    .wrap{ width:min(1100px,96vw); margin:28px auto; }
 
-    /* --- شاشة الدخول --- */
+    /* ✅ للتموضع الصحيح على الموبايل */
+    .wrap{
+      width:min(1100px,96vw);
+      margin:0 auto;
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 18px 0 calc(18px + env(safe-area-inset-bottom));
+    }
+
+    /* ================== شاشة الدخول ================== */
     .loginCard{
+      width:100%;
+      max-width:560px;
       background: rgba(255,255,255,0.82);
       border:1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
-      padding:20px;
+      padding: 18px 14px; /* ✅ يمنع القص */
       display:flex;
       align-items:center;
       justify-content:center;
-      min-height: 60vh;
     }
+
     .loginInner{
-      width:min(560px,92vw);
+      width:100%;
       text-align:center;
+      padding: 6px 6px;
     }
+
     .logoBox{
       width:120px;
       height:120px;
-      margin:0 auto 14px;
+      margin:0 auto 12px;
       border-radius: 26px;
       background: linear-gradient(180deg, rgba(11,61,145,0.16), rgba(255,210,74,0.14));
       border:1px solid rgba(11,61,145,0.18);
@@ -63,20 +81,25 @@
       width:78%;
       height:78%;
       object-fit:contain;
+      display:block;
     }
+
     h1{
       margin:0;
       font-size:18px;
       font-weight:950;
       letter-spacing:0.2px;
     }
+
     .sub{
       margin-top:8px;
       color: var(--muted);
       font-weight:900;
       font-size:13px;
-      line-height:1.6;
+      line-height:1.7;
+      padding: 0 6px;
     }
+
     .btn{
       margin-top:18px;
       border:none;
@@ -87,52 +110,26 @@
       background: var(--yellow);
       box-shadow: 0 10px 20px rgba(255,210,74,0.18);
       transition:0.2s;
-      min-width: 220px;
+      width:100%;
+      max-width: 340px;
       color:#071018;
       font-size:15px;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover{ transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0px); }
 
-    /* --- شاشة التفاصيل --- */
+    /* ================== شاشة التفاصيل ================== */
     .detailsPage{ display:none; }
-    .topBar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin:14px auto 0;
-      width:min(1200px,96vw);
-    }
-    .logoutBtn{
-      border:1px solid rgba(11,27,42,0.18);
-      background: rgba(255,255,255,0.85);
-      color:#0b1b2a;
-      padding:10px 14px;
-      border-radius:16px;
-      cursor:pointer;
-      font-weight:950;
-      box-shadow: 0 10px 20px rgba(2,6,23,0.06);
-      white-space:nowrap;
-    }
 
-    /* ============ CSS صفحة التفاصيل (نفس كودك) ============ */
-    :root{
-      --blue:#0b3d91;
-      --green:#0e7a4b;
-      --yellow:#ffd24a;
-      --shadow:0 18px 45px rgba(2,6,23,0.16);
-      --radius2:22px;
-      --radius:14px;
-      --fieldPad:12px;
-      --panel: rgba(255,255,255,0.78);
-    }
-    .container{ width:min(1200px,96vw); margin:12px auto 22px; }
+    /* CSS تفاصيل (من كودك) - مع تعديل بسيط للـ mobile */
+    .containerDetails{ width:min(1200px,96vw); margin:12px auto 22px; }
+
     header{
       padding:14px;
       background: rgba(255,255,255,0.72);
       border:1px solid var(--border);
-      border-radius: var(--radius2);
+      border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
       display:flex;
@@ -141,6 +138,8 @@
       gap:12px;
       flex-wrap:wrap;
     }
+
+    /* العناوين في صفحة التفاصيل */
     h2{
       margin:0;
       font-size:15px;
@@ -148,24 +147,26 @@
       font-weight:950;
       text-align:right;
     }
-    h3{
-      margin:0;
-      font-size:16px;
-      font-weight:950;
-      letter-spacing:0.2px;
-    }
     .sub2{
       margin-top:6px;
       color: rgba(11,27,42,0.65);
       font-weight:900;
       font-size:12px;
     }
+    h3{
+      margin:0;
+      font-size:16px;
+      font-weight:950;
+      letter-spacing:0.2px;
+    }
+
     .toolbar{
       display:flex;
       gap:12px;
       align-items:flex-end;
       flex-wrap:wrap;
     }
+
     label{
       display:block;
       color: rgba(11,27,42,0.65);
@@ -173,10 +174,11 @@
       margin-bottom:8px;
       font-size:13px;
     }
+
     select{
       width:260px;
       max-width: 80vw;
-      padding: calc(var(--fieldPad) + 2px) 12px;
+      padding: 14px 12px;
       border-radius: var(--radius);
       border: 1px solid rgba(11,27,42,0.18);
       background: rgba(255,255,255,0.9);
@@ -187,6 +189,7 @@
       font-size:15px;
       direction: rtl;
     }
+
     .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
     .btnDetail{
       border:none; cursor:pointer;
@@ -197,6 +200,7 @@
       box-shadow: 0 10px 20px rgba(255,210,74,0.18);
       transition:0.2s;
       min-height:46px;
+      -webkit-tap-highlight-color: transparent;
     }
     .btnDetail:hover{ transform: translateY(-1px); }
     .btnDetail.alt{
@@ -205,15 +209,17 @@
       box-shadow:none;
       color:rgba(11,27,42,0.8);
     }
+
     .card{
       margin-top:14px;
-      background: var(--panel);
+      background: rgba(255,255,255,0.78);
       border:1px solid var(--border);
-      border-radius: var(--radius2);
+      border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
       overflow:hidden;
     }
+
     .cardHead{
       padding:12px 14px;
       border-bottom:1px solid rgba(11,27,42,0.10);
@@ -224,6 +230,7 @@
       gap:12px;
       flex-wrap:wrap;
     }
+
     .fineprint{
       color: rgba(11,27,42,0.58);
       font-size: 12px;
@@ -232,6 +239,7 @@
       text-align:center;
       font-weight:850;
     }
+
     .ratingTag{
       display:inline-flex; padding:6px 10px;
       border-radius:999px;
@@ -261,19 +269,23 @@
       font-weight:950;
       flex-wrap:wrap;
     }
+
     .finalEmployeeMeta{
       padding:10px 12px 14px;
       border-top:1px solid rgba(11,27,42,0.10);
     }
+
     .finalReviewsList{
       display:flex; flex-direction:column; gap:8px; margin-top:8px;
     }
+
     .finalReviewItem{
       border:1px solid rgba(11,27,42,0.12);
       border-radius:12px;
       padding:10px 12px;
       background: rgba(255,255,255,0.65);
     }
+
     .finalReviewItem .metaLine{
       display:flex; flex-wrap:wrap; gap:8px 12px;
       align-items:center; justify-content:flex-start;
@@ -282,6 +294,7 @@
       color: rgba(11,27,42,0.75);
       font-size:12px;
     }
+
     .btn.printPurple{
       background: rgba(139,92,246,0.16) !important;
       color:#3b1c84 !important;
@@ -292,6 +305,7 @@
       min-height:40px !important;
       white-space:nowrap;
     }
+
     .toast{
       display:none;
       margin-top:12px;
@@ -303,6 +317,37 @@
       text-align:center;
       font-weight:850;
       font-size:13px;
+    }
+
+    /* شريط علوي بسيط لزر تسجيل الخروج */
+    .topBar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      width:min(1200px,96vw);
+      margin:14px auto 0;
+    }
+    .logoutBtn{
+      border:1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.85);
+      color:#0b1b2a;
+      padding:10px 14px;
+      border-radius:16px;
+      cursor:pointer;
+      font-weight:950;
+      box-shadow: 0 10px 20px rgba(2,6,23,0.06);
+      white-space:nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* تحسينات صغيرة جدًا للموبايل */
+    @media (max-width: 420px){
+      .logoBox{ width:108px; height:108px; border-radius:24px; }
+      h1{ font-size:17px; }
+      .btn{ max-width: 320px; }
+      select{ width: 100%; }
     }
   </style>
 </head>
@@ -332,7 +377,7 @@
       <button class="logoutBtn" id="logoutBtn" type="button">تسجيل خروج</button>
     </div>
 
-    <div class="container">
+    <div class="containerDetails">
       <header>
         <div>
           <h3>الإدارة العامة - التقييم النهائي لكل مركز</h3>
@@ -355,7 +400,7 @@
           <h2 id="centerTitle">—</h2>
           <div class="sub2" id="statusLine">جارٍ التحميل...</div>
         </div>
-        <div class="cardBody">
+        <div class="cardBody" style="padding:14px;">
           <div id="finalRatingEmployeesWrap"></div>
           <div class="fineprint" id="emptyMsg" style="display:none;"></div>
           <div class="toast" id="toastMsg"></div>
@@ -365,13 +410,15 @@
   </div>
 
   <script>
-    // --------- صلاحية الدخول (بدون كلمة مرور الآن) ---------
+    // ================== صلاحية الدخول (بدون كلمة مرور الآن) ==================
     const SESSION_KEY = "admin_session_ok_v1_no_pw";
 
     const loginView = document.getElementById("loginView");
     const detailsView = document.getElementById("detailsView");
     const enterAdminBtn = document.getElementById("enterAdminBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+
+    let detailsInitialized = false; // ✅ يمنع تحميل البيانات قبل الدخول
 
     function isAuthed(){
       return localStorage.getItem(SESSION_KEY) === "1";
@@ -380,11 +427,17 @@
     function showDetails(){
       loginView.style.display = "none";
       detailsView.style.display = "block";
+
+      // ✅ ابدأ تهيئة صفحة التفاصيل فقط بعد الدخول
+      if(!detailsInitialized){
+        detailsInitialized = true;
+        initAdminDetails();
+      }
     }
 
     function showLogin(){
       detailsView.style.display = "none";
-      loginView.style.display = "block";
+      loginView.style.display = "flex";
     }
 
     enterAdminBtn.addEventListener("click", ()=>{
@@ -403,388 +456,395 @@
       showLogin();
     }
 
-    // ============ كود صفحة التفاصيل (مأخوذ من ملفك كما هو) ============
-    // لنفادي خطأ عندما تكون شاشة التفاصيل مخفية، نترك الكود يبدأ دائمًا لأن العناصر موجودة في DOM.
+    // ================== كود التفاصيل (من ملفك) ==================
+    function initAdminDetails(){
+      // ========= أسماء المراكز (مطابقة حرفيًا لصفحات الاستبيان) =========
+      const CENTERS = [
+        "مركز القصر",
+        "مركز إشبيلية",
+        "مركز جابر العلي",
+        "مركز المسايل",
+        "مركز مشرف",
+        "مركز صباح أحمد",
+        "مركز الشامية"
+      ];
 
-    const CENTERS = [
-      "مركز القصر",
-      "مركز إشبيلية",
-      "مركز جابر العلي",
-      "مركز المسايل",
-      "مركز مشرف",
-      "مركز صباح أحمد",
-      "مركز الشامية"
-    ];
+      const LS_KEYS = {
+        current: "reviews_current_v3",
+        archive: "reviews_archive_v3",
+        employeesByCenter: "employees_by_center_v1",
+        questions: "rating_questions_v1"
+      };
 
-    const LS_KEYS = {
-      current: "reviews_current_v3",
-      archive: "reviews_archive_v3",
-      employeesByCenter: "employees_by_center_v1",
-      questions: "rating_questions_v1"
-    };
+      const centerSelect = document.getElementById("centerSelect");
+      const centerTitle = document.getElementById("centerTitle");
+      const statusLine = document.getElementById("statusLine");
+      const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
+      const emptyMsg = document.getElementById("emptyMsg");
+      const toastMsg = document.getElementById("toastMsg");
+      const refreshBtn = document.getElementById("refreshBtn");
 
-    const centerSelect = document.getElementById("centerSelect");
-    const centerTitle = document.getElementById("centerTitle");
-    const statusLine = document.getElementById("statusLine");
-    const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
-    const emptyMsg = document.getElementById("emptyMsg");
-    const toastMsg = document.getElementById("toastMsg");
-    const refreshBtn = document.getElementById("refreshBtn");
-
-    function showToast(html){
-      toastMsg.style.display = "block";
-      toastMsg.innerHTML = html;
-      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
-    }
-
-    function loadJson(key, fallback){
-      try{
-        const v = localStorage.getItem(key);
-        return v ? JSON.parse(v) : fallback;
-      }catch(e){
-        return fallback;
+      function showToast(html){
+        toastMsg.style.display = "block";
+        toastMsg.innerHTML = html;
+        setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
       }
-    }
 
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function formatDateTime(iso){
-      const d = new Date(iso);
-      if (Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleString("ar-KW", {
-        year:"numeric", month:"2-digit", day:"2-digit",
-        hour:"2-digit", minute:"2-digit"
-      });
-    }
-
-    function pointsForRating(r){
-      if(r === "ممتاز") return 1;
-      if(r === "جيد") return 2;
-      if(r === "مقبول") return 3;
-      return null;
-    }
-    function ratingClass(r){
-      if(r === "ممتاز") return "excellent";
-      if(r === "جيد") return "good";
-      return "acceptable";
-    }
-
-    function finalRatingFromAnswers(qs, answers){
-      if(!Array.isArray(qs) || qs.length === 0) return "—";
-
-      let sum = 0, count = 0;
-      for(const q of qs){
-        const ans = answers?.[q.id];
-        const p = pointsForRating(ans);
-        if(p == null) continue;
-        sum += p; count++;
+      function loadJson(key, fallback){
+        try{
+          const v = localStorage.getItem(key);
+          return v ? JSON.parse(v) : fallback;
+        }catch(e){
+          return fallback;
+        }
       }
-      if(count === 0) return "—";
 
-      if(count === 3){
-        if(sum <= 4) return "ممتاز";
-        if(sum <= 6) return "جيد";
+      function escapeHtml(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+      }
+
+      function formatDateTime(iso){
+        const d = new Date(iso);
+        if (Number.isNaN(d.getTime())) return "—";
+        return d.toLocaleString("ar-KW", {
+          year:"numeric", month:"2-digit", day:"2-digit",
+          hour:"2-digit", minute:"2-digit"
+        });
+      }
+
+      // --- منطق تحويل الإجابة النهائية إلى نقاط ---
+      function pointsForRating(r){
+        if(r === "ممتاز") return 1;
+        if(r === "جيد") return 2;
+        if(r === "مقبول") return 3;
+        return null;
+      }
+      function ratingClass(r){
+        if(r === "ممتاز") return "excellent";
+        if(r === "جيد") return "good";
+        return "acceptable";
+      }
+
+      // --- حساب التقييم النهائي لكل مراجعة (حسب أسئلة rating_questions_v1) ---
+      function finalRatingFromAnswers(qs, answers){
+        if(!Array.isArray(qs) || qs.length === 0) return "—";
+
+        let sum = 0, count = 0;
+        for(const q of qs){
+          const ans = answers?.[q.id];
+          const p = pointsForRating(ans);
+          if(p == null) continue;
+          sum += p; count++;
+        }
+        if(count === 0) return "—";
+
+        // نفس منطق صفحاتك عندما الأسئلة=3
+        if(count === 3){
+          if(sum <= 4) return "ممتاز";
+          if(sum <= 6) return "جيد";
+          return "مقبول";
+        }
+
+        const minSum = count * 1;
+        const maxSum = count * 3;
+        const t = (sum - minSum) / (maxSum - minSum || 1);
+        if(t <= 0.33) return "ممتاز";
+        if(t <= 0.66) return "جيد";
         return "مقبول";
       }
 
-      const minSum = count * 1;
-      const maxSum = count * 3;
-      const t = (sum - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
-      return "مقبول";
-    }
-
-    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
-      const n = excellentCount + goodCount + acceptableCount;
-      if(n === 0) return "—";
-      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
-      const minSum = n * 1;
-      const maxSum = n * 3;
-      const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
-      return "مقبول";
-    }
-
-    function printFinalForEmployee(center, empObj){
-      const w = window.open("", "_blank");
-      if(!w) return showToast("❌ فعّل النوافذ المنبثقة للطباعة.");
-
-      const htmlReviews = (empObj.reviews || []).map(r => `
-        <div style="border:1px solid #e6e6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
-          <div style="font-weight:900;color:#1d1b4b;font-size:13px;">
-            التاريخ: ${escapeHtml(formatDateTime(r.time))} &nbsp; | &nbsp;
-            المراجع: ${escapeHtml(r.reviewer)} &nbsp; | &nbsp;
-            الهاتف: ${escapeHtml(r.phone)}
-          </div>
-          <div style="margin-top:6px; font-weight:900;">
-            التقييم: <span style="font-weight:950;">${escapeHtml(r.rating)}</span>
-          </div>
-          <div style="margin-top:6px;color:#2b2a6b;font-weight:800;line-height:1.7;">
-            الملاحظة: ${escapeHtml(r.comment)}
-          </div>
-        </div>
-      `).join("");
-
-      const finalHtml = `
-        <html lang="ar" dir="rtl">
-          <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1"/>
-            <title>طباعة التقييم النهائي</title>
-            <style>
-              body{
-                font-family:"Tajawal","Cairo","Segoe UI",Arial,sans-serif;
-                background:#fff;
-                color:#0b1b2a;
-                padding:18px;
-              }
-              .header{ text-align:center; margin-bottom:14px; }
-              .title{ font-weight:950; font-size:20px; }
-              .sub{ color:rgba(11,27,42,0.65); font-weight:900; margin-top:6px; }
-              .box{
-                border:1px solid rgba(139,92,246,0.35);
-                border-radius:18px;
-                padding:14px;
-                background:rgba(139,92,246,0.04);
-              }
-              .tag{
-                display:inline-block;
-                padding:6px 12px;
-                border-radius:999px;
-                font-weight:950;
-                border:1px solid rgba(139,92,246,0.35);
-                background:rgba(139,92,246,0.10);
-              }
-              .meta{
-                margin-top:10px;
-                color:rgba(11,27,42,0.72);
-                font-weight:900;
-                font-size:13px;
-              }
-              .reviews{ margin-top:10px; }
-              @media print{ .noPrint{ display:none !important; } }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <div class="title">التقييم النهائي - ${escapeHtml(center)}</div>
-              <div class="sub">مُعدّ للطباعة</div>
-            </div>
-
-            <div class="box">
-              <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div style="font-weight:950;font-size:18px;">${escapeHtml(empObj.emp)}</div>
-                <div class="tag">التقييم النهائي: ${escapeHtml(empObj.final)}</div>
-              </div>
-
-              <div class="meta">
-                ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
-              </div>
-
-              <div class="reviews">${htmlReviews}</div>
-            </div>
-
-            <div class="noPrint" style="text-align:center;margin-top:12px;">
-              <button onclick="window.print()" style="
-                cursor:pointer;background:#8b5cf6;color:#fff;border:none;border-radius:14px;
-                padding:10px 16px;font-weight:950;
-              ">طباعة الآن</button>
-            </div>
-
-            <script>window.onload = () => { window.print(); }<\/script>
-          </body>
-        </html>
-      `;
-
-      w.document.open();
-      w.document.write(finalHtml);
-      w.document.close();
-    }
-
-    function renderFinalForCenter(center){
-      statusLine.textContent = "جارٍ تجميع التقييمات...";
-
-      const currentReviews = loadJson(LS_KEYS.current, []);
-      const archiveReviews = loadJson(LS_KEYS.archive, []);
-      const qs = loadJson(LS_KEYS.questions, []);
-
-      finalRatingEmployeesWrap.innerHTML = "";
-      emptyMsg.style.display = "none";
-      emptyMsg.textContent = "";
-
-      if(!Array.isArray(qs) || qs.length === 0){
-        statusLine.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
-        emptyMsg.style.display = "block";
-        emptyMsg.textContent = "أضف أسئلة التقييم من لوحة أي مركز أولاً.";
-        return;
+      // --- حساب التقييم النهائي للموظف بناءً على أعداد (ممتاز/جيد/مقبول) ---
+      function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
+        const n = excellentCount + goodCount + acceptableCount;
+        if(n === 0) return "—";
+        const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+        const minSum = n * 1;
+        const maxSum = n * 3;
+        const t = (sumPoints - minSum) / (maxSum - minSum || 1);
+        if(t <= 0.33) return "ممتاز";
+        if(t <= 0.66) return "جيد";
+        return "مقبول";
       }
 
-      const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
+      function printFinalForEmployee(center, empObj){
+        const w = window.open("", "_blank");
+        if(!w) return showToast("❌ فعّل النوافذ المنبثقة للطباعة.");
 
-      if(all.length === 0){
-        statusLine.textContent = "لا توجد تقييمات لهذا المركز حتى الآن.";
-        emptyMsg.style.display = "block";
-        emptyMsg.textContent = "لن يظهر أي موظف إلا بعد توفر مراجعات كافية.";
-        return;
+        const htmlReviews = (empObj.reviews || []).map(r => `
+          <div style="border:1px solid #e6e6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
+            <div style="font-weight:900;color:#1d1b4b;font-size:13px;">
+              التاريخ: ${escapeHtml(formatDateTime(r.time))} &nbsp; | &nbsp;
+              المراجع: ${escapeHtml(r.reviewer)} &nbsp; | &nbsp;
+              الهاتف: ${escapeHtml(r.phone)}
+            </div>
+            <div style="margin-top:6px; font-weight:900;">
+              التقييم: <span style="font-weight:950;">${escapeHtml(r.rating)}</span>
+            </div>
+            <div style="margin-top:6px;color:#2b2a6b;font-weight:800;line-height:1.7;">
+              الملاحظة: ${escapeHtml(r.comment)}
+            </div>
+          </div>
+        `).join("");
+
+        const finalHtml = `
+          <html lang="ar" dir="rtl">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1"/>
+              <title>طباعة التقييم النهائي</title>
+              <style>
+                body{
+                  font-family:"Tajawal","Cairo","Segoe UI",Arial,sans-serif;
+                  background:#fff;
+                  color:#0b1b2a;
+                  padding:18px;
+                }
+                .header{ text-align:center; margin-bottom:14px; }
+                .title{ font-weight:950; font-size:20px; }
+                .sub{ color:rgba(11,27,42,0.65); font-weight:900; margin-top:6px; }
+                .box{
+                  border:1px solid rgba(139,92,246,0.35);
+                  border-radius:18px;
+                  padding:14px;
+                  background:rgba(139,92,246,0.04);
+                }
+                .tag{
+                  display:inline-block;
+                  padding:6px 12px;
+                  border-radius:999px;
+                  font-weight:950;
+                  border:1px solid rgba(139,92,246,0.35);
+                  background:rgba(139,92,246,0.10);
+                }
+                .meta{
+                  margin-top:10px;
+                  color:rgba(11,27,42,0.72);
+                  font-weight:900;
+                  font-size:13px;
+                }
+                .reviews{ margin-top:10px; }
+                @media print{ .noPrint{ display:none !important; } }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <div class="title">التقييم النهائي - ${escapeHtml(center)}</div>
+                <div class="sub">مُعدّ للطباعة</div>
+              </div>
+
+              <div class="box">
+                <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+                  <div style="font-weight:950;font-size:18px;">${escapeHtml(empObj.emp)}</div>
+                  <div class="tag">التقييم النهائي: ${escapeHtml(empObj.final)}</div>
+                </div>
+
+                <div class="meta">
+                  ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
+                </div>
+
+                <div class="reviews">${htmlReviews}</div>
+              </div>
+
+              <div class="noPrint" style="text-align:center;margin-top:12px;">
+                <button onclick="window.print()" style="
+                  cursor:pointer;background:#8b5cf6;color:#fff;border:none;border-radius:14px;
+                  padding:10px 16px;font-weight:950;
+                ">طباعة الآن</button>
+              </div>
+
+              <script>window.onload = () => { window.print(); }<\/script>
+            </body>
+          </html>
+        `;
+
+        w.document.open();
+        w.document.write(finalHtml);
+        w.document.close();
       }
 
-      const map = new Map();
+      function renderFinalForCenter(center){
+        statusLine.textContent = "جارٍ تجميع التقييمات...";
 
-      for(const r of all){
-        const emp = String(r.employeeName || "").trim();
-        if(!emp) continue;
+        const currentReviews = loadJson(LS_KEYS.current, []);
+        const archiveReviews = loadJson(LS_KEYS.archive, []);
+        const qs = loadJson(LS_KEYS.questions, []);
 
-        const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-        if(finalRating === "—") continue;
+        finalRatingEmployeesWrap.innerHTML = "";
+        emptyMsg.style.display = "none";
+        emptyMsg.textContent = "";
 
-        if(!map.has(emp)){
-          map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
+        if(!Array.isArray(qs) || qs.length === 0){
+          statusLine.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "أضف أسئلة التقييم من لوحة أي مركز أولاً.";
+          return;
         }
-        const item = map.get(emp);
 
-        if(finalRating === "ممتاز") item.excellent++;
-        else if(finalRating === "جيد") item.good++;
-        else if(finalRating === "مقبول") item.acceptable++;
+        const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
 
-        item.reviews.push({
-          id: r.id,
-          time: r.archivedAt || r.createdAt || "",
-          reviewer: r.reviewerName || "",
-          phone: r.reviewerPhone || "",
-          rating: finalRating,
-          comment: (r.comment && String(r.comment).trim()) ? r.comment : "—"
-        });
-      }
+        if(all.length === 0){
+          statusLine.textContent = "لا توجد تقييمات لهذا المركز حتى الآن.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "لن يظهر أي موظف إلا بعد توفر مراجعات كافية.";
+          return;
+        }
 
-      const rows = Array.from(map.entries())
-        .map(([emp, data]) => ({
-          emp,
-          ...data,
-          total: data.excellent + data.good + data.acceptable
-        }))
-        .filter(x => x.total > 0)
-        .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
+        const map = new Map();
 
-      if(rows.length === 0){
-        statusLine.textContent = "لا توجد بيانات كافية لعرض التقييم النهائي.";
-        emptyMsg.style.display = "block";
-        emptyMsg.textContent = "قد تكون الأسئلة غير مكتملة أو المراجعات لا تحتوي إجابات.";
-        return;
-      }
+        for(const r of all){
+          const emp = String(r.employeeName || "").trim();
+          if(!emp) continue;
 
-      statusLine.textContent = "تم التجميع ✅";
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
 
-      for(const x of rows){
-        x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
-        const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+          if(!map.has(emp)){
+            map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
+          }
+          const item = map.get(emp);
 
-        finalRatingEmployeesWrap.innerHTML += `
-          <details class="finalEmployeeDetails">
-            <summary>
-              <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
-                <span>
-                  ${escapeHtml(x.emp)}
-                  &nbsp;—&nbsp;
-                  <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+          if(finalRating === "ممتاز") item.excellent++;
+          else if(finalRating === "جيد") item.good++;
+          else if(finalRating === "مقبول") item.acceptable++;
+
+          item.reviews.push({
+            id: r.id,
+            time: r.archivedAt || r.createdAt || "",
+            reviewer: r.reviewerName || "",
+            phone: r.reviewerPhone || "",
+            rating: finalRating,
+            comment: (r.comment && String(r.comment).trim()) ? r.comment : "—"
+          });
+        }
+
+        const rows = Array.from(map.entries())
+          .map(([emp, data]) => ({
+            emp,
+            ...data,
+            total: data.excellent + data.good + data.acceptable
+          }))
+          .filter(x => x.total > 0)
+          .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
+
+        if(rows.length === 0){
+          statusLine.textContent = "لا توجد بيانات كافية لعرض التقييم النهائي.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "قد تكون الأسئلة غير مكتملة أو المراجعات لا تحتوي إجابات.";
+          return;
+        }
+
+        statusLine.textContent = "تم التجميع ✅";
+
+        // ملاحظة: ربط طباعة الموظف يعتمد على rows (نخليه ضمن scope render)
+        for(const x of rows){
+          x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
+          const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+
+          finalRatingEmployeesWrap.innerHTML += `
+            <details class="finalEmployeeDetails">
+              <summary>
+                <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
+                  <span>
+                    ${escapeHtml(x.emp)}
+                    &nbsp;—&nbsp;
+                    <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+                  </span>
+
+                  <button
+                    class="btn printPurple"
+                    type="button"
+                    title="طباعة التقييم النهائي لهذا الموظف"
+                    data-print-emp="${escapeHtml(x.emp)}"
+                  >🖨️ طباعة</button>
                 </span>
 
-                <button
-                  class="btn printPurple"
-                  type="button"
-                  title="طباعة التقييم النهائي لهذا الموظف"
-                  data-print-emp="${escapeHtml(x.emp)}"
-                >🖨️ طباعة</button>
-              </span>
+                <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
+                  ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
+                </span>
+              </summary>
 
-              <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
-                ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
-              </span>
-            </summary>
+              <div class="finalEmployeeMeta">
+                <div style="font-weight:950;color:rgba(11,27,42,0.75);font-size:13px;">
+                  تفاصيل تقييماته السابقة:
+                </div>
 
-            <div class="finalEmployeeMeta">
-              <div style="font-weight:950;color:rgba(11,27,42,0.75);font-size:13px;">
-                تفاصيل تقييماته السابقة:
-              </div>
-
-              <div class="finalReviewsList">
-                ${x.reviews.map(r=>`
-                  <div class="finalReviewItem">
-                    <div class="metaLine">
-                      <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
-                      <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
-                      <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
-                      <span style="margin-inline-start:auto;">
-                        التقييم: <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
-                      </span>
+                <div class="finalReviewsList">
+                  ${x.reviews.map(r=>`
+                    <div class="finalReviewItem">
+                      <div class="metaLine">
+                        <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
+                        <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
+                        <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+                        <span style="margin-inline-start:auto;">
+                          التقييم: <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                        </span>
+                      </div>
+                      <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
+                        الملاحظة: ${escapeHtml(r.comment)}
+                      </div>
                     </div>
-                    <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
-                      الملاحظة: ${escapeHtml(r.comment)}
-                    </div>
-                  </div>
-                `).join("")}
+                  `).join("")}
+                </div>
               </div>
-            </div>
-          </details>
-        `;
-      }
+            </details>
+          `;
+        }
 
-      finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
-        btn.addEventListener('click',(e)=>{
-          e.stopPropagation();
-          const empName = btn.getAttribute('data-print-emp');
-          const empObj = rows.find(r => r.emp === empName);
-          if(!empObj) return;
+        // ربط طباعة الموظف
+        finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
+          btn.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            const empName = btn.getAttribute('data-print-emp');
+            const empObj = rows.find(r => r.emp === empName);
+            if(!empObj) return;
 
-          const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
+            const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
 
-          printFinalForEmployee(center, {
-            emp: empObj.emp,
-            final,
-            excellent: empObj.excellent,
-            good: empObj.good,
-            acceptable: empObj.acceptable,
-            total: empObj.total,
-            reviews: empObj.reviews
+            printFinalForEmployee(center, {
+              emp: empObj.emp,
+              final,
+              excellent: empObj.excellent,
+              good: empObj.good,
+              acceptable: empObj.acceptable,
+              total: empObj.total,
+              reviews: empObj.reviews
+            });
           });
         });
-      });
-    }
-
-    function init(){
-      centerSelect.innerHTML = "";
-      for(const c of CENTERS){
-        const opt = document.createElement("option");
-        opt.value = c;
-        opt.textContent = c;
-        centerSelect.appendChild(opt);
       }
 
-      const selected = CENTERS[0] || "";
-      if(selected) centerSelect.value = selected;
+      function init(){
+        centerSelect.innerHTML = "";
+        for(const c of CENTERS){
+          const opt = document.createElement("option");
+          opt.value = c;
+          opt.textContent = c;
+          centerSelect.appendChild(opt);
+        }
 
-      centerTitle.textContent = `التقييم النهائي - ${selected}`;
-      renderFinalForCenter(selected);
+        const selected = CENTERS[0] || "";
+        if(selected) centerSelect.value = selected;
 
-      centerSelect.addEventListener("change", ()=>{
-        const center = centerSelect.value;
-        centerTitle.textContent = `التقييم النهائي - ${center}`;
-        renderFinalForCenter(center);
-      });
+        centerTitle.textContent = `التقييم النهائي - ${selected}`;
+        renderFinalForCenter(selected);
 
-      refreshBtn.addEventListener("click", ()=>{
-        const center = centerSelect.value;
-        centerTitle.textContent = `التقييم النهائي - ${center}`;
-        renderFinalForCenter(center);
-      });
+        centerSelect.addEventListener("change", ()=>{
+          const center = centerSelect.value;
+          centerTitle.textContent = `التقييم النهائي - ${center}`;
+          renderFinalForCenter(center);
+        });
+
+        refreshBtn.addEventListener("click", ()=>{
+          const center = centerSelect.value;
+          centerTitle.textContent = `التقييم النهائي - ${center}`;
+          renderFinalForCenter(center);
+        });
+      }
+
+      init();
     }
-
-    init();
   </script>
 </body>
 </html>
