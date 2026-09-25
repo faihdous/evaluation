@@ -3,59 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>تقييم موظفين - المسايل</title>
+  <title>تقييم موظفين - الميصايل</title>
   <style>
-    :root{ --panel: rgba(255,255,255,0.06); --text:#eaf0ff; --muted: rgba(234,240,255,0.7); --border: rgba(255,255,255,0.14);
-      --yellow:#ffd24a; --shadow:0 12px 30px rgba(0,0,0,0.35); --radius2:22px; --gap:14px; --fieldPad:12px; --radius:14px; }
-    *{ box-sizing:border-box; }
-    body{ margin:0; font-family:"Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-      background: radial-gradient(900px 500px at 10% 0%, rgba(58,160,255,0.20), transparent 60%),
-                  radial-gradient(900px 500px at 90% 0%, rgba(24,195,126,0.16), transparent 60%),
-                  linear-gradient(180deg,#070b14,#0b1220);
-      color:var(--text); min-height:100vh; }
-    .container{ width:min(1200px,96vw); margin:12px auto 22px; }
-    header{ display:flex; gap:12px; align-items:center; justify-content:space-between;
-      padding:12px 14px; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius2);
-      box-shadow:var(--shadow); backdrop-filter:blur(10px); }
-    .brand{ display:flex; gap:12px; align-items:center; min-width:0; }
-    .logo{ width:56px; height:56px; border-radius:50%; border:2px solid rgba(255,255,255,0.18); background:rgba(255,255,255,0.05);
-      object-fit:cover; flex:0 0 auto; }
-    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; }
-    .brand p{ margin:6px 0 0; color:var(--muted); font-size:12px; }
-    .card{ background:var(--panel); border:1px solid var(--border); border-radius:var(--radius2); box-shadow:var(--shadow);
-      backdrop-filter:blur(10px); overflow:hidden; }
-    .card .cardHead{ padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.10);
-      background:linear-gradient(90deg, rgba(24,195,126,0.10), rgba(58,160,255,0.08)); }
-    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; }
-    .card .cardBody{ padding:14px; }
-    .grid{ display:grid; grid-template-columns:1fr; gap:var(--gap); margin-top:14px; }
-    label{ display:block; color:var(--muted); font-weight:800; margin-bottom:8px; font-size:13px; }
-    .row{ display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:14px; }
-    @media(min-width:720px){ .row.two{ grid-template-columns:1fr 1fr; } }
-    input,select,textarea{ width:100%; padding:calc(var(--fieldPad) + 2px) 12px; border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,0.18); background:rgba(0,0,0,0.30); color:var(--text); outline:none;
-      appearance:none; -webkit-appearance:none; font-size:15px; }
-    select{ padding-left:40px; background-image:
-      linear-gradient(45deg, transparent 50%, rgba(234,240,255,0.9) 50%),
-      linear-gradient(135deg, rgba(234,240,255,0.9) 50%, transparent 50%),
-      linear-gradient(to right, rgba(255,255,255,0.12), rgba(255,255,255,0.12));
+    :root{
+      --text: #0b1b2a; --muted: rgba(11,27,42,0.65); --border: rgba(11,27,42,0.14);
+      --secondaryGreen: #0e7a4b; --yellow: #ffd24a; --shadow: 0 18px 45px rgba(2,6,23,0.16);
+      --radius2: 22px; --gap: 14px; --fieldPad: 12px; --radius: 14px;
+    }
+    *{ box-sizing: border-box; }
+    body{
+      margin:0; font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif; color: var(--text);
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
+        radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
+        linear-gradient(180deg, #f3f6ff, #eef3ff);
+      min-height: 100vh; overflow-x: hidden;
+    }
+    .container{ width: min(1200px, 96vw); margin: 12px auto 22px; }
+    header{
+      display:flex; gap: 12px; align-items:center; justify-content: center !important;
+      padding: 12px 14px; background: rgba(255,255,255,0.72); border: 1px solid var(--border);
+      border-radius: var(--radius2); box-shadow: var(--shadow); backdrop-filter: blur(10px);
+      position: relative; text-align: center;
+    }
+    header .brand{ width: 100%; display:flex; align-items:center; justify-content:center; position: relative;
+      padding-left: 72px; padding-right: 72px; min-width: 0; }
+    .logo{ width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(11,61,145,0.25);
+      background: rgba(11,61,145,0.08); object-fit: cover; flex: 0 0 auto;
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%); }
+    .brand h1{ margin:0; font-size:16px; line-height:1.35; letter-spacing:0.2px; text-align:center; width: 100%; padding: 0 10px; }
+    .brand p{ margin:6px 0 0; color: var(--muted); font-size:12px; text-align:center; width: 100%; padding: 0 10px; }
+    @media(max-width: 520px){
+      header{ padding: 12px 12px; } header .brand{ padding-left: 66px; padding-right: 66px; }
+      .logo{ width: 52px; height: 52px; right: 10px; } .brand h1{ font-size: 15px; } .brand p{ font-size: 12px; }
+    }
+    .card{ background: rgba(255,255,255,0.80); border: 1px solid var(--border); border-radius: var(--radius2);
+      box-shadow: var(--shadow); backdrop-filter: blur(12px); overflow:hidden; }
+    .card .cardHead{ padding: 12px 14px; border-bottom: 1px solid rgba(11,27,42,0.10);
+      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12)); }
+    .card h2{ margin:0; font-size:15px; letter-spacing:0.2px; text-align:center; }
+    .grid{ display:grid; grid-template-columns: 1fr; gap: var(--gap); margin-top: 14px; }
+    .cardBody{ padding: 14px; }
+    .form-center-wrap{ width: 100%; max-width: 680px; margin: 0 auto; display:flex; flex-direction: column; align-items: center; text-align: center; }
+    .row{ display:grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; width: 100%; }
+    @media(min-width: 720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
+    label{ display:block; color: var(--muted); font-weight: 800; margin-bottom: 8px; font-size: 13px; text-align: center; width: 100%; }
+    input, select, textarea{
+      width:100%; padding: calc(var(--fieldPad) + 2px) 12px; border-radius: var(--radius);
+      border: 1px solid rgba(11,27,42,0.18); background: rgba(255,255,255,0.9); color: var(--text);
+      outline:none; appearance: none; -webkit-appearance: none; font-size: 15px;
+      display:block; margin-left:auto; margin-right:auto; text-align: right;
+    }
+    select{
+      padding-left: 40px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
+        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
       background-position: calc(10px) 50%, calc(18px) 50%, calc(100% - 42px) 50%;
-      background-size: 8px 8px, 8px 8px, 1px 22px; background-repeat:no-repeat; }
-    option{ background:#0f172a; color:#eaf0ff; }
-    input::placeholder,textarea::placeholder{ color:rgba(234,240,255,0.45); }
-    textarea{ min-height:86px; resize:vertical; }
-    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-    .btn{ border:none; cursor:pointer; padding:12px 14px; border-radius:16px; font-weight:950; color:#071018; background:var(--yellow);
-      transition:0.2s; box-shadow:0 10px 20px rgba(255,210,74,0.18); user-select:none; white-space:nowrap; min-height:46px; width:auto; }
-    .btn:hover{ transform:translateY(-1px); }
-    @media(max-width:480px){ .btnRow .btn{ width:100%; } .btnRow{ gap:12px; } }
-    .btn.alt{ background:rgba(255,255,255,0.10); color:var(--text); border:1px solid rgba(255,255,255,0.18); box-shadow:none; }
-    .btn.alt:hover{ background:rgba(255,255,255,0.14); }
-    .btn.green{ background:rgba(24,195,126,1); color:#062116; box-shadow:0 10px 20px rgba(24,195,126,0.20); }
-    .msg{ margin-top:12px; padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06);
-      color:var(--muted); line-height:1.7; font-weight:850; font-size:13px; display:none; }
-    .fineprint{ color:rgba(234,240,255,0.55); font-size:12px; margin-top:10px; line-height:1.7; }
-    @media(max-width:420px){ header{ padding:12px 12px; } .brand h1{ font-size:15px; } .card .cardBody{ padding:12px; } }
+      background-size: 8px 8px, 8px 8px, 1px 22px;
+      background-repeat: no-repeat;
+    }
+    option{ background:#f8fbff; color:#0b1b2a; }
+    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
+    textarea{ min-height: 86px; resize: vertical; }
+    .btnRow{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; justify-content: center; width: 100%; margin-top: 14px; }
+    .btn{ border:none; cursor:pointer; padding: 12px 14px; border-radius: 16px; font-weight: 950; color: #071018;
+      background: var(--yellow); transition: 0.2s; box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      user-select:none; white-space: nowrap; min-height: 46px; width: auto; }
+    .btn:hover{ transform: translateY(-1px); }
+    @media(max-width: 480px){ .btnRow .btn{ width: 100%; } .btnRow{ gap: 12px; } }
+    .btn.alt{ background: rgba(11,27,42,0.06); color: var(--text); border: 1px solid rgba(11,27,42,0.16); box-shadow: none; }
+    .btn.alt:hover{ background: rgba(11,27,42,0.10); }
+    .btn.green{ background: rgba(14,122,75,1); color: #fff; box-shadow: 0 10px 20px rgba(14,122,75,0.22); }
+    .msg{ margin-top: 12px; padding: 12px; border-radius: 14px; border: 1px solid rgba(11,27,42,0.14);
+      background: rgba(255,255,255,0.78); color: rgba(11,27,42,0.72);
+      line-height: 1.7; font-weight: 850; font-size: 13px; display:none; text-align:center; width: 100%; }
+    .fineprint{ color: rgba(11,27,42,0.58); font-size: 12px; margin-top: 10px; line-height: 1.7; text-align: center; width: 100%; }
+    #questionsContainer{ display:flex; flex-direction:column; gap:14px; margin-top:10px; width:100%; align-items:center; }
   </style>
 </head>
 
@@ -64,54 +89,60 @@
     <header>
       <div class="brand">
         <img class="logo" alt="Logo" src="logo.png" />
-        <div style="min-width:0;">
-          <h1>إدارة الهوية الوطنية - مركز المسايل</h1>
+        <div>
+          <h1>إدارة الهوية الوطنية - مركز الميصايل</h1>
           <p>تقييم الموظف</p>
         </div>
       </div>
-      <div></div>
     </header>
 
     <div class="grid">
       <section class="card">
-        <div class="cardHead"><h2>صفحة التقييم للمراجع</h2></div>
+        <div class="cardHead">
+          <h2>رأيك يصنع الفرق</h2>
+          <h2>قيم تجربتك اليوم</h2>
+        </div>
 
         <div class="cardBody">
-          <div class="row two">
-            <div><label>اسم الموظف</label><select id="employeeSelect"></select></div>
-            <div></div>
-          </div>
-
-          <div class="row two">
-            <div><label>اسم المراجع</label><input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" /></div>
-            <div><label>رقم المعاملة</label><input id="reviewerId" placeholder="مثال: رقم المعاملة" inputmode="text" /></div>
-          </div>
-
-          <div class="row two">
-            <div><label>رقم الهاتف</label><input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" /></div>
-            <div>
-              <label>التقييم</label>
-              <select id="ratingSelect">
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="مقبول">مقبول</option>
-              </select>
+          <div class="form-center-wrap">
+            <div class="row two">
+              <div>
+                <label>اسم الموظف</label>
+                <select id="employeeSelect"></select>
+              </div>
+              <div></div>
             </div>
-          </div>
 
-          <div class="row">
-            <div><label>ملاحظة (اختياري)</label><input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" /></div>
-          </div>
+            <div class="row two">
+              <div>
+                <label>اسم المراجع</label>
+                <input id="reviewerName" placeholder="اكتب اسمك" inputmode="text" />
+              </div>
+              <div>
+                <label>رقم الهاتف</label>
+                <input id="reviewerPhone" placeholder="مثال: 5XXXXXXXX" inputmode="tel" />
+              </div>
+            </div>
 
-          <div class="btnRow">
-            <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
-            <button class="btn alt" id="clearBtn" type="button">مسح</button>
-          </div>
+            <div style="width:100%; margin-top:8px;">
+              <div class="fineprint" style="margin-top:0;"></div>
+              <div id="questionsContainer"></div>
+            </div>
 
-          <div class="msg" id="toastMsg"></div>
+            <div class="row" style="margin-top:14px;">
+              <div>
+                <label>ملاحظة (اختياري)</label>
+                <input id="commentShort" placeholder="اكتب ملاحظة سريعة" inputmode="text" />
+              </div>
+            </div>
 
-          <div class="fineprint">
-            عند الإرسال سيتم تسجيل <b>التاريخ والوقت</b> + اسم المراجع ورقم المعاملة ورقم الهاتف، وتظهر باللوحة الإدارية ضمن المركز.
+            <div class="btnRow">
+              <button class="btn green" id="submitReviewBtn" type="button">إرسال التقييم</button>
+              <button class="btn alt" id="clearBtn" type="button">مسح</button>
+            </div>
+
+            <div class="msg" id="toastMsg"></div>
+            <div class="fineprint"></div>
           </div>
         </div>
       </section>
@@ -119,103 +150,201 @@
   </div>
 
   <script>
-    const center = "مركز المسايل";
-    const LS_KEYS = { current: "reviews_current_v3", employeesByCenter: "employees_by_center_v1" };
+    const center = "مركز الميصايل";
 
-    function loadJson(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
-    function saveJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-    let currentReviews = loadJson(LS_KEYS.current, []);
+    const LS_KEYS = {
+      current: "reviews_current_v3",
+      employeesByCenter: "employees_by_center_v1",
+      questions: "rating_questions_v1"
+    };
+
+    function loadJson(key, fallback){
+      try{
+        const v = localStorage.getItem(key);
+        return v ? JSON.parse(v) : fallback;
+      }catch(e){
+        return fallback;
+      }
+    }
+
+    function saveJson(key, value){
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+    }
 
     function formatDateTime(iso){
-      const d=new Date(iso);
-      return d.toLocaleString("ar-KW", {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+      const d = new Date(iso);
+      return d.toLocaleString("ar-KW", {
+        year:"numeric", month:"2-digit", day:"2-digit",
+        hour:"2-digit", minute:"2-digit"
+      });
     }
+
     function showToast(html){
-      toastMsg.style.display="block";
-      toastMsg.innerHTML=html;
-      setTimeout(()=>{ toastMsg.style.display="none"; },4500);
+      const toastMsg = document.getElementById("toastMsg");
+      toastMsg.style.display = "block";
+      toastMsg.innerHTML = html;
+      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    const employeeSelect=document.getElementById("employeeSelect");
-    const reviewerName=document.getElementById("reviewerName");
-    const reviewerId=document.getElementById("reviewerId");
-    const reviewerPhone=document.getElementById("reviewerPhone");
-    const ratingSelect=document.getElementById("ratingSelect");
-    const commentShort=document.getElementById("commentShort");
+    function getRatingOptions(){
+      return ["ممتاز","جيد","مقبول"];
+    }
 
-    const submitReviewBtn=document.getElementById("submitReviewBtn");
-    const clearBtn=document.getElementById("clearBtn");
-    const toastMsg=document.getElementById("toastMsg");
+    const employeeSelect = document.getElementById("employeeSelect");
+    const reviewerName = document.getElementById("reviewerName");
+    const reviewerPhone = document.getElementById("reviewerPhone");
+    const commentShort = document.getElementById("commentShort");
+
+    const submitReviewBtn = document.getElementById("submitReviewBtn");
+    const clearBtn = document.getElementById("clearBtn");
+
+    const questionsContainer = document.getElementById("questionsContainer");
 
     function renderEmployeesForCenter(){
-      const employeesByCenter=loadJson(LS_KEYS.employeesByCenter,{});
-      const list=employeesByCenter[center]||[];
-      employeeSelect.innerHTML="";
-      const unique=Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+      const employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
+      const list = employeesByCenter[center] || [];
 
-      if(unique.length===0){
-        const opt=document.createElement("option");
-        opt.value="";
-        opt.textContent="لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
+      employeeSelect.innerHTML = "";
+
+      const unique = Array.from(new Set(list.map(x => String(x).trim()).filter(Boolean)));
+
+      if(unique.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "لا يوجد موظفون لهذا المركز (أضف من الإدارة)";
         employeeSelect.appendChild(opt);
         return;
       }
 
+      const placeholder = document.createElement("option");
+      placeholder.value = "";
+      placeholder.textContent = "— اختر اسم الموظف —";
+      employeeSelect.appendChild(placeholder);
+
       for(const name of unique){
-        const opt=document.createElement("option");
-        opt.value=name;
-        opt.textContent=name;
+        const opt = document.createElement("option");
+        opt.value = name;
+        opt.textContent = name;
         employeeSelect.appendChild(opt);
       }
     }
 
-    submitReviewBtn.addEventListener("click", ()=>{
-      const employeeName=employeeSelect.value;
-      const name=(reviewerName.value||"").trim();
-      const dealNo=(reviewerId.value||"").trim();
-      const phone=(reviewerPhone.value||"").trim();
-      const rating=ratingSelect.value;
-      const comment=(commentShort.value||"").trim();
+    function loadQuestions(){
+      return loadJson(LS_KEYS.questions, []);
+    }
+
+    function renderQuestionDropdowns(){
+      const qs = loadQuestions();
+      questionsContainer.innerHTML = "";
+
+      if(!qs.length){
+        const info = document.createElement("div");
+        info.className = "fineprint";
+        info.style.marginTop = "0";
+        info.textContent = "لا توجد أسئلة مضافة حالياً.";
+        questionsContainer.appendChild(info);
+        return;
+      }
+
+      const ratingOptions = getRatingOptions();
+
+      qs.forEach((q)=>{
+        const optionsHtml = `
+          <option value="" selected>— اختر التقييم —</option>
+          ${ratingOptions.map(opt => `<option value="${opt}">${opt}</option>`).join("")}
+        `;
+
+        const wrap = document.createElement("div");
+        wrap.style.width = "100%";
+        wrap.style.display = "block";
+        wrap.innerHTML = `
+          <div class="row" style="margin-bottom:0;">
+            <div>
+              <label>${escapeHtml(q.text)}</label>
+              <select data-qid="${escapeHtml(q.id)}">
+                ${optionsHtml}
+              </select>
+            </div>
+          </div>
+        `;
+        questionsContainer.appendChild(wrap);
+      });
+    }
+
+    submitReviewBtn.addEventListener("click", () => {
+      const employeeName = employeeSelect.value;
+
+      const name = (reviewerName.value || "").trim();
+      const phone = (reviewerPhone.value || "").trim();
+      const comment = (commentShort.value || "").trim();
 
       if(!employeeName) return showToast("❌ اختر <b>اسم الموظف</b>.");
       if(!name) return showToast("❌ الرجاء إدخال <b>اسم المراجع</b>.");
-      if(!dealNo) return showToast("❌ الرجاء إدخال <b>رقم المعاملة</b>.");
       if(!phone) return showToast("❌ الرجاء إدخال <b>رقم الهاتف</b>.");
 
-      const review={
+      const qs = loadQuestions();
+      if(!qs.length) return showToast("❌ لا توجد أسئلة حالياً.");
+
+      const questionAnswers = {};
+
+      for(const q of qs){
+        const sel = document.querySelector(`select[data-qid="${q.id}"]`);
+        if(!sel) return showToast("❌ حدث خطأ. لم يتم العثور على سؤال.");
+
+        const value = sel.value;
+
+        if(!value){
+          return showToast(`❌ الرجاء الإجابة على سؤال: <b>${escapeHtml(q.text)}</b>.`);
+        }
+
+        questionAnswers[q.id] = value;
+      }
+
+      const rating = questionAnswers[qs[0].id];
+
+      const currentReviews = loadJson(LS_KEYS.current, []);
+
+      const review = {
         id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
         createdAt: new Date().toISOString(),
         center: center,
         employeeName,
         reviewerName: name,
-        reviewerId: dealNo,
+        reviewerId: "",
         reviewerPhone: phone,
         rating,
-        comment
+        comment,
+        questionAnswers
       };
 
       currentReviews.unshift(review);
       saveJson(LS_KEYS.current, currentReviews);
 
-      reviewerName.value="";
-      reviewerId.value="";
-      reviewerPhone.value="";
-      commentShort.value="";
-      ratingSelect.value="ممتاز";
+      reviewerName.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
 
+      renderQuestionDropdowns();
       showToast(`✅ تم إرسال التقييم بنجاح عند <b>${formatDateTime(review.createdAt)}</b>.`);
     });
 
-    clearBtn.addEventListener("click", ()=>{
-      reviewerName.value="";
-      reviewerId.value="";
-      reviewerPhone.value="";
-      commentShort.value="";
-      ratingSelect.value="ممتاز";
-      toastMsg.style.display="none";
+    clearBtn.addEventListener("click", () => {
+      reviewerName.value = "";
+      reviewerPhone.value = "";
+      commentShort.value = "";
+      employeeSelect.value = "";
+      document.getElementById("toastMsg").style.display = "none";
+      renderQuestionDropdowns();
     });
 
     renderEmployeesForCenter();
+    renderQuestionDropdowns();
   </script>
 </body>
 </html>
