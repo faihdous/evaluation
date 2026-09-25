@@ -407,6 +407,18 @@
       color: rgba(11,27,42,0.75);
       font-size: 12px;
     }
+
+    /* ✅ زر الطباعة بنفسجي ناعم */
+    .btn.printPurple{
+      background: rgba(139,92,246,0.16) !important;
+      color: #3b1c84 !important;
+      border: 1px solid rgba(139,92,246,0.38) !important;
+      box-shadow: 0 10px 20px rgba(139,92,246,0.12) !important;
+      padding: 8px 10px !important;
+      border-radius: 14px !important;
+      min-height: 40px !important;
+    }
+    .btn.printPurple:hover{ transform: translateY(-1px); }
   </style>
 </head>
 
@@ -489,7 +501,6 @@
             <!-- ===== Current ===== -->
             <div id="currentSection">
               <h3>التقييمات الحالية</h3>
-              <!-- نضع wrapper عشان نقدر نخفيه بسرعة عند التقييم النهائي -->
               <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead>
@@ -511,7 +522,6 @@
             <div id="archiveSection" class="hide">
               <h3 id="archiveTitle">أرشيف التقييمات (مركز الشامية)</h3>
 
-              <!-- wrapper عشان نخفي جدول الأرشيف فقط عند التقييم النهائي -->
               <div id="archiveTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
                 <table>
                   <thead id="archiveTableThead"></thead>
@@ -519,7 +529,6 @@
                 </table>
               </div>
 
-              <!-- ===== Final rating (يظهر عند ضغط الزر) ===== -->
               <div id="finalRatingSection" class="hide" style="margin-top:10px;">
                 <h3>التقييم النهائي لكل موظف</h3>
                 <div class="fineprint" style="margin-top:0;">
@@ -820,6 +829,115 @@
       }
 
       reviewDetailsModal.classList.remove("hide");
+    }
+
+    // ===== ✅ الطباعة (جديد) =====
+    function printFinalForEmployee(center, empObj){
+      const w = window.open("", "_blank");
+      if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
+
+      const htmlReviews = empObj.reviews.map(r => `
+        <div style="border:1px solid #e6e6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
+          <div style="font-weight:900;color:#1d1b4b;font-size:13px;">
+            التاريخ: ${escapeHtml(formatDateTime(r.time))} &nbsp; | &nbsp;
+            المراجع: ${escapeHtml(r.reviewer)} &nbsp; | &nbsp;
+            الهاتف: ${escapeHtml(r.phone)}
+          </div>
+          <div style="margin-top:6px; font-weight:900;">
+            التقييم: <span style="font-weight:950;">${escapeHtml(r.rating)}</span>
+          </div>
+          <div style="margin-top:6px;color:#2b2a6b;font-weight:800;line-height:1.7;">
+            الملاحظة: ${escapeHtml(r.comment)}
+          </div>
+        </div>
+      `).join("");
+
+      w.document.write(`
+        <html lang="ar" dir="rtl">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>طباعة التقييم النهائي</title>
+            <style>
+              body{
+                font-family:"Tajawal","Cairo","Segoe UI",Arial,sans-serif;
+                background:#fff;
+                color:#0b1b2a;
+                padding:18px;
+              }
+              .header{ text-align:center; margin-bottom:14px; }
+              .title{ font-weight:950; font-size:20px; }
+              .sub{ color:rgba(11,27,42,0.65); font-weight:900; margin-top:6px; }
+              .box{
+                border:1px solid rgba(139,92,246,0.35);
+                border-radius:18px;
+                padding:14px;
+                background:rgba(139,92,246,0.04);
+              }
+              .tag{
+                display:inline-block;
+                padding:6px 12px;
+                border-radius:999px;
+                font-weight:950;
+                border:1px solid rgba(139,92,246,0.35);
+                background:rgba(139,92,246,0.10);
+              }
+              .meta{
+                margin-top:10px;
+                color:rgba(11,27,42,0.72);
+                font-weight:900;
+                font-size:13px;
+              }
+              .reviews{ margin-top:10px; }
+              @media print{ .noPrint{ display:none; } }
+              button{
+                cursor:pointer;
+                background:#8b5cf6;
+                color:#fff;
+                border:none;
+                border-radius:14px;
+                padding:10px 16px;
+                font-weight:950;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <div class="title">التقييم النهائي - ${escapeHtml(center)}</div>
+              <div class="sub">مُعدّ للطباعة</div>
+            </div>
+
+            <div class="box">
+              <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+                <div style="font-weight:950;font-size:18px;">
+                  ${escapeHtml(empObj.emp)}
+                </div>
+                <div class="tag">
+                  التقييم النهائي: ${escapeHtml(empObj.final)}
+                </div>
+              </div>
+
+              <div class="meta">
+                ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
+              </div>
+
+              <div class="reviews">
+                ${htmlReviews}
+              </div>
+            </div>
+
+            <div class="noPrint" style="text-align:center;margin-top:12px;">
+              <button onclick="window.print()">طباعة الآن</button>
+            </div>
+
+            <script>
+              window.onload = () => { window.print(); };
+            </script>
+          </body>
+        </html>
+      `);
+
+      w.document.close();
     }
 
     // ===== Employees =====
@@ -1154,7 +1272,6 @@
     function setInitialView(){
       setView("current");
       finalRatingSection.classList.add("hide");
-      // إعادة إظهار الجداول
       currentTableWrap.classList.remove("hide");
       archiveTableWrap.classList.remove("hide");
       archiveTitle.classList.remove("hide");
@@ -1248,12 +1365,25 @@
         finalRatingEmployeesWrap.innerHTML += `
           <details class="finalEmployeeDetails">
             <summary>
-              <span>
-                ${escapeHtml(x.emp)}
-                &nbsp;—&nbsp;
-                <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+              <span style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-start;">
+                <span>
+                  ${escapeHtml(x.emp)}
+                  &nbsp;—&nbsp;
+                  <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+                </span>
+
+                <!-- ✅ زر طباعة جنب الاسم -->
+                <button
+                  class="btn printPurple"
+                  type="button"
+                  title="طباعة التقييم النهائي لهذا الموظف"
+                  data-print-emp="${escapeHtml(x.emp)}"
+                >
+                  🖨️ طباعة
+                </button>
               </span>
-              <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900;">
+
+              <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900; white-space:nowrap;">
                 ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
@@ -1286,6 +1416,29 @@
           </details>
         `;
       }
+
+      // ربط حدث زر الطباعة
+      finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+          e.stopPropagation(); // مهم: لا يفتح/يغلق الـ details
+          const empName = btn.getAttribute('data-print-emp');
+
+          const empObj = rows.find(r => r.emp === empName);
+          if(!empObj) return;
+
+          const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
+
+          printFinalForEmployee(center, {
+            emp: empObj.emp,
+            final,
+            excellent: empObj.excellent,
+            good: empObj.good,
+            acceptable: empObj.acceptable,
+            total: empObj.total,
+            reviews: empObj.reviews
+          });
+        });
+      });
     }
 
     // ===== Buttons =====
@@ -1305,7 +1458,6 @@
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
 
-      // إظهار Current / إخفاء Final
       finalRatingSection.classList.add("hide");
 
       currentTableWrap.classList.remove("hide");
@@ -1320,7 +1472,6 @@
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       adminAdjustPage.classList.add("hide");
 
-      // إظهار Archive / إخفاء Final
       finalRatingSection.classList.add("hide");
 
       currentTableWrap.classList.remove("hide");
@@ -1331,23 +1482,18 @@
       renderArchiveTablesForCenter(LOCK_CENTER);
     });
 
-    // ✅ زر التقييم النهائي: يخفي Current وجدول الأرشيف ويظهر فقط النهائي
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
 
       adminAdjustPage.classList.add("hide");
 
-      // اجعل Archive visible (لأن finalRatingSection موجود داخل archiveSection)
       setView("archive");
 
-      // أخفي current بالكامل
       currentSection.classList.add("hide");
 
-      // ✅ أخفِ جدول الأرشيف والعنوان حتى ما تزحم
       archiveTableWrap.classList.add("hide");
       archiveTitle.classList.add("hide");
 
-      // ✅ إظهار القسم النهائي
       finalRatingSection.classList.remove("hide");
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
@@ -1365,7 +1511,6 @@
       adminAdjustPage.classList.add("hide");
       if(!adminCenterSession) return;
 
-      // رجوع افتراضي: إظهار Current + إخفاء Final
       finalRatingSection.classList.add("hide");
       archiveTableWrap.classList.remove("hide");
       archiveTitle.classList.remove("hide");
