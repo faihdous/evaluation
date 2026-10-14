@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>دخول الإدارة - الهوية الوطنية</title>
 
+  <!-- ✅ Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
   <style>
     :root{
       --text:#0b1b2a;
@@ -358,6 +361,41 @@
       font-size:13px;
     }
 
+    /* ✅ Charts layout */
+    .chartsWrap{
+      display:none;
+      margin-top:14px;
+    }
+    .chartsGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:14px;
+    }
+    @media (min-width: 980px){
+      .chartsGrid{ grid-template-columns: 1fr 1fr; }
+      .chartsGrid .span2{ grid-column: span 2; }
+    }
+
+    .chartCard{
+      background: rgba(255,255,255,0.62);
+      border:1px solid rgba(11,27,42,0.12);
+      border-radius:22px;
+      box-shadow: 0 18px 45px rgba(2,6,23,0.10);
+      backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
+    .chartCardHead{
+      padding:10px 12px;
+      border-bottom:1px solid rgba(11,27,42,0.08);
+      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+      font-weight:950;
+      font-size:14px;
+      text-align:center;
+    }
+    .chartCardBody{
+      padding:12px;
+    }
+
     @media (max-width: 420px){
       .logoBox{ width:128px; height:128px; }
       h1{ font-size:17px; }
@@ -401,7 +439,6 @@
         </div>
 
         <div class="toolbar">
-          <!-- ✅ (إلغاء) النص فوق الحقل -->
           <div>
             <select id="centerSelect"></select>
           </div>
@@ -417,7 +454,34 @@
           <h2 id="centerTitle">—</h2>
           <div class="sub2" id="statusLine">اختر المركز لعرض التقييمات...</div>
         </div>
+
         <div class="cardBody" style="padding:14px;">
+          <!-- ✅ Charts -->
+          <div class="chartsWrap" id="chartsWrap">
+            <div class="chartsGrid">
+              <div class="chartCard span2">
+                <div class="chartCardHead">أفضل المراكز (من الأفضل إلى الأقل) حسب متوسط نقاط التقييم النهائي للموظفين</div>
+                <div class="chartCardBody">
+                  <canvas id="bestCentersChart" height="110"></canvas>
+                </div>
+              </div>
+
+              <div class="chartCard">
+                <div class="chartCardHead">عدد الموظفين حسب التقييم داخل كل مركز (Stacked)</div>
+                <div class="chartCardBody">
+                  <canvas id="centersRatingChart" height="110"></canvas>
+                </div>
+              </div>
+
+              <div class="chartCard">
+                <div class="chartCardHead">Top موظفين ممتاز (داخل المركز المختار)</div>
+                <div class="chartCardBody">
+                  <canvas id="topExcellentEmployeesChart" height="110"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div id="finalRatingEmployeesWrap"></div>
           <div class="fineprint" id="emptyMsg" style="display:none;"></div>
           <div class="toast" id="toastMsg"></div>
@@ -498,6 +562,9 @@
       const toastMsg = document.getElementById("toastMsg");
       const refreshBtn = document.getElementById("refreshBtn");
 
+      const chartsWrap = document.getElementById("chartsWrap");
+      let charts = {};
+
       function showToast(html){
         toastMsg.style.display = "block";
         toastMsg.innerHTML = html;
@@ -576,6 +643,198 @@
         if(t <= 0.33) return "ممتاز";
         if(t <= 0.66) return "جيد";
         return "مقبول";
+      }
+
+      function destroyCharts(){
+        for(const k in charts){
+          try { charts[k].destroy(); } catch(e){}
+        }
+        charts = {};
+      }
+
+      function renderChartsForAllCenters(currentReviews, archiveReviews, qs){
+        if(!chartsWrap) return;
+
+        chartsWrap.style.display = "none";
+        destroyCharts();
+
+        if(!Array.isArray(qs) || qs.length === 0) return;
+
+        const centerSummaries = [];
+
+        // بناء إحصائيات لكل مركز
+        for(const c of CENTERS){
+          const all = [...currentReviews, ...archiveReviews].filter(r => r.center === c);
+
+          const map = new Map(); // emp => {excellent, good, acceptable}
+          for(const r of all){
+            const emp = String(r.employeeName || "").trim();
+            if(!emp) continue;
+
+            const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+            if(finalRating === "—") continue;
+
+            if(!map.has(emp)){
+              map.set(emp, { excellent:0, good:0, acceptable:0 });
+            }
+            const item = map.get(emp);
+            if(finalRating === "ممتاز") item.excellent++;
+            else if(finalRating === "جيد") item.good++;
+            else if(finalRating === "مقبول") item.acceptable++;
+          }
+
+          // حساب النهائي للموظف (من counts) ثم نقاط/تصنيف
+          let excellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
+          let sumPoints = 0, countFinalEmployees = 0;
+
+          for(const [, data] of map.entries()){
+            const final = computeFinalByCounts(data.excellent, data.good, data.acceptable);
+            if(final === "—") continue;
+
+            const p = pointsForRating(final); // ممتاز=1 ... مقبول=3
+            if(p == null) continue;
+
+            sumPoints += p;
+            countFinalEmployees++;
+
+            if(final === "ممتاز") excellentEmployees++;
+            else if(final === "جيد") goodEmployees++;
+            else if(final === "مقبول") acceptableEmployees++;
+          }
+
+          if(countFinalEmployees > 0){
+            centerSummaries.push({
+              center: c,
+              excellentEmployees,
+              goodEmployees,
+              acceptableEmployees,
+              finalEmployeesCount: countFinalEmployees,
+              avgPoint: sumPoints / countFinalEmployees
+            });
+          }
+        }
+
+        if(centerSummaries.length === 0) return;
+
+        chartsWrap.style.display = "block";
+
+        // 1) أفضل المراكز (أقل avgPoint أفضل)
+        const best = centerSummaries
+          .slice()
+          .sort((a,b)=> a.avgPoint - b.avgPoint);
+
+        const topBest = best.slice(0, Math.min(7, best.length));
+
+        charts.bestCentersChart = new Chart(document.getElementById("bestCentersChart"), {
+          type: "bar",
+          data: {
+            labels: topBest.map(x => x.center),
+            datasets: [{
+              label: "متوسط نقاط الموظفين (أقل = أفضل)",
+              data: topBest.map(x => Number(x.avgPoint.toFixed(2))),
+              backgroundColor: "rgba(14,122,75,0.35)",
+              borderColor: "rgba(14,122,75,0.95)",
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: true } },
+            scales: { y: { beginAtZero: true } }
+          }
+        });
+
+        // 2) أكثر مركز يحصل على تقييم (عدد الموظفين حسب التقييم داخل كل مركز) - stacked
+        const allCenters = CENTERS.map(c=>{
+          const found = centerSummaries.find(x => x.center === c);
+          return found || { center:c, excellentEmployees:0, goodEmployees:0, acceptableEmployees:0 };
+        });
+
+        charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
+          type: "bar",
+          data: {
+            labels: allCenters.map(x => x.center),
+            datasets: [
+              {
+                label: "ممتاز",
+                data: allCenters.map(x => x.excellentEmployees),
+                backgroundColor: "rgba(14,122,75,0.35)",
+                borderColor:"rgba(14,122,75,0.95)",
+                borderWidth:1,
+                stack:"s1"
+              },
+              {
+                label: "جيد",
+                data: allCenters.map(x => x.goodEmployees),
+                backgroundColor: "rgba(11,61,145,0.25)",
+                borderColor:"rgba(11,61,145,0.95)",
+                borderWidth:1,
+                stack:"s1"
+              },
+              {
+                label: "مقبول",
+                data: allCenters.map(x => x.acceptableEmployees),
+                backgroundColor: "rgba(255,210,74,0.35)",
+                borderColor:"rgba(180,130,0,0.95)",
+                borderWidth:1,
+                stack:"s1"
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: true } },
+            scales: {
+              y: { stacked: true, beginAtZero: true }
+            }
+          }
+        });
+
+        // 3) Top موظفين ممتاز (داخل المركز المختار): نعدّ عدد مراجعات الموظف التي خرجت "ممتاز"
+        const selectedCenter = centerSelect.value;
+        const allInSelected = [...currentReviews, ...archiveReviews].filter(r => r.center === selectedCenter);
+
+        const empMap = new Map(); // emp => {excellent: number}
+        for(const r of allInSelected){
+          const emp = String(r.employeeName || "").trim();
+          if(!emp) continue;
+
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
+
+          if(!empMap.has(emp)) empMap.set(emp, { excellent:0, good:0, acceptable:0 });
+          const it = empMap.get(emp);
+
+          if(finalRating === "ممتاز") it.excellent++;
+          else if(finalRating === "جيد") it.good++;
+          else if(finalRating === "مقبول") it.acceptable++;
+        }
+
+        const topEmp = Array.from(empMap.entries())
+          .map(([emp, d]) => ({ emp, excellent: d.excellent }))
+          .filter(x => x.excellent > 0)
+          .sort((a,b)=> b.excellent - a.excellent)
+          .slice(0, 10);
+
+        charts.topExcellentEmployeesChart = new Chart(document.getElementById("topExcellentEmployeesChart"), {
+          type: "bar",
+          data: {
+            labels: topEmp.map(x => x.emp),
+            datasets: [{
+              label: "عدد مرات الحصول على (ممتاز) — من تقييمات المراجعات",
+              data: topEmp.map(x => x.excellent),
+              backgroundColor: "rgba(139,92,246,0.25)",
+              borderColor: "rgba(139,92,246,0.95)",
+              borderWidth: 1
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            plugins: { legend: { display: true } },
+            scales: { x: { beginAtZero: true } }
+          }
+        });
       }
 
       function printFinalForEmployee(center, empObj){
@@ -680,6 +939,9 @@
         const currentReviews = loadJson(LS_KEYS.current, []);
         const archiveReviews = loadJson(LS_KEYS.archive, []);
         const qs = loadJson(LS_KEYS.questions, []);
+
+        // Charts refresh كل ما نختار مركز
+        renderChartsForAllCenters(currentReviews, archiveReviews, qs);
 
         finalRatingEmployeesWrap.innerHTML = "";
         emptyMsg.style.display = "none";
@@ -805,6 +1067,7 @@
           btn.addEventListener('click',(e)=>{
             e.stopPropagation();
             const empName = btn.getAttribute('data-print-emp');
+
             const empObj = rows.find(r => r.emp === empName);
             if(!empObj) return;
 
@@ -826,7 +1089,6 @@
       function init(){
         centerSelect.innerHTML = "";
 
-        // ✅ خيار تمهيدي داخل الحقل فقط
         const placeholder = document.createElement("option");
         placeholder.value = "";
         placeholder.textContent = "اختر المركز";
@@ -841,12 +1103,13 @@
           centerSelect.appendChild(opt);
         }
 
-        // ✅ لا تعرض أي بيانات قبل اختيار
         centerTitle.textContent = "—";
         statusLine.textContent = "اختر المركز لعرض التقييمات...";
         finalRatingEmployeesWrap.innerHTML = "";
         emptyMsg.style.display = "none";
         emptyMsg.textContent = "";
+
+        chartsWrap.style.display = "none";
 
         centerSelect.addEventListener("change", ()=>{
           const center = centerSelect.value;
