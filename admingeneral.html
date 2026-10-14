@@ -352,7 +352,7 @@
 
     /* =================== لوحة الرسومات (مربعات) =================== */
     .chartsWrap{
-      display:block;       /* ✅ تظهر مباشرة */
+      display:block;
       margin-top:14px;
     }
 
@@ -360,8 +360,6 @@
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap:14px;
-
-      /* ✅ ما تاخذ كامل الصفحة */
       max-width: 980px;
       margin: 0 auto;
     }
@@ -373,8 +371,6 @@
       box-shadow: 0 18px 45px rgba(2,6,23,0.10);
       backdrop-filter: blur(10px);
       overflow:hidden;
-
-      /* ✅ حجم مربع تقريبي */
       min-height: 260px;
       display:flex;
       flex-direction:column;
@@ -398,7 +394,7 @@
 
     .chartCardBody canvas{
       width:100% !important;
-      height:190px !important; /* ✅ يصير شكل مربع/لوحة */
+      height:190px !important;
     }
 
     @media (max-width: 420px){
@@ -460,8 +456,7 @@
         </div>
 
         <div class="cardBody" style="padding:14px;">
-
-          <!-- ✅ الرسومات (مربعات) تظهر فور الدخول -->
+          <!-- ✅ الرسومات (مربعات) -->
           <div class="chartsWrap" id="chartsWrap">
             <div class="chartsGrid">
               <div class="chartCard">
@@ -567,6 +562,29 @@
       const toastMsg = document.getElementById("toastMsg");
       const refreshBtn = document.getElementById("refreshBtn");
 
+      const chartsWrap = document.getElementById("chartsWrap");
+      const cardBody = document.querySelector("#detailsView .cardBody");
+
+      // ✅ نحفظ نقطة الإدراج الأصلية (فوق قائمة الموظفين)
+      const originalChartsPosition = function(){
+        if(!cardBody || !chartsWrap || !finalRatingEmployeesWrap) return;
+        // إدراج الرسومات قبل قائمة الموظفين
+        cardBody.insertBefore(chartsWrap, finalRatingEmployeesWrap);
+      };
+
+      // ✅ نحرك الرسومات تحت قائمة الموظفين
+      const chartsPositionUnderEmployees = function(){
+        if(!cardBody || !chartsWrap || !finalRatingEmployeesWrap) return;
+
+        // إذا ما فيه عناصر بعد القائمة (أول مرة)، خليها بعد القائمة مباشرة
+        const next = finalRatingEmployeesWrap.nextSibling;
+        if(next){
+          cardBody.insertBefore(chartsWrap, next);
+        }else{
+          cardBody.appendChild(chartsWrap);
+        }
+      };
+
       let charts = {};
 
       function destroyCharts(){
@@ -659,13 +677,11 @@
       }
 
       function buildCenterSummaries(currentReviews, archiveReviews, qs){
-        // لكل مركز: عدد موظفين ممتاز/جيد/مقبول + متوسط نقاط (لو احتجناه)
         const centerSummaries = [];
 
         for(const c of CENTERS){
           const all = [...currentReviews, ...archiveReviews].filter(r => r.center === c);
 
-          // emp -> counts النهائي (عندنا من answers لكل مراجعة)
           const empMap = new Map(); // emp => {excellent, good, acceptable}
 
           for(const r of all){
@@ -685,7 +701,6 @@
             else if(finalRating === "مقبول") it.acceptable++;
           }
 
-          // نطلع نهائي كل موظف بواسطة counts وبعدين نعدّ (ممتاز/جيد/مقبول) عدد الموظفين
           let excellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
           let sumPoints = 0, countFinalEmployees = 0;
 
@@ -720,17 +735,16 @@
       }
 
       function renderChartsGeneral(currentReviews, archiveReviews, qs){
-        const chartsWrap = document.getElementById("chartsWrap");
-        if(!chartsWrap) return;
+        const chartsWrapEl = document.getElementById("chartsWrap");
+        if(!chartsWrapEl) return;
 
         if(!Array.isArray(qs) || qs.length === 0) return;
 
         destroyCharts();
 
-        // الملخصات لكل مركز
         const centerSummaries = buildCenterSummaries(currentReviews, archiveReviews, qs);
 
-        // (1) أفضل المراكز حسب: أكثر موظفين ممتاز (الخيار 2)
+        // (1) أفضل المراكز حسب: أكثر موظفين ممتاز
         const sortedByExcellent = centerSummaries
           .slice()
           .sort((a,b)=> b.excellentEmployees - a.excellentEmployees);
@@ -757,7 +771,7 @@
           }
         });
 
-        // (2) أكثر مركز يحصل على تقييم (تكديس حسب عدد موظفين)
+        // (2) أكثر مركز يحصل على تقييم (تكديس)
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
           return found || { center:c, excellentEmployees:0, goodEmployees:0, acceptableEmployees:0 };
@@ -798,9 +812,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: true } },
-            scales: {
-              y: { stacked: true, beginAtZero: true }
-            }
+            scales: { y: { stacked: true, beginAtZero: true } }
           }
         });
 
@@ -983,6 +995,7 @@
           if(!map.has(emp)){
             map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
           }
+
           const item = map.get(emp);
 
           if(finalRating === "ممتاز") item.excellent++;
@@ -1122,12 +1135,16 @@
         emptyMsg.style.display = "none";
         emptyMsg.textContent = "";
 
-        // ✅ رسم الرسومات العامة مباشرة
+        // ✅ رسم الرسومات العامة مباشرة (وبشكلها الأصلي فوق القائمة)
+        originalChartsPosition();
         renderChartsGeneral(currentReviews, archiveReviews, qs);
 
         centerSelect.addEventListener("change", ()=>{
           const center = centerSelect.value;
           if(!center) return;
+
+          // ✅ هنا نحرّك الرسومات تحت قائمة التقييم
+          chartsPositionUnderEmployees();
 
           centerTitle.textContent = `التقييم النهائي - ${center}`;
           renderFinalForCenter(center);
@@ -1136,16 +1153,21 @@
         refreshBtn.addEventListener("click", ()=>{
           const center = centerSelect.value;
 
-          // تحديث الرسومات العامة دائماً عند الضغط
+          // تحديث الرسومات العامة
           const curR = loadJson(LS_KEYS.current, []);
           const arR = loadJson(LS_KEYS.archive, []);
           const q2 = loadJson(LS_KEYS.questions, []);
           renderChartsGeneral(curR, arR, q2);
 
           if(!center){
+            // ✅ إذا ما فيه مركز: خل الرسومات فوق مثل البداية
+            originalChartsPosition();
             showToast("✅ تم تحديث الرسومات العامة. اختر مركز لعرض تفاصيل الموظفين.");
             return;
           }
+
+          // ✅ إذا فيه مركز: الرسومات لازم تكون تحت القائمة
+          chartsPositionUnderEmployees();
 
           centerTitle.textContent = `التقييم النهائي - ${center}`;
           renderFinalForCenter(center);
