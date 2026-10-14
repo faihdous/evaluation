@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>لوحة المدير العام</title>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
@@ -317,6 +316,49 @@
       font-size:12px;
     }
 
+    /* ✅ زر التفاصيل */
+    .reviewDetailsBtn{
+      border:1px solid rgba(139,92,246,0.35);
+      background: rgba(139,92,246,0.10);
+      color:#3b1c84;
+      padding:8px 10px;
+      border-radius:12px;
+      font-weight:950;
+      cursor:pointer;
+      white-space:nowrap;
+      min-height:40px;
+    }
+    .reviewDetailsBtn:hover{ transform: translateY(-1px); }
+
+    .reviewAnswersWrap{
+      margin-top:10px;
+      border:1px solid rgba(11,27,42,0.10);
+      border-radius:14px;
+      background: rgba(255,255,255,0.55);
+      padding:10px 12px;
+      display:none;
+    }
+
+    .reviewQBox{
+      padding:8px 10px;
+      border:1px solid rgba(11,27,42,0.10);
+      border-radius:12px;
+      background: rgba(255,255,255,0.55);
+      margin-top:8px;
+    }
+    .reviewQText{
+      font-weight:950;
+      color: rgba(11,27,42,0.80);
+      font-size:13px;
+    }
+    .reviewQAns{
+      margin-top:6px;
+      font-weight:900;
+      color: rgba(11,27,42,0.65);
+      font-size:13px;
+      word-break: break-word;
+    }
+
     .btn.printPurple{
       background: rgba(139,92,246,0.16) !important;
       color:#3b1c84 !important;
@@ -565,18 +607,13 @@
       const chartsWrap = document.getElementById("chartsWrap");
       const cardBody = document.querySelector("#detailsView .cardBody");
 
-      // ✅ نحفظ نقطة الإدراج الأصلية (فوق قائمة الموظفين)
       const originalChartsPosition = function(){
         if(!cardBody || !chartsWrap || !finalRatingEmployeesWrap) return;
-        // إدراج الرسومات قبل قائمة الموظفين
         cardBody.insertBefore(chartsWrap, finalRatingEmployeesWrap);
       };
 
-      // ✅ نحرك الرسومات تحت قائمة الموظفين
       const chartsPositionUnderEmployees = function(){
         if(!cardBody || !chartsWrap || !finalRatingEmployeesWrap) return;
-
-        // إذا ما فيه عناصر بعد القائمة (أول مرة)، خليها بعد القائمة مباشرة
         const next = finalRatingEmployeesWrap.nextSibling;
         if(next){
           cardBody.insertBefore(chartsWrap, next);
@@ -649,7 +686,6 @@
         }
         if(count === 0) return "—";
 
-        // نفس منطقك:
         if(count === 3){
           if(sum <= 4) return "ممتاز";
           if(sum <= 6) return "جيد";
@@ -682,7 +718,7 @@
         for(const c of CENTERS){
           const all = [...currentReviews, ...archiveReviews].filter(r => r.center === c);
 
-          const empMap = new Map(); // emp => {excellent, good, acceptable}
+          const empMap = new Map();
 
           for(const r of all){
             const emp = String(r.employeeName || "").trim();
@@ -739,12 +775,10 @@
         if(!chartsWrapEl) return;
 
         if(!Array.isArray(qs) || qs.length === 0) return;
-
         destroyCharts();
 
         const centerSummaries = buildCenterSummaries(currentReviews, archiveReviews, qs);
 
-        // (1) أفضل المراكز حسب: أكثر موظفين ممتاز
         const sortedByExcellent = centerSummaries
           .slice()
           .sort((a,b)=> b.excellentEmployees - a.excellentEmployees);
@@ -771,7 +805,6 @@
           }
         });
 
-        // (2) أكثر مركز يحصل على تقييم (تكديس)
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
           return found || { center:c, excellentEmployees:0, goodEmployees:0, acceptableEmployees:0 };
@@ -816,9 +849,9 @@
           }
         });
 
-        // (3) Top موظفين ممتاز على مستوى كل المراكز
         const allAll = [...currentReviews, ...archiveReviews];
-        const empMap = new Map(); // emp => {excellent}
+        const empMap = new Map();
+
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
           if(!emp) continue;
@@ -917,7 +950,6 @@
                   font-size:13px;
                 }
                 .reviews{ margin-top:10px; }
-                @media print{ .noPrint{ display:none !important; } }
               </style>
             </head>
             <body>
@@ -939,7 +971,7 @@
                 <div class="reviews">${htmlReviews}</div>
               </div>
 
-              <div class="noPrint" style="text-align:center;margin-top:12px;">
+              <div style="text-align:center;margin-top:12px;">
                 <button onclick="window.print()" style="
                   cursor:pointer;background:#8b5cf6;color:#fff;border:none;border-radius:14px;
                   padding:10px 16px;font-weight:950;
@@ -1002,13 +1034,15 @@
           else if(finalRating === "جيد") item.good++;
           else if(finalRating === "مقبول") item.acceptable++;
 
+          // ✅ نضيف answers عشان نافذة/قسم التفاصيل يعرض الأسئلة والإجابات
           item.reviews.push({
             id: r.id,
             time: r.archivedAt || r.createdAt || "",
             reviewer: r.reviewerName || "",
             phone: r.reviewerPhone || "",
             rating: finalRating,
-            comment: (r.comment && String(r.comment).trim()) ? r.comment : "—"
+            comment: (r.comment && String(r.comment).trim()) ? r.comment : "—",
+            answers: r.questionAnswers || {}
           });
         }
 
@@ -1030,6 +1064,7 @@
 
         statusLine.textContent = "تم التجميع ✅";
 
+        // عرض الموظفين + زر تفاصيل لكل مراجعة
         for(const x of rows){
           x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
           const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
@@ -1039,7 +1074,22 @@
               <summary>
                 <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
                   <span>
-                    ${escapeHtml(x.emp)}
+                    <button
+                      type="button"
+                      class="empNameBtn"
+                      data-emp="${escapeHtml(x.emp)}"
+                      style="
+                        border:none;
+                        background:transparent;
+                        cursor:pointer;
+                        font-weight:950;
+                        color:inherit;
+                        font-family:inherit;
+                        padding:0;
+                        text-decoration: underline;
+                      "
+                      title="اضغط لفتح تفاصيل الموظف"
+                    >${escapeHtml(x.emp)}</button>
                     &nbsp;—&nbsp;
                     <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
                   </span>
@@ -1063,27 +1113,68 @@
                 </div>
 
                 <div class="finalReviewsList">
-                  ${x.reviews.map(r=>`
-                    <div class="finalReviewItem">
-                      <div class="metaLine">
-                        <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
-                        <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
-                        <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
-                        <span style="margin-inline-start:auto;">
-                          التقييم: <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
-                        </span>
+                  ${x.reviews.map(r => {
+                    // نبني HTML إجابات الأسئلة
+                    const answersHtml = qs.map(q => {
+                      const qText = q.text ?? q.title ?? q.label ?? q.id;
+                      const ans = (r.answers && r.answers[q.id] != null && String(r.answers[q.id]).trim() !== "")
+                        ? String(r.answers[q.id])
+                        : "—";
+                      return `
+                        <div class="reviewQBox">
+                          <div class="reviewQText">${escapeHtml(qText)}</div>
+                          <div class="reviewQAns">الإجابة: ${escapeHtml(ans)}</div>
+                        </div>
+                      `;
+                    }).join("");
+
+                    return `
+                      <div class="finalReviewItem">
+                        <div class="metaLine">
+                          <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
+                          <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
+                          <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+
+                          <span style="margin-inline-start:auto;">
+                            التقييم:
+                            <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                          </span>
+
+                          <button
+                            class="reviewDetailsBtn"
+                            type="button"
+                            data-toggle-review="1"
+                            data-review-id="${escapeHtml(String(r.id))}"
+                            title="عرض أسئلة التقييم والإجابات"
+                          >تفاصيل</button>
+                        </div>
+
+                        <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
+                          الملاحظة: ${escapeHtml(r.comment)}
+                        </div>
+
+                        <div class="reviewAnswersWrap" data-review-answers="${escapeHtml(String(r.id))}">
+                          ${answersHtml}
+                        </div>
                       </div>
-                      <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
-                        الملاحظة: ${escapeHtml(r.comment)}
-                      </div>
-                    </div>
-                  `).join("")}
+                    `;
+                  }).join("")}
                 </div>
               </div>
             </details>
           `;
         }
 
+        // ✅ فتح تفاصيل الموظف عند الضغط على الاسم (يفتح <details> نفسه)
+        finalRatingEmployeesWrap.querySelectorAll(".empNameBtn").forEach(btn=>{
+          btn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const details = btn.closest("details");
+            if(details) details.open = true;
+          });
+        });
+
+        // ✅ زر الطباعة
         finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
           btn.addEventListener('click',(e)=>{
             e.stopPropagation();
@@ -1093,6 +1184,7 @@
 
             const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
 
+            // للطباعة نرسل المراجعات بدون answers (عشان ما يطول)
             printFinalForEmployee(center, {
               emp: empObj.emp,
               final,
@@ -1100,19 +1192,37 @@
               good: empObj.good,
               acceptable: empObj.acceptable,
               total: empObj.total,
-              reviews: empObj.reviews
+              reviews: empObj.reviews.map(rr=>({
+                time: rr.time,
+                reviewer: rr.reviewer,
+                phone: rr.phone,
+                rating: rr.rating,
+                comment: rr.comment
+              }))
             });
+          });
+        });
+
+        // ✅ زر تفاصيل لكل تقييم: يظهر/يخفي قسم الأسئلة والإجابات
+        finalRatingEmployeesWrap.querySelectorAll(".reviewDetailsBtn").forEach(btn=>{
+          btn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const reviewId = btn.getAttribute("data-review-id");
+            const wrap = finalRatingEmployeesWrap.querySelector(
+              `.reviewAnswersWrap[data-review-answers="${CSS.escape(reviewId)}"]`
+            );
+            if(!wrap) return;
+            const isShown = wrap.style.display !== "none";
+            wrap.style.display = isShown ? "none" : "block";
           });
         });
       }
 
       function init(){
-        // بيانات جاهزة للرسومات العامة فور الدخول
         const currentReviews = loadJson(LS_KEYS.current, []);
         const archiveReviews = loadJson(LS_KEYS.archive, []);
         const qs = loadJson(LS_KEYS.questions, []);
 
-        // إعدادات الكونترول
         centerSelect.innerHTML = "";
 
         const placeholder = document.createElement("option");
@@ -1135,7 +1245,7 @@
         emptyMsg.style.display = "none";
         emptyMsg.textContent = "";
 
-        // ✅ رسم الرسومات العامة مباشرة (وبشكلها الأصلي فوق القائمة)
+        // ✅ رسم الرسومات العامة فور الدخول (فوق القائمة)
         originalChartsPosition();
         renderChartsGeneral(currentReviews, archiveReviews, qs);
 
@@ -1143,9 +1253,7 @@
           const center = centerSelect.value;
           if(!center) return;
 
-          // ✅ هنا نحرّك الرسومات تحت قائمة التقييم
           chartsPositionUnderEmployees();
-
           centerTitle.textContent = `التقييم النهائي - ${center}`;
           renderFinalForCenter(center);
         });
@@ -1153,22 +1261,18 @@
         refreshBtn.addEventListener("click", ()=>{
           const center = centerSelect.value;
 
-          // تحديث الرسومات العامة
           const curR = loadJson(LS_KEYS.current, []);
           const arR = loadJson(LS_KEYS.archive, []);
           const q2 = loadJson(LS_KEYS.questions, []);
           renderChartsGeneral(curR, arR, q2);
 
           if(!center){
-            // ✅ إذا ما فيه مركز: خل الرسومات فوق مثل البداية
             originalChartsPosition();
             showToast("✅ تم تحديث الرسومات العامة. اختر مركز لعرض تفاصيل الموظفين.");
             return;
           }
 
-          // ✅ إذا فيه مركز: الرسومات لازم تكون تحت القائمة
           chartsPositionUnderEmployees();
-
           centerTitle.textContent = `التقييم النهائي - ${center}`;
           renderFinalForCenter(center);
         });
