@@ -490,12 +490,14 @@
       background: rgba(11,61,145,0.04);
       margin-bottom:10px;
     }
+
     .modalQTitle{
       font-weight:950;
       color: rgba(11,27,42,0.85);
       margin-bottom:6px;
       font-size:13px;
     }
+
     .modalQAns{
       font-weight:900;
       color: rgba(11,27,42,0.65);
@@ -882,9 +884,82 @@
         return "مقبول";
       }
 
+      // ================================
+      // ✅ NEW: فتح نافذة أسماء (بنفس modal)
+      // ================================
+      function openEmployeesModalByCenterAndCategory(centerName, ratingLabel){
+        const currentReviews = loadJson(LS_KEYS.current, []);
+        const archiveReviews = loadJson(LS_KEYS.archive, []);
+        const qs = loadJson(LS_KEYS.questions, []);
+
+        currentQuestionsCache = Array.isArray(qs) ? qs : [];
+        empCentersModalTitle.textContent = "—";
+        empCentersModalMeta.textContent = "";
+        empCentersModalList.innerHTML = "";
+
+        if(!Array.isArray(qs) || qs.length === 0){
+          empCentersModalTitle.textContent = `موظفون - ${centerName}`;
+          empCentersModalMeta.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
+          empCentersModal.classList.add("show");
+          return;
+        }
+
+        const allCenterReviews = [...currentReviews, ...archiveReviews].filter(r => r.center === centerName);
+        if(allCenterReviews.length === 0){
+          empCentersModalTitle.textContent = `موظفون - ${centerName}`;
+          empCentersModalMeta.textContent = "لا توجد تقييمات لهذا المركز حالياً.";
+          empCentersModal.classList.add("show");
+          return;
+        }
+
+        const empCounts = new Map(); // emp -> {excellent, goodExcellent, good, acceptable}
+
+        for(const r of allCenterReviews){
+          const emp = String(r.employeeName || "").trim();
+          if(!emp) continue;
+
+          const finalRatingPerReview = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRatingPerReview === "—") continue;
+
+          if(!empCounts.has(emp)){
+            empCounts.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
+          }
+          const cts = empCounts.get(emp);
+
+          if(finalRatingPerReview === "ممتاز") cts.excellent++;
+          else if(finalRatingPerReview === "جيد جدا") cts.goodExcellent++;
+          else if(finalRatingPerReview === "جيد") cts.good++;
+          else if(finalRatingPerReview === "مقبول") cts.acceptable++;
+        }
+
+        const names = [];
+        for(const [emp, cts] of empCounts.entries()){
+          const finalForEmp = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
+          if(finalForEmp === "—") continue;
+          if(ratingLabel && finalForEmp !== ratingLabel) continue;
+          names.push(emp);
+        }
+
+        empCentersModalTitle.textContent = `موظفون - ${ratingLabel || "كل الفئات"} - ${centerName}`;
+        empCentersModalMeta.textContent = names.length ? `عدد الأسماء: ${names.length}` : "لا توجد أسماء مطابقة لهذه الفئة.";
+
+        empCentersModalList.innerHTML = names.length
+          ? names.map(n => `
+              <div class="centerRow" style="justify-content:flex-start;">
+                <div class="centerName">${escapeHtml(n)}</div>
+                <div class="centerCount" style="margin-inline-start:auto; border-color: rgba(11,61,145,0.35); background: rgba(11,61,145,0.08);">
+                  —
+                </div>
+              </div>
+            `).join("")
+          : "";
+
+        empCentersModal.classList.add("show");
+      }
+
       // =========================================================
-      // ✅ NEW بعد التعديل: الأسماء حسب التقييم النهائي (داخل المركز)
-      //   + عند الضغط على الاسم يفتح Modal "مراكز الموظف" بنفس الشكل
+      // (تبقى دالة renderNamesOnlyForCenter كما هي في كودك إن تحبها)
+      // لكن لن نستخدمها الآن في الرسم 1 و2
       // =========================================================
       function renderNamesOnlyForCenter(center, ratingFilterLabel){
         statusLine.textContent = "جارٍ جلب الأسماء...";
@@ -915,8 +990,7 @@
           return;
         }
 
-        // نجمع counts لكل موظف داخل هذا المركز (نفس منطق renderFinalForCenter)
-        const empCounts = new Map(); // emp -> {excellent, goodExcellent, good, acceptable}
+        const empCounts = new Map();
 
         for(const r of allCenterReviews){
           const emp = String(r.employeeName || "").trim();
@@ -936,7 +1010,6 @@
           else if(finalRatingPerReview === "مقبول") cts.acceptable++;
         }
 
-        // فلترة حسب التقييم النهائي للموظف داخل المركز
         const names = [];
         for(const [emp, cts] of empCounts.entries()){
           const finalForEmp = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
@@ -954,102 +1027,24 @@
 
         statusLine.textContent = `تم التجميع ✅ (عدد الأسماء: ${names.length})`;
 
-        // عند الضغط على اسم -> modal نفس شكل ممتاز
-        const openEmpCentersModalByFinal = (empName) => {
-          // نجمع للموظف عبر كل المراكز: هل تقييمه النهائي يطابق ratingFilterLabel؟
-          const allAll = [...currentReviews, ...archiveReviews];
-
-          // emp -> center -> counts
-          const map = new Map(); // center -> {excellent, goodExcellent, good, acceptable}
-          for(const c of CENTERS){
-            map.set(c, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
-          }
-
-          // نجمع counts للموظف في كل مركز
-          for(const r of allAll){
-            const emp = String(r.employeeName || "").trim();
-            if(emp !== empName) continue;
-
-            const centerName = String(r.center || "").trim();
-            if(!centerName) continue;
-
-            if(!map.has(centerName)) continue;
-
-            const finalRatingPerReview = finalRatingFromAnswers(qs, r.questionAnswers || {});
-            if(finalRatingPerReview === "—") continue;
-
-            const cts = map.get(centerName);
-            if(finalRatingPerReview === "ممتاز") cts.excellent++;
-            else if(finalRatingPerReview === "جيد جدا") cts.goodExcellent++;
-            else if(finalRatingPerReview === "جيد") cts.good++;
-            else if(finalRatingPerReview === "مقبول") cts.acceptable++;
-          }
-
-          // نطلع المراكز التي يطابق فيها التقييم النهائي الفئة المطلوبة
-          const centersArr = [];
-          for(const c of CENTERS){
-            const cts = map.get(c);
-            if(!cts) continue;
-
-            const finalForCenter = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
-            if(finalForCenter === "—") continue;
-            if(ratingFilterLabel && finalForCenter !== ratingFilterLabel) continue;
-
-            centersArr.push({ center: c, cnt: 1 }); // نفس شكل modal: عدد مرات/ظهور (هنا ظهور)
-          }
-
-          empCentersModalTitle.textContent = `مراكز الموظف: ${empName}`;
-
-          if(centersArr.length === 0){
-            empCentersModalMeta.textContent = "لا توجد بيانات مطابقة حسب التقييم النهائي للفئة الحالية.";
-            empCentersModalList.innerHTML = "";
-          }else{
-            empCentersModalMeta.textContent = `عدد المراكز التي يطابق فيها التقييم النهائي: ${centersArr.length}`;
-
-            empCentersModalList.innerHTML = centersArr.map(x => `
-              <div class="centerRow">
-                <div class="centerName">${escapeHtml(x.center)}</div>
-                <div class="centerCount">× ${x.cnt}</div>
-              </div>
-            `).join("");
-          }
-
-          empCentersModal.classList.add("show");
-        };
-
-        // عرض الأسماء كـ chips clickable
         finalRatingEmployeesWrap.innerHTML = `
           <div style="
             display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;
             align-items:center; justify-content:flex-start;
           ">
             ${names.map(n => `
-              <button type="button"
-                class="empNameBtn"
-                data-emp="${escapeHtml(n)}"
-                style="
-                  border:1px solid rgba(11,27,42,0.14);
-                  background: rgba(11,27,42,0.05);
-                  border-radius:999px;
-                  padding:8px 12px;
-                  font-weight:950;
-                  color:rgba(11,27,42,0.90);
-                  white-space:nowrap;
-                  cursor:pointer;
-                "
-                title="عرض مراكز الموظف"
-              >${escapeHtml(n)}</button>
+              <span style="
+                border:1px solid rgba(11,27,42,0.14);
+                background: rgba(11,27,42,0.05);
+                border-radius:999px;
+                padding:8px 12px;
+                font-weight:950;
+                color:rgba(11,27,42,0.90);
+                white-space:nowrap;
+              ">${escapeHtml(n)}</span>
             `).join("")}
           </div>
         `;
-
-        // bind click
-        finalRatingEmployeesWrap.querySelectorAll(".empNameBtn").forEach(btn=>{
-          btn.addEventListener("click", ()=>{
-            const empName = btn.getAttribute("data-emp");
-            if(empName) openEmpCentersModalByFinal(empName);
-          });
-        });
       }
 
       function buildCenterSummaries(currentReviews, archiveReviews, qs){
@@ -1119,8 +1114,6 @@
       }
 
       function renderChartsGeneral(currentReviews, archiveReviews, qs){
-        const chartsWrapEl = document.getElementById("chartsWrap");
-        if(!chartsWrapEl) return;
         if(!Array.isArray(qs) || qs.length === 0) return;
 
         destroyCharts();
@@ -1145,24 +1138,11 @@
         const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
         const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
 
-        // ✅ معدل: الرسم 1 يطلع أسماء ممتاز فقط
-        const openCenterDetailsFromCharts = (centerName) => {
-          if(!centerName) return;
-
-          const options = centerSelect?.options;
-          if(!options) return;
-
-          const foundOpt = Array.from(options).find(opt => opt.value === centerName);
-          if(!foundOpt) return;
-
-          centerSelect.value = centerName;
-          chartsPositionUnderEmployees();
-          centerTitle.textContent = `أسماء ممتاز - ${centerName}`;
-
-          renderNamesOnlyForCenter(centerName, "ممتاز");
+        // ✅ تعديل: الرسم 1 يفتح modal أسماء فئة ممتاز داخل المركز
+        const openModalForBestCenters = (centerName) => {
+          openEmployeesModalByCenterAndCategory(centerName, "ممتاز");
         };
 
-        // ========= الرسم 1: أفضل المراكز =========
         charts.bestCentersChart = new Chart(document.getElementById("bestCentersChart"), {
           type: "bar",
           data: {
@@ -1197,11 +1177,11 @@
 
             const idx = points[0].index;
             const centerName = topBest[idx]?.center;
-            if(centerName) openCenterDetailsFromCharts(centerName);
+            if(centerName) openModalForBestCenters(centerName);
           });
         }
 
-        // ========= الرسم 2: 4 فئات داخل كل مركز =========
+        // ========= الرسم 2: 4 فئات =========
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
           return found || {
@@ -1280,15 +1260,12 @@
             const ratingLabelsByDataset = ["ممتاز", "جيد جدا", "جيد", "مقبول"];
             const ratingLabel = ratingLabelsByDataset[datasetIndex] || null;
 
-            centerSelect.value = centerName;
-            chartsPositionUnderEmployees();
-            centerTitle.textContent = `أسماء (${ratingLabel}) - ${centerName}`;
-
-            renderNamesOnlyForCenter(centerName, ratingLabel);
+            // ✅ تعديل: بدال قائمة فوق/مكان غلط -> modal
+            openEmployeesModalByCenterAndCategory(centerName, ratingLabel);
           });
         }
 
-        // ========= الرسم 3 (ممتاز فقط) =========
+        // ========= الرسم 3 (ممتاز فقط) كما في كودك =========
         const allAll = [...currentReviews, ...archiveReviews];
 
         const empToCenterExcellentCounts = new Map();
@@ -1387,7 +1364,7 @@
           empCentersModal.classList.add("show");
         });
 
-        // ========= الرسم 4: متدني المستوى (مقبول + جيد) =========
+        // ========= الرسم 4 (متدني المستوى) كما في كودك =========
         const empToCenterCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
