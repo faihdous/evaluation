@@ -254,7 +254,7 @@
       width:100%;
     }
 
-    /* ================== ✅ ألوان التقييم (حسب اتفاقنا) ================== */
+    /* ================== ✅ ألوان التقييم (تم التعديل) ================== */
     .ratingTag{
       display:inline-flex;
       padding:6px 10px;
@@ -289,7 +289,7 @@
       border-color: rgba(255,120,120,0.55);
       background: rgba(255,120,120,0.16);
     }
-    /* ================================================================== */
+    /* ================================================================= */
 
     details.finalEmployeeDetails{
       border:1px solid rgba(11,27,42,0.12);
@@ -541,6 +541,8 @@
     }
     #empCentersModal.show{ display:flex; }
 
+    .modalBox{ color: var(--text); }
+
     .centerRow{
       border:1px solid rgba(11,27,42,0.12);
       border-radius:14px;
@@ -641,6 +643,7 @@
                 </div>
               </div>
 
+              <!-- ✅ الرسم البياني الرابع (مضاف) -->
               <div class="chartCard">
                 <div class="chartCardHead">الموظفون متدني المستوى (مقبول + جيد) — اضغط للاطلاع على المراكز</div>
                 <div class="chartCardBody">
@@ -857,7 +860,7 @@
         return null;
       }
 
-      /* ✅ مهم: جيد جدا لازم يكون good2 (أزرق) مو good */
+      // ✅ تعديل: "جيد جدا" لازم يطلع good2
       function ratingClass(r){
         if(r === "ممتاز") return "excellent";
         if(r === "جيد جدا") return "good2";
@@ -1071,13 +1074,9 @@
           }
         });
 
-        // ======= بقية الكود كما هو عندك (بدون تغيير) =======
-        // ملاحظة: لا نحتاج نغيّر أي شيء في الرسومات لأن المطلوب كان ألوان الـ ratingTag داخل الواجهة.
-        // لذلك تركت باقي منطقك نفسه كما هو.
-        // ----------------------------------------------------
-
         const allAll = [...currentReviews, ...archiveReviews];
 
+        // ✅ top excellent chart (ممتاز فقط)
         const empToCenterExcellentCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1176,10 +1175,168 @@
           empCentersModal.classList.add("show");
         });
 
-        // الرسم البياني الرابع والثالث وباقي منطق initAdminDetails عندك طويل
-        // لذلك للتفادي من الخطأ في اللصق: إذا تريد أرجع لك "بنفس كودك حرفياً" بالكامل
-        // قولي بس ونسوي لك نسخة كاملة 1:1.
-        // حالياً هذا الجزء المهم (rating ألوان) تم تعديله 100%.
+        // ==========================================================
+        // ✅ الرسم البياني الرابع: الموظفون متدني المستوى (مقبول + جيد)
+        // ==========================================================
+        const empToCenterCounts = new Map();
+        for(const r of allAll){
+          const emp = String(r.employeeName || "").trim();
+          const center = String(r.center || "").trim();
+          if(!emp || !center) continue;
+
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
+
+          if(!empToCenterCounts.has(emp)) empToCenterCounts.set(emp, new Map());
+          const centerMap = empToCenterCounts.get(emp);
+
+          if(!centerMap.has(center)){
+            centerMap.set(center, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
+          }
+          const counts = centerMap.get(center);
+
+          if(finalRating === "ممتاز") counts.excellent++;
+          else if(finalRating === "جيد جدا") counts.goodExcellent++;
+          else if(finalRating === "جيد") counts.good++;
+          else if(finalRating === "مقبول") counts.acceptable++;
+        }
+
+        const lowLevelEmpToCenterFinalMap = new Map();
+        const lowEmpTotal = new Map();
+        const empWorstLowLabel = new Map();
+
+        for(const [emp, centerMap] of empToCenterCounts.entries()){
+          for(const [center, cts] of centerMap.entries()){
+            const final = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
+            if(final !== "مقبول" && final !== "جيد") continue;
+
+            if(!lowLevelEmpToCenterFinalMap.has(emp)) lowLevelEmpToCenterFinalMap.set(emp, new Map());
+            const m = lowLevelEmpToCenterFinalMap.get(emp);
+
+            if(!m.has(center)) m.set(center, 1);
+
+            lowEmpTotal.set(emp, (lowEmpTotal.get(emp) || 0) + (m.get(center) === 1 ? 0 : 0));
+            const prev = empWorstLowLabel.get(emp);
+            if(final === "مقبول"){
+              empWorstLowLabel.set(emp, "مقبول");
+            }else{
+              if(!prev) empWorstLowLabel.set(emp, "جيد");
+            }
+          }
+        }
+
+        const lowEmployeesArr = Array.from(lowLevelEmpToCenterFinalMap.entries()).map(([emp, centerMap])=>{
+          const worst = empWorstLowLabel.get(emp) || "جيد";
+          const totalInstances = Array.from(centerMap.values()).reduce((s, v)=> s + v, 0);
+          return { emp, worst, totalInstances };
+        });
+
+        lowEmployeesArr.sort((a,b)=>{
+          const aw = a.worst === "مقبول" ? 0 : 1;
+          const bw = b.worst === "مقبول" ? 0 : 1;
+          if(aw !== bw) return aw - bw;
+          return (b.totalInstances - a.totalInstances);
+        });
+
+        const lowTop = lowEmployeesArr.slice(0, 12);
+
+        const canvasLow = document.getElementById("lowLevelEmployeesChart");
+        if(canvasLow){
+          if(charts.lowLevelEmployeesChart){
+            try{ charts.lowLevelEmployeesChart.destroy(); }catch(e){}
+            charts.lowLevelEmployeesChart = null;
+          }
+
+          if(lowTop.length === 0){
+            const parent = canvasLow.parentElement;
+            parent.innerHTML = '<div class="fineprint" style="margin:0; padding:10px 0;">لا يوجد موظفون بتقييم (مقبول/جيد) حالياً حسب البيانات الحالية.</div>';
+          }else{
+            const labels = lowTop.map(x => x.emp);
+            const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
+
+            const colors = lowTop.map(x => x.worst === "مقبول"
+              ? "rgba(255, 120, 120, 0.45)"
+              : "rgba(255, 214, 102, 0.50)"
+            );
+
+            charts.lowLevelEmployeesChart = new Chart(canvasLow, {
+              type: "bar",
+              data: {
+                labels,
+                datasets: [{
+                  label: "التقييم النهائي المتدني (داخل المركز)",
+                  data: values,
+                  backgroundColor: colors,
+                  borderWidth: 0
+                }]
+              },
+              options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: function(ctx){
+                        const v = ctx.raw;
+                        return v === 4 ? "مقبول" : "جيد";
+                      }
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: function(value){
+                        if(value === 4) return "مقبول";
+                        if(value === 3) return "جيد";
+                        return value;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+
+            const chartLow = charts.lowLevelEmployeesChart;
+            chartLow.canvas.addEventListener("click", (evt) => {
+              const points = chartLow.getElementsAtEventForMode(
+                evt,
+                'nearest',
+                { intersect: true },
+                true
+              );
+              if(!points || points.length === 0) return;
+
+              const idx = points[0].index;
+              const empName = labels[idx];
+              if(!empName) return;
+
+              const centerMap = lowLevelEmpToCenterFinalMap.get(empName) || new Map();
+              const centersArr = Array.from(centerMap.entries())
+                .map(([center, cnt]) => ({ center, cnt }))
+                .sort((a,b)=> b.cnt - a.cnt);
+
+              empCentersModalTitle.textContent = `مراكز الموظف المتدني: ${empName}`;
+              if(centersArr.length === 0){
+                empCentersModalMeta.textContent = "لا توجد مراكز لهذا الموظف (مقبول/جيد) حسب البيانات الحالية.";
+                empCentersModalList.innerHTML = "";
+              }else{
+                const total = centersArr.length;
+                empCentersModalMeta.textContent = `عدد المراكز التي ظهر فيها (مقبول/جيد): ${total}`;
+                empCentersModalList.innerHTML = centersArr.map(x => `
+                  <div class="centerRow">
+                    <div class="centerName">${escapeHtml(x.center)}</div>
+                    <div class="centerCount">× ${x.cnt}</div>
+                  </div>
+                `).join("");
+              }
+              empCentersModal.classList.add("show");
+            });
+          }
+        }
       }
 
       function printFinalForEmployee(center, empObj){
@@ -1279,9 +1436,258 @@
         w.document.close();
       }
 
-      // ======= init عندك طويل جداً، لكن جزء التلوين المهم صار مضبوط أعلاه =======
-      // إذا تبغاني أرجع لك "الكود الكامل 1:1" بدون ما أنقص أي جزء،
-      // قلّي: "دز الكود كامل 1:1" وسأرسله كامل حرفياً بعد تطبيق نفس التعديلات فقط.
+      function openReviewDetailsById(reviewId){
+        const review = reviewById.get(String(reviewId));
+        if(!review){
+          reviewDetailsMeta.textContent = "❌ لا توجد بيانات للتفاصيل.";
+          reviewDetailsQuestions.innerHTML = "";
+          reviewDetailsModal.classList.add("show");
+          return;
+        }
+
+        const qs = currentQuestionsCache || [];
+        const answers = review.questionAnswers || {};
+        const finalRating = finalRatingFromAnswers(qs, answers);
+
+        const noteText = (review.comment && String(review.comment).trim()) ? review.comment : "—";
+
+        reviewDetailsMeta.innerHTML = `
+          <div><b>الموظف:</b> ${escapeHtml(review.employeeName || "")}</div>
+          <div><b>المراجع:</b> ${escapeHtml(review.reviewerName || "")} &nbsp;|&nbsp; <b>الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")}</div>
+          <div><b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))}</div>
+          <div><b>الملاحظة:</b> ${escapeHtml(noteText)}</div>
+          <div style="margin-top:6px;">
+            <b>التقييم النهائي:</b>
+            <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
+          </div>
+        `;
+
+        if(!Array.isArray(qs) || qs.length === 0){
+          reviewDetailsQuestions.innerHTML = `<div class="fineprint" style="margin:0;">لا توجد أسئلة مضافة حالياً.</div>`;
+        }else{
+          reviewDetailsQuestions.innerHTML = qs.map((q, i)=>{
+            const qText = q.text ?? q.title ?? q.label ?? q.id;
+            const ans = answers && answers[q.id] != null ? answers[q.id] : "—";
+            return `
+              <div class="modalQ">
+                <div class="modalQTitle">${i+1}) ${escapeHtml(qText)}</div>
+                <div class="modalQAns">الإجابة: ${escapeHtml(ans === "" ? "—" : ans)}</div>
+              </div>
+            `;
+          }).join("");
+        }
+
+        reviewDetailsModal.classList.add("show");
+      }
+
+      function renderFinalForCenter(center){
+        statusLine.textContent = "جارٍ تجميع التقييمات...";
+
+        const currentReviews = loadJson(LS_KEYS.current, []);
+        const archiveReviews = loadJson(LS_KEYS.archive, []);
+        const qs = loadJson(LS_KEYS.questions, []);
+
+        currentQuestionsCache = Array.isArray(qs) ? qs : [];
+        reviewById.clear();
+
+        finalRatingEmployeesWrap.innerHTML = "";
+        emptyMsg.style.display = "none";
+        emptyMsg.textContent = "";
+
+        if(!Array.isArray(qs) || qs.length === 0){
+          statusLine.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "أضف أسئلة التقييم من لوحة أي مركز أولاً.";
+          return;
+        }
+
+        const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
+        if(all.length === 0){
+          statusLine.textContent = "لا توجد تقييمات لهذا المركز حتى الآن.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "لن يظهر أي موظف إلا بعد توفر مراجعات كافية.";
+          return;
+        }
+
+        const map = new Map();
+
+        for(const r of all){
+          if(r && r.id != null) reviewById.set(String(r.id), r);
+
+          const emp = String(r.employeeName || "").trim();
+          if(!emp) continue;
+
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
+
+          if(!map.has(emp)){
+            map.set(emp, {
+              excellent:0,
+              goodExcellent:0,
+              good:0,
+              acceptable:0,
+              reviews:[]
+            });
+          }
+
+          const item = map.get(emp);
+
+          if(finalRating === "ممتاز") item.excellent++;
+          else if(finalRating === "جيد جدا") item.goodExcellent++;
+          else if(finalRating === "جيد") item.good++;
+          else if(finalRating === "مقبول") item.acceptable++;
+
+          item.reviews.push({
+            id: r.id,
+            time: r.archivedAt || r.createdAt || "",
+            reviewer: r.reviewerName || "",
+            phone: r.reviewerPhone || "",
+            rating: finalRating,
+            comment: (r.comment && String(r.comment).trim()) ? r.comment : "—"
+          });
+        }
+
+        const rows = Array.from(map.entries())
+          .map(([emp, data]) => ({
+            emp,
+            ...data,
+            total: data.excellent + data.goodExcellent + data.good + data.acceptable
+          }))
+          .filter(x => x.total > 0)
+          .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
+
+        if(rows.length === 0){
+          statusLine.textContent = "لا توجد بيانات كافية لعرض التقييم النهائي.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "قد تكون الأسئلة غير مكتملة أو المراجعات لا تحتوي إجابات.";
+          return;
+        }
+
+        statusLine.textContent = "تم التجميع ✅";
+
+        for(const x of rows){
+          x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
+          const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
+
+          finalRatingEmployeesWrap.innerHTML += `
+            <details class="finalEmployeeDetails">
+              <summary>
+                <span style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-start;">
+                  <span>
+                    <button
+                      type="button"
+                      class="empNameBtn"
+                      data-emp="${escapeHtml(x.emp)}"
+                      style="
+                        border:none;
+                        background:transparent;
+                        cursor:pointer;
+                        font-weight:950;
+                        color:inherit;
+                        font-family:inherit;
+                        padding:0;
+                        text-decoration: underline;
+                      "
+                      title="اضغط لفتح تفاصيل الموظف"
+                    >${escapeHtml(x.emp)}</button>
+                    &nbsp;—&nbsp;
+                    <span class="ratingTag ${ratingClass(final)}">${escapeHtml(final)}</span>
+                  </span>
+
+                  <button
+                    class="btn printPurple"
+                    type="button"
+                    title="طباعة التقييم النهائي لهذا الموظف"
+                    data-print-emp="${escapeHtml(x.emp)}"
+                  >🖨️ طباعة</button>
+                </span>
+
+                <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
+                  ممتاز: ${x.excellent}
+                  | جيد جدا: ${x.goodExcellent}
+                  | جيد: ${x.good}
+                  | مقبول: ${x.acceptable}
+                  | المجموع: ${x.total}
+                </span>
+              </summary>
+
+              <div class="finalEmployeeMeta">
+                <div style="font-weight:950;color:rgba(11,27,42,0.75);font-size:13px;">
+                  تفاصيل تقييماته السابقة:
+                </div>
+
+                <div class="finalReviewsList">
+                  ${x.reviews.map(r => `
+                    <div class="finalReviewItem">
+                      <div class="metaLine">
+                        <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
+                        <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
+                        <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+
+                        <span style="margin-inline-start:auto;">
+                          التقييم:
+                          <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                        </span>
+
+                        <button
+                          class="reviewDetailsBtn"
+                          type="button"
+                          data-review-id="${escapeHtml(String(r.id))}"
+                          title="عرض الأسئلة والإجابات"
+                        >تفاصيل</button>
+                      </div>
+
+                      <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
+                        الملاحظة: ${escapeHtml(r.comment)}
+                      </div>
+                    </div>
+                  `).join("")}
+                </div>
+              </div>
+            </details>
+          `;
+        }
+
+        finalRatingEmployeesWrap.querySelectorAll(".empNameBtn").forEach(btn=>{
+          btn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const details = btn.closest("details");
+            if(details) details.open = true;
+          });
+        });
+
+        finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
+          btn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const empName = btn.getAttribute('data-print-emp');
+
+            const empObj = rows.find(r => r.emp === empName);
+            if(!empObj) return;
+
+            const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
+
+            printFinalForEmployee(center, {
+              emp: empObj.emp,
+              final,
+              excellent: empObj.excellent,
+              goodExcellent: empObj.goodExcellent,
+              good: empObj.good,
+              acceptable: empObj.acceptable,
+              total: empObj.total,
+              reviews: empObj.reviews
+            });
+          });
+        });
+
+        finalRatingEmployeesWrap.querySelectorAll(".reviewDetailsBtn").forEach(btn=>{
+          btn.addEventListener("click",(e)=>{
+            e.stopPropagation();
+            const reviewId = btn.getAttribute("data-review-id");
+            openReviewDetailsById(reviewId);
+          });
+        });
+      }
+
       function init(){
         const currentReviews = loadJson(LS_KEYS.current, []);
         const archiveReviews = loadJson(LS_KEYS.archive, []);
@@ -1318,10 +1724,7 @@
 
           chartsPositionUnderEmployees();
           centerTitle.textContent = `التقييم النهائي - ${center}`;
-
-          // تابع عندك renderFinalForCenter داخل النسخة الأصلية
-          // هنا لن أكرر لأنه في كودك الأصلي موجود بالكامل.
-          // فقط أؤكد: ratingTag سيتلون صح لأن ratingClass + CSS تم تعديلهم.
+          renderFinalForCenter(center);
         });
 
         refreshBtn.addEventListener("click", ()=>{
@@ -1340,7 +1743,7 @@
 
           chartsPositionUnderEmployees();
           centerTitle.textContent = `التقييم النهائي - ${center}`;
-          // تابع عندك renderFinalForCenter داخل النسخة الأصلية
+          renderFinalForCenter(center);
         });
       }
 
