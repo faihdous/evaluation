@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -6,43 +6,107 @@
   <title>لوحة الإدارة - مركز الشامية</title>
 
   <style>
+    /* ====== Colors tuned to your “الجنسية والجوازات” logo (blue/green/red + ink) ====== */
     :root{
-      --panel: rgba(255,255,255,0.78);
-      --text: #0b1b2a;
-      --muted: rgba(11,27,42,0.65);
-      --border: rgba(11,27,42,0.14);
+      --ink:#0b1220;                 /* thick ink */
+      --inkSoft: rgba(11,18,32,.72);
+      --text: #0b1220;
+      --muted: rgba(11,18,32,.62);
+      --border: rgba(11,18,32,.14);
 
-      --blue: #0b3d91;
-      --green: #0e7a4b;
-      --danger: #ff4d4d;
-      --yellow: #ffd24a;
+      --blue:#2B63B8;               /* logo blue */
+      --blue2:#1f4ea6;              /* deep blue */
+      --green:#0C8A4A;              /* logo green */
+      --red:#E03131;                /* logo red */
+
+      /* “official” trims */
+      --trim: rgba(255,255,255,.95);
+      --trimSoft: rgba(255,255,255,.55);
+
+      --panel: rgba(255,255,255,0.84);
+
+      --radius2: 22px;
+      --radius: 14px;
 
       --shadow: 0 18px 45px rgba(2,6,23,0.16);
-      --modalBg: rgba(0,0,0,0.35);
-      --radius2: 22px;
+      --modalBg: rgba(0,0,0,0.42);
 
-      --pillBg: rgba(255,255,255,0.78);
-      --pillBorder: rgba(11,61,145,0.22);
+      --pillBg: rgba(255,255,255,0.80);
+      --pillBorder: rgba(43,99,184,0.28);
 
       --fieldPad: 12px;
-      --radius: 14px;
+
+      /* Embroidery / stitching */
+      --stBlue: rgba(43,99,184,.48);
+      --stGreen: rgba(12,138,74,.40);
+      --stRed: rgba(224,49,49,.32);
+
+      --stInk: rgba(11,18,32,.16);
+      --stitchLine: rgba(43,99,184,.16);
+      --stitchLine2: rgba(12,138,74,.10);
     }
 
     *{ box-sizing: border-box; }
 
+    /* ====== Background: “building-feel” grid + official glow ====== */
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
       color: var(--text);
       background:
-        radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
-        radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
-        linear-gradient(180deg, #f3f6ff, #eef3ff);
+        /* building-like vertical columns */
+        repeating-linear-gradient(90deg,
+          rgba(43,99,184,0.08) 0 1px,
+          transparent 1px 38px),
+        /* subtle dark bands like facade */
+        repeating-linear-gradient(180deg,
+          rgba(11,18,32,0.04) 0 1px,
+          transparent 1px 18px),
+        /* logo-inspired glow blobs */
+        radial-gradient(900px 520px at 10% 0%, rgba(43,99,184,0.25), transparent 60%),
+        radial-gradient(900px 520px at 90% 0%, rgba(12,138,74,0.18), transparent 60%),
+        radial-gradient(680px 460px at 50% 20%, rgba(224,49,49,0.10), transparent 65%),
+        linear-gradient(180deg, #f6fbff, #eef5ff);
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
     }
 
-    .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
+    /* ====== “Embroidery” overlay around the whole page ====== */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: -30px;
+      pointer-events:none;
+      z-index: 0;
+      opacity: .9;
+      background:
+        /* corner stitching feel */
+        radial-gradient(circle at 6% 6%, rgba(43,99,184,0.22), transparent 35%),
+        radial-gradient(circle at 94% 6%, rgba(12,138,74,0.18), transparent 35%),
+        radial-gradient(circle at 6% 94%, rgba(224,49,49,0.14), transparent 40%),
+        radial-gradient(circle at 94% 94%, rgba(43,99,184,0.16), transparent 40%),
+        /* micro dotted stitch grid */
+        radial-gradient(circle at 15% 25%, rgba(43,99,184,0.26) 0 1px, transparent 2px),
+        radial-gradient(circle at 55% 55%, rgba(12,138,74,0.18) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 22%, rgba(224,49,49,0.14) 0 1px, transparent 2px);
+      background-size: auto, auto, auto, auto, 120px 120px, 160px 160px, 140px 140px;
+      filter: saturate(1.05);
+      animation: stitchFloat 9s ease-in-out infinite;
+    }
+
+    @keyframes stitchFloat{
+      0%,100%{ transform: translateY(0px); opacity:.88; }
+      50%{ transform: translateY(10px); opacity:1; }
+    }
+
+    .container{
+      width: min(1200px, 96vw);
+      margin: 12px auto 26px;
+      max-width:100%;
+      position: relative;
+      z-index: 1;
+    }
 
     header{
       display:flex;
@@ -50,11 +114,29 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.78);
       border: 1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow:hidden;
+    }
+
+    /* ====== Header “marbling + embroidery” frame ====== */
+    header::before{
+      content:"";
+      position:absolute; inset:-2px;
+      pointer-events:none;
+      background:
+        /* stitched top/bottom lines */
+        linear-gradient(90deg, transparent, rgba(43,99,184,0.55), transparent) top/300px 3px no-repeat,
+        linear-gradient(90deg, transparent, rgba(12,138,74,0.35), transparent) bottom/300px 2px no-repeat,
+        /* repeating stitch dots */
+        repeating-linear-gradient(135deg,
+          rgba(43,99,184,0.12) 0 1px,
+          transparent 1px 13px);
+      opacity:.95;
     }
 
     .brandPill{
@@ -68,7 +150,28 @@
       border: 1px solid var(--pillBorder);
       box-shadow: 0 18px 35px rgba(0,0,0,0.08);
       max-width: 100%;
+      position: relative;
+      overflow:hidden;
     }
+
+    .brandPill::after{
+      content:"";
+      position:absolute; inset:-3px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 15% 50%, rgba(43,99,184,0.22), transparent 45%),
+        radial-gradient(circle at 80% 30%, rgba(12,138,74,0.18), transparent 45%),
+        radial-gradient(circle at 55% 70%, rgba(224,49,49,0.10), transparent 55%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.28) 0 1px, transparent 1px 14px);
+      opacity:.55;
+      animation: pillGlint 6.5s ease-in-out infinite;
+    }
+
+    @keyframes pillGlint{
+      0%,100%{ transform: translateX(-12px); opacity:.40; }
+      50%{ transform: translateX(12px); opacity:.70; }
+    }
+
     .brandPill .title{
       margin:0;
       font-weight: 950;
@@ -79,6 +182,8 @@
       overflow:hidden;
       text-overflow: ellipsis;
       text-align:center;
+      position: relative;
+      z-index: 1;
     }
 
     .loginLogo{
@@ -86,27 +191,43 @@
       height: 88px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(11,61,145,0.25);
-      background: rgba(11,61,145,0.08);
-      box-shadow: 0 10px 25px rgba(11,61,145,0.15);
+      border: 2px solid rgba(43,99,184,0.35);
+      background: rgba(43,99,184,0.08);
+      box-shadow: 0 10px 25px rgba(43,99,184,0.18);
       margin-top: 4px;
       margin-bottom: 2px;
+      position: relative;
+      z-index: 1;
     }
 
     .card{
-      background: rgba(255,255,255,0.80);
+      background: rgba(255,255,255,0.82);
       border: 1px solid var(--border);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
       overflow:hidden;
       width: 100%;
+      position: relative;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(43,99,184,0.18), transparent 40%),
+        radial-gradient(circle at 95% 15%, rgba(12,138,74,0.14), transparent 45%),
+        repeating-linear-gradient(135deg, rgba(43,99,184,0.14) 0 1px, transparent 1px 12px);
+      opacity:.38;
     }
 
     .card .cardHead{
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(11,27,42,0.10);
-      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+      border-bottom: 1px solid rgba(11,18,32,0.10);
+      background: linear-gradient(90deg, rgba(12,138,74,0.14), rgba(43,99,184,0.12));
+      position: relative;
+      z-index: 1;
     }
 
     .card h2{
@@ -115,8 +236,11 @@
       letter-spacing:0.2px;
       color: var(--text);
       text-align:center;
+      font-weight: 950;
+      position: relative;
+      z-index: 1;
     }
-    .card .cardBody{ padding: 14px; }
+    .card .cardBody{ padding: 14px; position: relative; z-index: 1; }
 
     .loginStage{
       min-height: 58vh;
@@ -127,6 +251,8 @@
       text-align:center;
       padding: 10px 0;
       gap: 10px;
+      position: relative;
+      z-index: 1;
     }
 
     @media (max-width: 520px){
@@ -147,6 +273,8 @@
       gap: 12px;
       align-items: stretch;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
     @media (max-width: 720px){
       .toolbarGrid{ grid-template-columns: 1fr; }
@@ -162,6 +290,8 @@
       gap: 12px;
       align-items: stretch;
       width: 100%;
+      position: relative;
+      z-index: 1;
     }
     @media (max-width: 720px){
       .subToolbarGrid{ grid-template-columns: 1fr; }
@@ -182,39 +312,75 @@
       user-select:none;
       min-height: 46px;
       width:auto;
-      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
-      background: var(--yellow);
+      box-shadow: 0 10px 20px rgba(43,99,184,0.16);
       display:inline-flex;
       align-items:center;
       justify-content:center;
+      position: relative;
+      overflow:hidden;
+      z-index: 1;
+
+      background: linear-gradient(180deg, rgba(255,255,255,0.0), rgba(255,255,255,0.12)), rgba(255,255,255,0.85);
+      border: 1px solid rgba(43,99,184,0.25);
+      color: var(--text);
     }
-    .btn:hover{ transform: translateY(-1px); }
+
+    .btn::before{
+      content:"";
+      position:absolute; inset:-2px;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(43,99,184,0.35), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(12,138,74,0.26), transparent 50%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.30) 0 1px, transparent 1px 14px);
+      opacity: .55;
+      transform: translateX(-20%);
+      transition: transform .6s ease, opacity .2s ease;
+    }
+
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(43,99,184,0.24);
+    }
+    .btn:hover::before{ transform: translateX(20%); opacity:.85; }
+
     .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
 
-    .btn.blue{ background: var(--blue); color: #fff; box-shadow: 0 10px 20px rgba(11,61,145,0.22); }
-    .btn.green{ background: var(--green); color: #fff; box-shadow: 0 10px 20px rgba(14,122,75,0.22); }
+    .btn.blue{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0)), rgba(43,99,184,1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.22);
+      box-shadow: 0 10px 20px rgba(43,99,184,0.30);
+    }
+    .btn.green{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0)), rgba(12,138,74,1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.20);
+      box-shadow: 0 10px 20px rgba(12,138,74,0.28);
+    }
     .btn.alt{
-      background: rgba(11,27,42,0.06);
+      background: rgba(11,18,32,0.05);
       color: var(--text);
-      border: 1px solid rgba(11,27,42,0.16);
+      border: 1px solid rgba(11,18,32,0.16);
       box-shadow: none;
     }
-    .btn.alt:hover{ background: rgba(11,27,42,0.10); }
+    .btn.alt:hover{ background: rgba(11,18,32,0.09); }
     .btn.danger{
-      background: var(--danger);
-      color: #180404;
-      box-shadow: 0 10px 20px rgba(255,77,77,0.20);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.0)), rgba(224,49,49,1);
+      color: #1a0707;
+      box-shadow: 0 10px 20px rgba(224,49,49,0.20);
+      border: 1px solid rgba(255,255,255,0.18);
     }
 
     .btn.dangerLight{
-      background: rgba(255, 120, 120, 0.22);
-      color: #4a0f0f;
-      border: 1px solid rgba(255, 120, 120, 0.45);
-      box-shadow: 0 10px 20px rgba(255,77,77,0.10);
+      background: rgba(224,49,49,0.18);
+      color: #6a0f0f;
+      border: 1px solid rgba(224,49,49,0.40);
+      box-shadow: 0 10px 20px rgba(224,49,49,0.10);
     }
     .btn.dangerLight:hover{
       transform: translateY(-1px);
-      background: rgba(255, 120, 120, 0.28);
+      background: rgba(224,49,49,0.24);
     }
 
     table{
@@ -222,19 +388,31 @@
       border-collapse: collapse;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(11,27,42,0.12);
+      border:1px solid rgba(11,18,32,0.12);
       background: rgba(255,255,255,0.78);
+      position: relative;
     }
+
+    table::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(135deg, rgba(43,99,184,0.14) 0 1px, transparent 1px 14px);
+      opacity: .22;
+    }
+
     th, td{
       padding:10px 10px;
-      border-bottom:1px solid rgba(11,27,42,0.10);
+      border-bottom:1px solid rgba(11,18,32,0.10);
       text-align:center;
       font-size:13px;
       vertical-align: middle;
       white-space: nowrap;
+      position: relative;
+      z-index: 1;
     }
     th{
-      background: rgba(11,61,145,0.06);
+      background: rgba(43,99,184,0.06);
       color: var(--muted);
       font-weight:900;
     }
@@ -247,27 +425,38 @@
       font-weight: 800;
       margin-bottom: 8px;
       font-size: 13px;
+      position: relative;
+      z-index: 1;
     }
 
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(11,27,42,0.18);
-      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(11,18,32,0.18);
+      background: rgba(255,255,255,0.92);
       color: var(--text);
       outline:none;
       appearance: none;
       -webkit-appearance: none;
       font-size: 15px;
+      transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(43,99,184,0.55);
+      box-shadow: 0 0 0 4px rgba(43,99,184,0.14);
+      transform: translateY(-1px);
     }
 
     select{
       padding-left: 40px;
       background-image:
-        linear-gradient(45deg, transparent 50%, rgba(11,61,145,0.85) 50%),
-        linear-gradient(135deg, rgba(11,61,145,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(11,27,42,0.16), rgba(11,27,42,0.16));
+        linear-gradient(45deg, transparent 50%, rgba(43,99,184,0.85) 50%),
+        linear-gradient(135deg, rgba(43,99,184,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(11,18,32,0.14), rgba(11,18,32,0.14));
       background-position:
         calc(10px) 50%,
         calc(18px) 50%,
@@ -280,59 +469,61 @@
     }
 
     option{ background:#f8fbff; color:#0b1b2a; }
-    input::placeholder, textarea::placeholder{ color: rgba(11,27,42,0.45); }
+    input::placeholder, textarea::placeholder{ color: rgba(11,18,32,0.45); }
 
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
 
-    h3{ margin:14px 0 8px; font-size:15px; color: rgba(11,27,42,0.70); }
+    h3{ margin:14px 0 8px; font-size:15px; color: rgba(11,18,32,0.72); font-weight:950; }
     .hide{ display:none; }
 
     .fineprint{
-      color: rgba(11,27,42,0.58);
+      color: rgba(11,18,32,0.58);
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
       text-align:center;
     }
 
-    /* ✅ ألوان التقييم */
+    /* ✅ ألوان التقييم (official-ish) */
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
-      border: 1px solid rgba(11,27,42,0.14);
-      background: rgba(11,27,42,0.05); white-space:nowrap;
+      border: 1px solid rgba(11,18,32,0.14);
+      background: rgba(11,18,32,0.05); white-space:nowrap;
       color: var(--text);
     }
-    .ratingTag.excellent{ 
-      border-color: rgba(14,122,75,0.55); 
-      background: rgba(14,122,75,0.08); 
+    .ratingTag.excellent{
+      border-color: rgba(12,138,74,0.60);
+      background: rgba(12,138,74,0.10);
     }
-    .ratingTag.good{ 
-      border-color: rgba(255,210,74,0.85);
-      background: rgba(255,210,74,0.16); 
+    .ratingTag.good{
+      border-color: rgba(224,49,49,0.55);
+      background: rgba(224,49,49,0.12);
     }
-    .ratingTag.good2{ 
-      border-color: rgba(11,61,145,0.55);
-      background: rgba(11,61,145,0.10); 
+    .ratingTag.good2{
+      border-color: rgba(43,99,184,0.60);
+      background: rgba(43,99,184,0.12);
     }
-    .ratingTag.acceptable{ 
-      border-color: rgba(255,120,120,0.55);
-      background: rgba(255,120,120,0.16); 
+    .ratingTag.acceptable{
+      border-color: rgba(11,18,32,0.28);
+      background: rgba(11,18,32,0.06);
     }
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
-      background: rgba(11,27,42,0.06); color: var(--text);
-      border:1px solid rgba(11,27,42,0.16); box-shadow:none;
+      background: rgba(11,18,32,0.06); color: var(--text);
+      border:1px solid rgba(11,18,32,0.16); box-shadow:none;
       white-space:nowrap; min-height: 40px;
+      transition: transform .18s ease, background .18s ease;
     }
+    .smallBtn:hover{ transform: translateY(-1px); background: rgba(11,18,32,0.10); }
 
     .msg{
       margin-top:12px; padding:12px; border-radius:14px;
-      border:1px solid rgba(11,27,42,0.14);
+      border:1px solid rgba(11,18,32,0.14);
       background: rgba(255,255,255,0.78);
-      color: rgba(11,27,42,0.72);
+      color: rgba(11,18,32,0.72);
       line-height:1.7; font-weight:850; font-size:13px;
       display:none;
       text-align:center;
@@ -342,16 +533,18 @@
     .employeeChip{
       display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
       border-radius:999px;
-      background: rgba(11,61,145,0.06);
-      border: 1px solid rgba(11,61,145,0.14);
+      background: rgba(43,99,184,0.06);
+      border: 1px solid rgba(43,99,184,0.14);
       color: var(--text); font-weight:900; font-size:13px;
     }
     .employeeChip button{
       min-height: 34px; min-width: 34px; padding:0 10px; border-radius: 999px;
       border:none; cursor:pointer;
-      background: rgba(255,77,77,0.18); color: #b61f1f;
-      border: 1px solid rgba(255,77,77,0.35); font-weight:950;
+      background: rgba(224,49,49,0.16); color: #7a1010;
+      border: 1px solid rgba(224,49,49,0.35); font-weight:950;
+      transition: transform .18s ease, filter .18s ease;
     }
+    .employeeChip button:hover{ transform: translateY(-1px); filter: brightness(1.04); }
 
     #reviewDetailsModal{
       position: fixed;
@@ -362,14 +555,30 @@
       align-items: center;
       justify-content: center;
       padding: 14px;
+      backdrop-filter: blur(6px);
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
+    #reviewDetailsModal > div{
+      position: relative;
+      overflow:hidden;
+    }
+    #reviewDetailsModal > div::before{
+      content:"";
+      position:absolute; inset:-2px;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(135deg, rgba(43,99,184,0.14) 0 1px, transparent 1px 13px),
+        radial-gradient(circle at 15% 10%, rgba(12,138,74,0.18), transparent 45%),
+        radial-gradient(circle at 90% 20%, rgba(224,49,49,0.12), transparent 48%);
+      opacity:.28;
+    }
+
     .btn.printPurple{
-      background: rgba(139,92,246,0.16) !important;
-      color: #3b1c84 !important;
-      border: 1px solid rgba(139,92,246,0.38) !important;
-      box-shadow: 0 10px 20px rgba(139,92,246,0.12) !important;
+      background: rgba(43,99,184,0.14) !important;
+      color: rgba(31,78,166,1) !important;
+      border: 1px solid rgba(43,99,184,0.38) !important;
+      box-shadow: 0 10px 20px rgba(43,99,184,0.12) !important;
       padding: 8px 10px !important;
       border-radius: 14px !important;
       min-height: 40px !important;
@@ -377,47 +586,61 @@
     .btn.printPurple:hover{ transform: translateY(-1px); }
 
     #showCurrentBtn{
-      background: rgba(11,27,42,0.06);
+      background: rgba(11,18,32,0.06);
       color: var(--text);
-      border: 1px solid rgba(11,27,42,0.16);
+      border: 1px solid rgba(11,18,32,0.16);
     }
     #showFinalRatingBtn{
-      background: rgba(11,27,42,0.06);
+      background: rgba(11,18,32,0.06);
       color: var(--text);
-      border: 1px solid rgba(11,27,42,0.16);
+      border: 1px solid rgba(11,18,32,0.16);
     }
     #showCurrentBtn:disabled{
-      background: rgba(14,122,75,0.22) !important;
+      background: rgba(12,138,74,0.22) !important;
       color: #0b3f25 !important;
-      border: 1px solid rgba(14,122,75,0.45) !important;
+      border: 1px solid rgba(12,138,74,0.45) !important;
       opacity: 0.95 !important;
       cursor: not-allowed !important;
       transform: none !important;
     }
     #showFinalRatingBtn:disabled{
-      background: rgba(255,210,74,0.28) !important;
-      color: #3a2b00 !important;
-      border: 1px solid rgba(255,210,74,0.55) !important;
+      background: rgba(43,99,184,0.20) !important;
+      color: #183a7a !important;
+      border: 1px solid rgba(43,99,184,0.42) !important;
       opacity: 0.95 !important;
       cursor: not-allowed !important;
       transform: none !important;
     }
 
-    /* ✅ ترتيب أفضل داخل تفاصيل الموظف */
+    /* ✅ final details with clear “embroidery” */
     .finalReviewItem{
-      border:1px solid rgba(11,27,42,0.12);
+      border:1px solid rgba(11,18,32,0.12);
       border-radius:14px;
       padding:10px 12px;
-      background: rgba(11,61,145,0.04);
+      background: rgba(43,99,184,0.04);
       margin-top:10px;
+      position: relative;
+      overflow:hidden;
     }
+    .finalReviewItem::before{
+      content:"";
+      position:absolute; inset:-2px;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(135deg, rgba(12,138,74,0.10) 0 1px, transparent 1px 12px),
+        radial-gradient(circle at 18% 20%, rgba(224,49,49,0.14), transparent 45%),
+        radial-gradient(circle at 85% 30%, rgba(43,99,184,0.20), transparent 55%);
+      opacity:.55;
+    }
+    .finalReviewTop, .finalReviewActions{ position: relative; z-index: 1; }
+
     .finalReviewTop{
       display:flex;
       gap:10px;
       flex-wrap:wrap;
       align-items:center;
       font-weight:900;
-      color: rgba(11,27,42,0.75);
+      color: rgba(11,18,32,0.78);
       font-size:13px;
     }
     .finalReviewActions{
@@ -456,8 +679,8 @@
               </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
-                background: rgba(11,61,145,0.06);
-                border: 1px solid rgba(11,61,145,0.18);
+                background: rgba(43,99,184,0.06);
+                border: 1px solid rgba(43,99,184,0.18);
                 padding: 10px 16px;
                 border-radius: 14px;
                 font-weight: 950;
@@ -599,12 +822,13 @@
     <div style="
       width: min(900px, 94vw);
       background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(11,27,42,0.18);
+      border: 1px solid rgba(11,18,32,0.18);
       border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
       padding: 14px;
       color: var(--text);
+      position: relative;
     ">
       <div class="btnRow" style="justify-content:space-between; margin-bottom: 10px;">
         <div style="font-weight:950;">تفاصيل التقييم</div>
@@ -617,7 +841,7 @@
         max-height: 55vh;
         overflow:auto;
         border-radius: 14px;
-        border: 1px solid rgba(11,27,42,0.14);
+        border: 1px solid rgba(11,18,32,0.14);
         background: rgba(255,255,255,0.55);
       ">
         <div id="reviewDetailsQuestions" style="padding: 12px; display:flex; flex-direction:column; gap:10px;"></div>
@@ -792,10 +1016,10 @@
           const ans = (answers && answers[q.id] != null) ? answers[q.id] : "—";
           return `
             <div style="
-              border:1px solid rgba(11,27,42,0.12);
+              border:1px solid rgba(11,18,32,0.12);
               border-radius:14px;
               padding:10px 12px;
-              background: rgba(11,61,145,0.04);
+              background: rgba(43,99,184,0.04);
             ">
               <div style="font-weight:950; margin-bottom:6px; color: var(--text);">${i+1}) ${escapeHtml(q.text)}</div>
               <div class="ratingTag ${ratingClass(ans)}" style="font-size:13px; display:inline-flex;">
@@ -902,14 +1126,16 @@
 
       questions.forEach((q, index)=>{
         const wrap = document.createElement("div");
-        wrap.style.border="1px solid rgba(11,27,42,0.14)";
+        wrap.style.border="1px solid rgba(11,18,32,0.14)";
         wrap.style.borderRadius="14px";
         wrap.style.padding="10px 12px";
-        wrap.style.background="rgba(11,61,145,0.04)";
+        wrap.style.background="rgba(43,99,184,0.04)";
+        wrap.style.position="relative";
+        wrap.style.overflow="hidden";
 
         wrap.innerHTML = `
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-            <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
+          <div style="font-weight:950; color: var(--text); display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div>#${index+1} - ${escapeHtml(q.text)}</div>
             <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
           </div>
           <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد جدا / جيد / مقبول</div>
@@ -976,7 +1202,7 @@
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(11,27,42,0.55); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(11,18,32,0.55); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
         currentReviewsTbody.appendChild(tr);
         return;
       }
@@ -1018,7 +1244,7 @@
       if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
 
       const htmlReviews = (empObj.reviews || []).map(r => `
-        <div style="border:1px solid #e6e6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
+        <div style="border:1px solid #dfe6ff;border-radius:14px;padding:10px 12px;margin:8px 0;background:#fafaff;">
           <div style="font-weight:900;color:#1d1b4b;font-size:13px;">
             التاريخ: ${escapeHtml(formatDateTime(r.time))} &nbsp; | &nbsp;
             المراجع: ${escapeHtml(r.reviewer)} &nbsp; | &nbsp;
@@ -1050,18 +1276,18 @@
               .title{ font-weight:950; font-size:20px; }
               .sub{ color:rgba(11,27,42,0.65); font-weight:900; margin-top:6px; }
               .box{
-                border:1px solid rgba(139,92,246,0.35);
+                border:1px solid rgba(43,99,184,0.35);
                 border-radius:18px;
                 padding:14px;
-                background:rgba(139,92,246,0.04);
+                background:rgba(43,99,184,0.04);
               }
               .tag{
                 display:inline-block;
                 padding:6px 12px;
                 border-radius:999px;
                 font-weight:950;
-                border:1px solid rgba(139,92,246,0.35);
-                background:rgba(139,92,246,0.10);
+                border:1px solid rgba(43,99,184,0.35);
+                background:rgba(43,99,184,0.10);
               }
               .meta{
                 margin-top:10px;
@@ -1073,7 +1299,7 @@
               @media print{ .noPrint{ display:none !important; } }
               button{
                 cursor:pointer;
-                background:#8b5cf6;
+                background:#2B63B8;
                 color:#fff;
                 border:none;
                 border-radius:14px;
@@ -1176,7 +1402,6 @@
 
         item.reviews.push({
           id: r.id,
-          // مهم: نخزن كامل الكائن تقريباً حتى يشتغل modal بنفس منطق openReviewDetails
           center: r.center,
           createdAt: r.createdAt || "",
           archivedAt: r.archivedAt || "",
@@ -1211,13 +1436,11 @@
         return;
       }
 
-      // نبني HTML
-      const allReviewsCache = new Map(); // key: `${emp}__${reviewId}` -> review object
+      const allReviewsCache = new Map();
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
         const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
-        // نخزن reviews عشان تفاصيل modal
         for(const rev of x.reviews){
           allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
         }
@@ -1242,13 +1465,13 @@
                 </button>
               </span>
 
-              <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900; white-space:nowrap;">
+              <span style="font-size:12px; color: rgba(11,18,32,0.65); font-weight: 900; white-space:nowrap;">
                 ممتاز: ${x.excellent} | جيد جدا: ${x.goodExcellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
 
             <div style="margin-top:12px;">
-              <div style="font-weight:950; color: rgba(11,27,42,0.75); font-size:13px; margin-bottom:8px;">
+              <div style="font-weight:950; color: rgba(11,18,32,0.75); font-size:13px; margin-bottom:8px;">
                 تفاصيل مراجعاته السابقة:
               </div>
 
@@ -1266,7 +1489,7 @@
                       </span>
                     </div>
 
-                    <div style="margin-top:10px; font-size:13px; color: rgba(11,27,42,0.72); font-weight:850; line-height:1.6;">
+                    <div style="margin-top:10px; font-size:13px; color: rgba(11,18,32,0.72); font-weight:850; line-height:1.6;">
                       الملاحظة: ${escapeHtml(rev.comment)}
                     </div>
 
@@ -1288,7 +1511,6 @@
         `;
       }
 
-      // ✅ ربط أزرار تفاصيل المراجعة داخل modal
       finalRatingEmployeesWrap.querySelectorAll("button[data-review-detail]").forEach(btn=>{
         btn.addEventListener("click", (e)=>{
           e.stopPropagation();
@@ -1299,9 +1521,8 @@
         });
       });
 
-      // ✅ ربط طباعة الموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
-        btn.addEventListener('click', (e)=>{
+        btn.addEventListener('click',(e)=>{
           e.stopPropagation();
           const empName = btn.getAttribute('data-print-emp');
           const empObj = rows.find(r => r.emp === empName);
@@ -1309,7 +1530,6 @@
 
           const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
-          // طباعة تحتاج الشكل اللي عندك: reviews فيها time/reviewer/phone/rating/comment
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
