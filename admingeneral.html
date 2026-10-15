@@ -519,6 +519,8 @@
     }
     #empCentersModal.show{ display:flex; }
 
+    .modalBox{ color: var(--text); }
+
     .centerRow{
       border:1px solid rgba(11,27,42,0.12);
       border-radius:14px;
@@ -550,7 +552,6 @@
 
 <body>
 
-  <!-- ================== شاشة الدخول ================== -->
   <div class="wrap" id="loginView">
     <div class="loginCard">
       <div class="loginInner">
@@ -565,7 +566,6 @@
     </div>
   </div>
 
-  <!-- ================== شاشة التفاصيل ================== -->
   <div class="detailsPage" id="detailsView">
     <div class="topBar">
       <div></div>
@@ -631,7 +631,6 @@
     </div>
   </div>
 
-  <!-- =================== مودل تفاصيل التقييم =================== -->
   <div id="reviewDetailsModal">
     <div class="modalBox">
       <div class="modalTop">
@@ -647,7 +646,6 @@
     </div>
   </div>
 
-  <!-- =================== مودل مراكز الموظف (ممتاز) =================== -->
   <div id="empCentersModal">
     <div class="modalBox" style="width:min(720px,94vw);">
       <div class="modalTop">
@@ -708,7 +706,6 @@
       showLogin();
     }
 
-    // ================== كود المدير ==================
     function initAdminDetails(){
       const CENTERS = [
         "مركز القصر",
@@ -737,7 +734,6 @@
       const chartsWrap = document.getElementById("chartsWrap");
       const cardBody = document.querySelector("#detailsView .cardBody");
 
-      // ✅ مودل تفاصيل التقييم
       const reviewDetailsModal = document.getElementById("reviewDetailsModal");
       const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
       const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
@@ -753,7 +749,6 @@
         }
       });
 
-      // ✅ مودل مراكز الموظف (ممتاز) - جديد
       const empCentersModal = document.getElementById("empCentersModal");
       const closeEmpCentersModalBtn = document.getElementById("closeEmpCentersModalBtn");
       const empCentersModalTitle = document.getElementById("empCentersModalTitle");
@@ -768,8 +763,8 @@
         if(e.target === empCentersModal) empCentersModal.classList.remove("show");
       });
 
-      let currentQuestionsCache = []; // نستخدمها للعرض داخل المودل
-      const reviewById = new Map();     // id -> review كاملة
+      let currentQuestionsCache = [];
+      const reviewById = new Map();
 
       const originalChartsPosition = function(){
         if(!cardBody || !chartsWrap || !finalRatingEmployeesWrap) return;
@@ -825,7 +820,7 @@
         });
       }
 
-      // ✅ 4 فئات - متطابقة مع ادمن الشامية
+      // 4 فئات - متطابقة مع ادمن الشامية
       function pointsForRating(r){
         if(r === "ممتاز") return 1;
         if(r === "جيد جدا") return 2;
@@ -853,8 +848,8 @@
         }
         if(count === 0) return "—";
 
-        const minSum = count * 1; // ممتاز
-        const maxSum = count * 4; // مقبول
+        const minSum = count * 1;   // ممتاز
+        const maxSum = count * 4;   // مقبول
         const t = (sum - minSum) / (maxSum - minSum || 1);
 
         if(t <= 0.20) return "ممتاز";
@@ -909,6 +904,7 @@
           }
 
           let excellentEmployees = 0, goodExcellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
+
           let sumPoints = 0, countFinalEmployees = 0;
 
           for(const [, data] of empMap.entries()){
@@ -994,6 +990,16 @@
           };
         });
 
+        // ✅ تعديل الألوان المطلوبة فقط لـ:
+        // - مقبول: أحمر فاتح مطفي
+        // - جيد: أصفر فاتح مطفي
+        // وباقي الدرجات (جيد جدا / ممتاز) بدون تغيير
+        const GOOD_COLOR_BG = "rgba(255, 214, 102, 0.28)";   // أصفر فاتح مطفي
+        const GOOD_COLOR_BORDER = "rgba(180, 120, 0, 0.70)";
+
+        const ACCEPTABLE_COLOR_BG = "rgba(255, 120, 120, 0.24)"; // أحمر فاتح مطفي
+        const ACCEPTABLE_COLOR_BORDER = "rgba(200, 60, 60, 0.75)";
+
         charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
           type: "bar",
           data: {
@@ -1010,7 +1016,7 @@
               {
                 label: "جيد جدا",
                 data: allCentersAll.map(x => x.goodExcellentEmployees),
-                backgroundColor: "rgba(11,61,145,0.30)",
+                backgroundColor: "rgba(11,61,145,0.30)",   // نفس لونك السابق (لا تغيير)
                 borderColor:"rgba(11,61,145,0.95)",
                 borderWidth:1,
                 stack:"s1"
@@ -1018,16 +1024,16 @@
               {
                 label: "جيد",
                 data: allCentersAll.map(x => x.goodEmployees),
-                backgroundColor: "rgba(11,61,145,0.18)",
-                borderColor:"rgba(11,61,145,0.65)",
+                backgroundColor: GOOD_COLOR_BG,          // ✅ أصفر فاتح مطفي
+                borderColor: GOOD_COLOR_BORDER,
                 borderWidth:1,
                 stack:"s1"
               },
               {
                 label: "مقبول",
                 data: allCentersAll.map(x => x.acceptableEmployees),
-                backgroundColor: "rgba(255,210,74,0.35)",
-                borderColor:"rgba(180,130,0,0.95)",
+                backgroundColor: ACCEPTABLE_COLOR_BG,    // ✅ أحمر فاتح مطفي
+                borderColor: ACCEPTABLE_COLOR_BORDER,
                 borderWidth:1,
                 stack:"s1"
               }
@@ -1043,7 +1049,6 @@
 
         const allAll = [...currentReviews, ...archiveReviews];
 
-        // ✅ Map: emp -> { center -> countExcellent } (ممتاز فقط كما هو)
         const empToCenterExcellentCounts = new Map();
 
         for(const r of allAll){
@@ -1063,7 +1068,6 @@
           centerMap.set(center, (centerMap.get(center) || 0) + 1);
         }
 
-        // ✅ أعلى موظفين ممتاز (على مستوى كل المراكز)
         const empMap = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1103,7 +1107,6 @@
           }
         });
 
-        // ✅ فتح مودل المراكز عند الضغط على أي بار (اسم موظف)
         const chartTop = charts.topExcellentEmployeesChart;
 
         chartTop.canvas.addEventListener("click", (evt) => {
@@ -1316,7 +1319,7 @@
           return;
         }
 
-        const map = new Map(); // emp => {counts, reviews:[]}
+        const map = new Map();
 
         for(const r of all){
           if(r && r.id != null) reviewById.set(String(r.id), r);
