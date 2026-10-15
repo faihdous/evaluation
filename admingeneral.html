@@ -112,7 +112,6 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: translateY(0px); }
 
-    /* ================== شاشة التفاصيل ================== */
     .detailsPage{ display:none; }
 
     .topBar{
@@ -254,7 +253,7 @@
       width:100%;
     }
 
-    /* ================== ✅ ألوان التقييم (تم التعديل) ================== */
+    /* ================== ألوان التقييم ================== */
     .ratingTag{
       display:inline-flex;
       padding:6px 10px;
@@ -266,30 +265,11 @@
       white-space:nowrap;
     }
 
-    /* ممتاز (أخضر فاتح مطفي) */
-    .ratingTag.excellent{
-      border-color: rgba(14,122,75,0.55);
-      background: rgba(14,122,75,0.08);
-    }
-
-    /* جيد (أصفر فاتح مطفي) */
-    .ratingTag.good{
-      border-color: rgba(255,210,74,0.85);
-      background: rgba(255,210,74,0.16);
-    }
-
-    /* جيد جدا (أزرق فاتح مطفي) */
-    .ratingTag.good2{
-      border-color: rgba(11,61,145,0.55);
-      background: rgba(11,61,145,0.10);
-    }
-
-    /* مقبول (أحمر فاتح مطفي) */
-    .ratingTag.acceptable{
-      border-color: rgba(255,120,120,0.55);
-      background: rgba(255,120,120,0.16);
-    }
-    /* ================================================================= */
+    .ratingTag.excellent{ border-color: rgba(14,122,75,0.55); background: rgba(14,122,75,0.08); }
+    .ratingTag.good{ border-color: rgba(255,210,74,0.85); background: rgba(255,210,74,0.16); }
+    .ratingTag.good2{ border-color: rgba(11,61,145,0.55); background: rgba(11,61,145,0.10); }
+    .ratingTag.acceptable{ border-color: rgba(255,120,120,0.55); background: rgba(255,120,120,0.16); }
+    /* ================================================= */
 
     details.finalEmployeeDetails{
       border:1px solid rgba(11,27,42,0.12);
@@ -387,10 +367,7 @@
       font-size:13px;
     }
 
-    .chartsWrap{
-      display:block;
-      margin-top:14px;
-    }
+    .chartsWrap{ display:block; margin-top:14px; }
 
     .chartsGrid{
       display:grid;
@@ -643,7 +620,6 @@
                 </div>
               </div>
 
-              <!-- ✅ الرسم البياني الرابع (مضاف) -->
               <div class="chartCard">
                 <div class="chartCardHead">الموظفون متدني المستوى (مقبول + جيد) — اضغط للاطلاع على المراكز</div>
                 <div class="chartCardBody">
@@ -851,7 +827,7 @@
         });
       }
 
-      // 4 فئات - متطابقة مع ادمن الشامية
+      // 4 فئات
       function pointsForRating(r){
         if(r === "ممتاز") return 1;
         if(r === "جيد جدا") return 2;
@@ -860,12 +836,11 @@
         return null;
       }
 
-      // ✅ تعديل: "جيد جدا" لازم يطلع good2
       function ratingClass(r){
         if(r === "ممتاز") return "excellent";
         if(r === "جيد جدا") return "good2";
         if(r === "جيد") return "good";
-        return "acceptable"; // مقبول
+        return "acceptable";
       }
 
       function finalRatingFromAnswers(qs, answers){
@@ -880,8 +855,8 @@
         }
         if(count === 0) return "—";
 
-        const minSum = count * 1;   // ممتاز
-        const maxSum = count * 4;   // مقبول
+        const minSum = count * 1;
+        const maxSum = count * 4;
         const t = (sum - minSum) / (maxSum - minSum || 1);
 
         if(t <= 0.20) return "ممتاز";
@@ -990,6 +965,20 @@
 
         const topBest = sortedByExcellent.slice(0, Math.min(7, sortedByExcellent.length));
 
+        // ألوان مطابقـة لشارات التقييم
+        const EXCELLENT_BG = "rgba(14,122,75,0.35)";
+        const EXCELLENT_BORDER = "rgba(14,122,75,0.95)";
+
+        const GOOD2_BG = "rgba(11,61,145,0.30)";
+        const GOOD2_BORDER = "rgba(11,61,145,0.95)";
+
+        const GOOD_BG = "rgba(255,210,74,0.28)";
+        const GOOD_BORDER = "rgba(180,120,0,0.75)";
+
+        const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
+        const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
+
+        // 1) أفضل المراكز (ممتاز)
         charts.bestCentersChart = new Chart(document.getElementById("bestCentersChart"), {
           type: "bar",
           data: {
@@ -997,8 +986,8 @@
             datasets: [{
               label: "عدد الموظفين (ممتاز)",
               data: topBest.map(x => x.excellentEmployees),
-              backgroundColor: "rgba(14,122,75,0.35)",
-              borderColor: "rgba(14,122,75,0.95)",
+              backgroundColor: EXCELLENT_BG,
+              borderColor: EXCELLENT_BORDER,
               borderWidth: 1
             }]
           },
@@ -1021,12 +1010,7 @@
           };
         });
 
-        const GOOD_COLOR_BG = "rgba(255, 214, 102, 0.28)";
-        const GOOD_COLOR_BORDER = "rgba(180, 120, 0, 0.70)";
-
-        const ACCEPTABLE_COLOR_BG = "rgba(255, 120, 120, 0.24)";
-        const ACCEPTABLE_COLOR_BORDER = "rgba(200, 60, 60, 0.75)";
-
+        // 2) حسب الفئات (4 فئات) - مطابقة الألوان
         charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
           type: "bar",
           data: {
@@ -1035,32 +1019,32 @@
               {
                 label: "ممتاز",
                 data: allCentersAll.map(x => x.excellentEmployees),
-                backgroundColor: "rgba(14,122,75,0.35)",
-                borderColor:"rgba(14,122,75,0.95)",
+                backgroundColor: EXCELLENT_BG,
+                borderColor: EXCELLENT_BORDER,
                 borderWidth:1,
                 stack:"s1"
               },
               {
                 label: "جيد جدا",
                 data: allCentersAll.map(x => x.goodExcellentEmployees),
-                backgroundColor: "rgba(11,61,145,0.30)",
-                borderColor:"rgba(11,61,145,0.95)",
+                backgroundColor: GOOD2_BG,
+                borderColor: GOOD2_BORDER,
                 borderWidth:1,
                 stack:"s1"
               },
               {
                 label: "جيد",
                 data: allCentersAll.map(x => x.goodEmployees),
-                backgroundColor: GOOD_COLOR_BG,
-                borderColor: GOOD_COLOR_BORDER,
+                backgroundColor: GOOD_BG,
+                borderColor: GOOD_BORDER,
                 borderWidth:1,
                 stack:"s1"
               },
               {
                 label: "مقبول",
                 data: allCentersAll.map(x => x.acceptableEmployees),
-                backgroundColor: ACCEPTABLE_COLOR_BG,
-                borderColor: ACCEPTABLE_COLOR_BORDER,
+                backgroundColor: ACCEPTABLE_BG,
+                borderColor: ACCEPTABLE_BORDER,
                 borderWidth:1,
                 stack:"s1"
               }
@@ -1076,7 +1060,7 @@
 
         const allAll = [...currentReviews, ...archiveReviews];
 
-        // ✅ top excellent chart (ممتاز فقط)
+        // 3) الموظفون الحاصلون على ممتاز (تركته بنفس البنفسجي اللي عندك لأنه مو فئة 4، لكن إذا تبغاه أخضر مطابقة تمامًا قلّي)
         const empToCenterExcellentCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1143,7 +1127,6 @@
             { intersect: true },
             true
           );
-
           if(!points || points.length === 0) return;
 
           const idx = points[0].index;
@@ -1175,9 +1158,7 @@
           empCentersModal.classList.add("show");
         });
 
-        // ==========================================================
-        // ✅ الرسم البياني الرابع: الموظفون متدني المستوى (مقبول + جيد)
-        // ==========================================================
+        // 4) متدني المستوى: مقبول + جيد (هنا نطابقها: مقبول=أحمر، جيد=أصفر)
         const empToCenterCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1216,6 +1197,7 @@
             if(!m.has(center)) m.set(center, 1);
 
             lowEmpTotal.set(emp, (lowEmpTotal.get(emp) || 0) + (m.get(center) === 1 ? 0 : 0));
+
             const prev = empWorstLowLabel.get(emp);
             if(final === "مقبول"){
               empWorstLowLabel.set(emp, "مقبول");
@@ -1239,8 +1221,8 @@
         });
 
         const lowTop = lowEmployeesArr.slice(0, 12);
-
         const canvasLow = document.getElementById("lowLevelEmployeesChart");
+
         if(canvasLow){
           if(charts.lowLevelEmployeesChart){
             try{ charts.lowLevelEmployeesChart.destroy(); }catch(e){}
@@ -1254,10 +1236,13 @@
             const labels = lowTop.map(x => x.emp);
             const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
 
-            const colors = lowTop.map(x => x.worst === "مقبول"
-              ? "rgba(255, 120, 120, 0.45)"
-              : "rgba(255, 214, 102, 0.50)"
-            );
+            // ✅ مطابقة الألوان: مقبول أحمر + جيد أصفر
+            const COLORS = {
+              acceptable: "rgba(255, 120, 120, 0.45)",
+              good: "rgba(255, 210, 74, 0.50)"
+            };
+
+            const colors = lowTop.map(x => x.worst === "مقبول" ? COLORS.acceptable : COLORS.good);
 
             charts.lowLevelEmployeesChart = new Chart(canvasLow, {
               type: "bar",
@@ -1660,7 +1645,6 @@
           btn.addEventListener("click",(e)=>{
             e.stopPropagation();
             const empName = btn.getAttribute('data-print-emp');
-
             const empObj = rows.find(r => r.emp === empName);
             if(!empObj) return;
 
