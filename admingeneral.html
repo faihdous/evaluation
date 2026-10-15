@@ -112,6 +112,7 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: translateY(0px); }
 
+    /* ================== شاشة التفاصيل ================== */
     .detailsPage{ display:none; }
 
     .topBar{
@@ -253,7 +254,6 @@
       width:100%;
     }
 
-    /* ================== ألوان التقييم ================== */
     .ratingTag{
       display:inline-flex;
       padding:6px 10px;
@@ -264,12 +264,10 @@
       background: rgba(11,27,42,0.05);
       white-space:nowrap;
     }
-
     .ratingTag.excellent{ border-color: rgba(14,122,75,0.55); background: rgba(14,122,75,0.08); }
     .ratingTag.good{ border-color: rgba(255,210,74,0.85); background: rgba(255,210,74,0.16); }
     .ratingTag.good2{ border-color: rgba(11,61,145,0.55); background: rgba(11,61,145,0.10); }
     .ratingTag.acceptable{ border-color: rgba(255,120,120,0.55); background: rgba(255,120,120,0.16); }
-    /* ================================================= */
 
     details.finalEmployeeDetails{
       border:1px solid rgba(11,27,42,0.12);
@@ -367,7 +365,10 @@
       font-size:13px;
     }
 
-    .chartsWrap{ display:block; margin-top:14px; }
+    .chartsWrap{
+      display:block;
+      margin-top:14px;
+    }
 
     .chartsGrid{
       display:grid;
@@ -855,8 +856,8 @@
         }
         if(count === 0) return "—";
 
-        const minSum = count * 1;
-        const maxSum = count * 4;
+        const minSum = count * 1;   // ممتاز
+        const maxSum = count * 4;   // مقبول
         const t = (sum - minSum) / (maxSum - minSum || 1);
 
         if(t <= 0.20) return "ممتاز";
@@ -956,7 +957,9 @@
         if(!chartsWrapEl) return;
         if(!Array.isArray(qs) || qs.length === 0) return;
 
+        // تأكد: تدمير ثم إعادة بناء (حتى Refresh ما يخرب)
         destroyCharts();
+
         const centerSummaries = buildCenterSummaries(currentReviews, archiveReviews, qs);
 
         const sortedByExcellent = centerSummaries
@@ -965,7 +968,7 @@
 
         const topBest = sortedByExcellent.slice(0, Math.min(7, sortedByExcellent.length));
 
-        // ألوان مطابقـة لشارات التقييم
+        // ✅ ألوان مطابقة لشارات التقييم
         const EXCELLENT_BG = "rgba(14,122,75,0.35)";
         const EXCELLENT_BORDER = "rgba(14,122,75,0.95)";
 
@@ -978,7 +981,7 @@
         const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
         const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
 
-        // 1) أفضل المراكز (ممتاز)
+        // ========= الرسم 1: أفضل المراكز (ممتاز) =========
         charts.bestCentersChart = new Chart(document.getElementById("bestCentersChart"), {
           type: "bar",
           data: {
@@ -999,6 +1002,7 @@
           }
         });
 
+        // ========= الرسم 2: 4 فئات داخل كل مركز =========
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
           return found || {
@@ -1010,7 +1014,6 @@
           };
         });
 
-        // 2) حسب الفئات (4 فئات) - مطابقة الألوان
         charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
           type: "bar",
           data: {
@@ -1021,7 +1024,7 @@
                 data: allCentersAll.map(x => x.excellentEmployees),
                 backgroundColor: EXCELLENT_BG,
                 borderColor: EXCELLENT_BORDER,
-                borderWidth:1,
+                borderWidth: 1,
                 stack:"s1"
               },
               {
@@ -1029,7 +1032,7 @@
                 data: allCentersAll.map(x => x.goodExcellentEmployees),
                 backgroundColor: GOOD2_BG,
                 borderColor: GOOD2_BORDER,
-                borderWidth:1,
+                borderWidth: 1,
                 stack:"s1"
               },
               {
@@ -1037,7 +1040,7 @@
                 data: allCentersAll.map(x => x.goodEmployees),
                 backgroundColor: GOOD_BG,
                 borderColor: GOOD_BORDER,
-                borderWidth:1,
+                borderWidth: 1,
                 stack:"s1"
               },
               {
@@ -1045,7 +1048,7 @@
                 data: allCentersAll.map(x => x.acceptableEmployees),
                 backgroundColor: ACCEPTABLE_BG,
                 borderColor: ACCEPTABLE_BORDER,
-                borderWidth:1,
+                borderWidth: 1,
                 stack:"s1"
               }
             ]
@@ -1060,7 +1063,7 @@
 
         const allAll = [...currentReviews, ...archiveReviews];
 
-        // 3) الموظفون الحاصلون على ممتاز (تركته بنفس البنفسجي اللي عندك لأنه مو فئة 4، لكن إذا تبغاه أخضر مطابقة تمامًا قلّي)
+        // ========= الرسم 3 (ممتاز فقط) =========
         const empToCenterExcellentCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1097,6 +1100,7 @@
           .sort((a,b)=> b.excellent - a.excellent)
           .slice(0, 10);
 
+        // أخضر (مطابق ممتاز)
         charts.topExcellentEmployeesChart = new Chart(document.getElementById("topExcellentEmployeesChart"), {
           type: "bar",
           data: {
@@ -1104,8 +1108,8 @@
             datasets: [{
               label: "عدد مرات (ممتاز) — من مراجعات",
               data: topEmp.map(x => x.excellent),
-              backgroundColor: "rgba(139,92,246,0.28)",
-              borderColor: "rgba(139,92,246,0.95)",
+              backgroundColor: EXCELLENT_BG,
+              borderColor: EXCELLENT_BORDER,
               borderWidth: 1
             }]
           },
@@ -1119,7 +1123,6 @@
         });
 
         const chartTop = charts.topExcellentEmployeesChart;
-
         chartTop.canvas.addEventListener("click", (evt) => {
           const points = chartTop.getElementsAtEventForMode(
             evt,
@@ -1158,7 +1161,7 @@
           empCentersModal.classList.add("show");
         });
 
-        // 4) متدني المستوى: مقبول + جيد (هنا نطابقها: مقبول=أحمر، جيد=أصفر)
+        // ========= الرسم 4: متدني المستوى (مقبول + جيد) =========
         const empToCenterCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1183,7 +1186,6 @@
         }
 
         const lowLevelEmpToCenterFinalMap = new Map();
-        const lowEmpTotal = new Map();
         const empWorstLowLabel = new Map();
 
         for(const [emp, centerMap] of empToCenterCounts.entries()){
@@ -1196,13 +1198,10 @@
 
             if(!m.has(center)) m.set(center, 1);
 
-            lowEmpTotal.set(emp, (lowEmpTotal.get(emp) || 0) + (m.get(center) === 1 ? 0 : 0));
-
-            const prev = empWorstLowLabel.get(emp);
             if(final === "مقبول"){
               empWorstLowLabel.set(emp, "مقبول");
             }else{
-              if(!prev) empWorstLowLabel.set(emp, "جيد");
+              if(!empWorstLowLabel.has(emp)) empWorstLowLabel.set(emp, "جيد");
             }
           }
         }
@@ -1236,13 +1235,10 @@
             const labels = lowTop.map(x => x.emp);
             const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
 
-            // ✅ مطابقة الألوان: مقبول أحمر + جيد أصفر
-            const COLORS = {
-              acceptable: "rgba(255, 120, 120, 0.45)",
-              good: "rgba(255, 210, 74, 0.50)"
-            };
-
-            const colors = lowTop.map(x => x.worst === "مقبول" ? COLORS.acceptable : COLORS.good);
+            const colors = lowTop.map(x => x.worst === "مقبول"
+              ? "rgba(255, 120, 120, 0.45)"   // مقبول
+              : "rgba(255, 210, 74, 0.50)"    // جيد
+            );
 
             charts.lowLevelEmployeesChart = new Chart(canvasLow, {
               type: "bar",
@@ -1309,8 +1305,7 @@
                 empCentersModalMeta.textContent = "لا توجد مراكز لهذا الموظف (مقبول/جيد) حسب البيانات الحالية.";
                 empCentersModalList.innerHTML = "";
               }else{
-                const total = centersArr.length;
-                empCentersModalMeta.textContent = `عدد المراكز التي ظهر فيها (مقبول/جيد): ${total}`;
+                empCentersModalMeta.textContent = `عدد المراكز التي ظهر فيها (مقبول/جيد): ${centersArr.length}`;
                 empCentersModalList.innerHTML = centersArr.map(x => `
                   <div class="centerRow">
                     <div class="centerName">${escapeHtml(x.center)}</div>
@@ -1644,7 +1639,8 @@
         finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
           btn.addEventListener("click",(e)=>{
             e.stopPropagation();
-            const empName = btn.getAttribute('data-print-emp');
+            const empName = btn.getAttribute("data-print-emp");
+
             const empObj = rows.find(r => r.emp === empName);
             if(!empObj) return;
 
