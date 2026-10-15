@@ -34,12 +34,71 @@
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
       color: var(--text);
+
+      /* خلفية هادية */
       background:
-        radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
-        radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
-        linear-gradient(180deg, #f3f6ff, #eef3ff);
+        radial-gradient(1000px 520px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(14,122,75,0.16), transparent 60%),
+        linear-gradient(180deg, #f4f8ff, #eef3ff);
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ======= معالم الكويت خلفية ثابتة (بدون علم وبدون أنيميشن) ======= */
+    .kuwait-landmarks-bg{
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.65;
+
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700' viewBox='0 0 1200 700'>\
+          <defs>\
+            <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+              <stop offset='0' stop-color='%230b3d91' stop-opacity='0.35'/>\
+              <stop offset='1' stop-color='%230e7a4b' stop-opacity='0.25'/>\
+            </linearGradient>\
+            <style>\
+              .s{fill:none;stroke:%230b3d91;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0.55;}\
+              .s2{fill:none;stroke:%23ffd24a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0.35;}\
+              .s3{fill:none;stroke:%230e7a4b;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0.35;}\
+            </style>\
+          </defs>\
+          <!-- خط ساحل مبسّط رمزي -->\
+          <path class='s' d='M70 520 C160 470, 250 430, 330 440 C420 450, 520 520, 610 520 C710 520, 820 440, 930 440 C1020 440, 1100 470, 1130 500'/>\
+          <!-- معلم (قوس/برج رمزي) -->\
+          <g transform='translate(170,130)'>\
+            <path class='s' d='M55 380 L55 240 L15 220 L55 190 L55 120 L85 120 L85 190 L125 220 L85 240 L85 380'/>\
+            <path class='s2' d='M35 300 Q55 280 75 300 Q95 320 115 300'/>\
+            <path class='s3' d='M70 250 Q90 260 105 245'/>\
+          </g>\
+          <!-- مسجد/قبة رمزية -->\
+          <g transform='translate(520,160)'>\
+            <path class='s' d='M65 320 L65 220'/>\
+            <path class='s' d='M30 320 Q65 250 100 320'/>\
+            <path class='s' d='M65 150 Q115 190 125 230 Q65 215 5 230 Q15 190 65 150'/>\
+            <path class='s2' d='M35 250 Q65 235 95 250'/>\
+          </g>\
+          <!-- ميناء/قارب رمزي -->\
+          <g transform='translate(860,360)'>\
+            <path class='s' d='M30 0 L120 0 L170 30 L-20 30 Z'/>\
+            <path class='s' d='M55 -5 L55 85'/>\
+            <path class='s' d='M55 -5 Q75 15 95 40 Q115 65 150 95'/>\
+            <path class='s2' d='M25 35 Q60 45 95 35 Q130 25 155 35'/>\
+          </g>\
+          <!-- نقاط كأبراج/أحياء رمزية -->\
+          <circle cx='320' cy='240' r='8' fill='%230b3d91' fill-opacity='0.35'/>\
+          <circle cx='360' cy='300' r='6' fill='%230e7a4b' fill-opacity='0.30'/>\
+          <circle cx='730' cy='280' r='7' fill='%23ffd24a' fill-opacity='0.30'/>\
+          <circle cx='780' cy='340' r='5' fill='%230b3d91' fill-opacity='0.28'/>\
+          <circle cx='1060' cy='240' r='7' fill='%230e7a4b' fill-opacity='0.28'/>\
+          <!-- خطوط خفيفة إضافية (إحساس “خريطة”) -->\
+          <path class='s3' d='M90 420 C180 360, 280 360, 360 400 C450 445, 520 410, 590 380 C670 345, 760 340, 850 380 C950 430, 1040 420, 1110 390'/>\
+        </svg>");
+      background-repeat: repeat;
+      background-size: 1200px 700px;
     }
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
@@ -432,6 +491,9 @@
 </head>
 
 <body>
+  <!-- طبقة المعالم -->
+  <div class="kuwait-landmarks-bg" aria-hidden="true"></div>
+
   <div class="container">
     <header>
       <div class="brandPill">
@@ -1156,7 +1218,6 @@
 
       const map = new Map();
 
-      // نجمع عدد التقييم + نخزن questionAnswers داخل كل مراجعة
       for(const r of all){
         const emp = String(r.employeeName || "").trim();
         if(!emp) continue;
@@ -1176,7 +1237,6 @@
 
         item.reviews.push({
           id: r.id,
-          // مهم: نخزن كامل الكائن تقريباً حتى يشتغل modal بنفس منطق openReviewDetails
           center: r.center,
           createdAt: r.createdAt || "",
           archivedAt: r.archivedAt || "",
@@ -1211,13 +1271,11 @@
         return;
       }
 
-      // نبني HTML
-      const allReviewsCache = new Map(); // key: `${emp}__${reviewId}` -> review object
+      const allReviewsCache = new Map();
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
         const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
-        // نخزن reviews عشان تفاصيل modal
         for(const rev of x.reviews){
           allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
         }
@@ -1288,7 +1346,6 @@
         `;
       }
 
-      // ✅ ربط أزرار تفاصيل المراجعة داخل modal
       finalRatingEmployeesWrap.querySelectorAll("button[data-review-detail]").forEach(btn=>{
         btn.addEventListener("click", (e)=>{
           e.stopPropagation();
@@ -1299,9 +1356,8 @@
         });
       });
 
-      // ✅ ربط طباعة الموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
-        btn.addEventListener('click', (e)=>{
+        btn.addEventListener("click",(e)=>{
           e.stopPropagation();
           const empName = btn.getAttribute('data-print-emp');
           const empObj = rows.find(r => r.emp === empName);
@@ -1309,7 +1365,6 @@
 
           const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
-          // طباعة تحتاج الشكل اللي عندك: reviews فيها time/reviewer/phone/rating/comment
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
