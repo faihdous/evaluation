@@ -296,8 +296,7 @@
       text-align:center;
     }
 
-    /* ===================== */
-    /* ✅ ألوان التقييم (مع تمييز جيد جدا) */
+    /* ✅ ألوان التقييم */
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
@@ -305,31 +304,22 @@
       background: rgba(11,27,42,0.05); white-space:nowrap;
       color: var(--text);
     }
-
-    /* ممتاز (لا تغيير حسب طلبك) */
     .ratingTag.excellent{ 
       border-color: rgba(14,122,75,0.55); 
       background: rgba(14,122,75,0.08); 
     }
-
-    /* جيد (أصفر فاتح مطفي) */
     .ratingTag.good{ 
       border-color: rgba(255,210,74,0.85);
       background: rgba(255,210,74,0.16); 
     }
-
-    /* جيد جدا (أزرق فاتح مطفي) */
     .ratingTag.good2{ 
       border-color: rgba(11,61,145,0.55);
       background: rgba(11,61,145,0.10); 
     }
-
-    /* مقبول (أحمر فاتح مطفي) */
     .ratingTag.acceptable{ 
       border-color: rgba(255,120,120,0.55);
       background: rgba(255,120,120,0.16); 
     }
-    /* ===================== */
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
@@ -391,13 +381,11 @@
       color: var(--text);
       border: 1px solid rgba(11,27,42,0.16);
     }
-
     #showFinalRatingBtn{
       background: rgba(11,27,42,0.06);
       color: var(--text);
       border: 1px solid rgba(11,27,42,0.16);
     }
-
     #showCurrentBtn:disabled{
       background: rgba(14,122,75,0.22) !important;
       color: #0b3f25 !important;
@@ -406,7 +394,6 @@
       cursor: not-allowed !important;
       transform: none !important;
     }
-
     #showFinalRatingBtn:disabled{
       background: rgba(255,210,74,0.28) !important;
       color: #3a2b00 !important;
@@ -414,6 +401,32 @@
       opacity: 0.95 !important;
       cursor: not-allowed !important;
       transform: none !important;
+    }
+
+    /* ✅ ترتيب أفضل داخل تفاصيل الموظف */
+    .finalReviewItem{
+      border:1px solid rgba(11,27,42,0.12);
+      border-radius:14px;
+      padding:10px 12px;
+      background: rgba(11,61,145,0.04);
+      margin-top:10px;
+    }
+    .finalReviewTop{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-weight:900;
+      color: rgba(11,27,42,0.75);
+      font-size:13px;
+    }
+    .finalReviewActions{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start;
     }
   </style>
 </head>
@@ -637,7 +650,7 @@
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
 
-    // ✅ تعديل: تمييز "جيد جدا" عن "جيد"
+    // ✅ تمييز "جيد جدا" عن "جيد"
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
       if(r === "جيد جدا") return "good2";
@@ -1114,7 +1127,7 @@
       w.document.close();
     }
 
-    // === Final rating (Current only) ===
+    // ✅ === Final rating (Current only) مع تفاصيل كل مراجعة ===
     function renderFinalRatingForEmployees(center){
       currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -1143,6 +1156,7 @@
 
       const map = new Map();
 
+      // نجمع عدد التقييم + نخزن questionAnswers داخل كل مراجعة
       for(const r of all){
         const emp = String(r.employeeName || "").trim();
         if(!emp) continue;
@@ -1162,6 +1176,15 @@
 
         item.reviews.push({
           id: r.id,
+          // مهم: نخزن كامل الكائن تقريباً حتى يشتغل modal بنفس منطق openReviewDetails
+          center: r.center,
+          createdAt: r.createdAt || "",
+          archivedAt: r.archivedAt || "",
+          employeeName: r.employeeName || emp,
+          reviewerName: r.reviewerName || "",
+          reviewerPhone: r.reviewerPhone || "",
+          questionAnswers: r.questionAnswers || {},
+
           time: r.createdAt || "",
           reviewer: r.reviewerName || "",
           phone: r.reviewerPhone || "",
@@ -1188,9 +1211,16 @@
         return;
       }
 
+      // نبني HTML
+      const allReviewsCache = new Map(); // key: `${emp}__${reviewId}` -> review object
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
         const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
+
+        // نخزن reviews عشان تفاصيل modal
+        for(const rev of x.reviews){
+          allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
+        }
 
         finalRatingEmployeesWrap.innerHTML += `
           <details class="finalEmployeeDetails">
@@ -1217,35 +1247,59 @@
               </span>
             </summary>
 
-            <div class="finalEmployeeMeta">
-              <div style="font-weight:950; color: rgba(11,27,42,0.75); font-size:13px;">
-                تفاصيل تقييماته السابقة:
+            <div style="margin-top:12px;">
+              <div style="font-weight:950; color: rgba(11,27,42,0.75); font-size:13px; margin-bottom:8px;">
+                تفاصيل مراجعاته السابقة:
               </div>
 
-              <div class="finalReviewsList">
-                ${x.reviews.map(r=>{
-                  return `
-                    <div class="finalReviewItem">
-                      <div class="metaLine">
-                        <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
-                        <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
-                        <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
-                        <span style="margin-inline-start:auto;">
-                          التقييم: <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
-                        </span>
-                      </div>
-                      <div style="font-size:13px; color: rgba(11,27,42,0.72); font-weight:850; line-height:1.6;">
-                        الملاحظة: ${escapeHtml(r.comment)}
-                      </div>
+              ${x.reviews.map(rev=>{
+                const detailKey = `${x.emp}__${rev.id}`;
+                return `
+                  <div class="finalReviewItem">
+                    <div class="finalReviewTop">
+                      <span>التاريخ: <b>${escapeHtml(formatDateTime(rev.time))}</b></span>
+                      <span>المراجع: <b>${escapeHtml(rev.reviewer)}</b></span>
+                      <span>الهاتف: <b>${escapeHtml(rev.phone)}</b></span>
+                      <span style="margin-inline-start:auto;">
+                        التقييم:
+                        <span class="ratingTag ${ratingClass(rev.rating)}">${escapeHtml(rev.rating)}</span>
+                      </span>
                     </div>
-                  `;
-                }).join("")}
-              </div>
+
+                    <div style="margin-top:10px; font-size:13px; color: rgba(11,27,42,0.72); font-weight:850; line-height:1.6;">
+                      الملاحظة: ${escapeHtml(rev.comment)}
+                    </div>
+
+                    <div class="finalReviewActions">
+                      <button
+                        class="smallBtn"
+                        type="button"
+                        data-review-detail="${escapeHtml(detailKey)}"
+                        title="عرض تفاصيل هذه المراجعة بالكامل"
+                      >
+                        تفاصيل المراجعة
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
             </div>
           </details>
         `;
       }
 
+      // ✅ ربط أزرار تفاصيل المراجعة داخل modal
+      finalRatingEmployeesWrap.querySelectorAll("button[data-review-detail]").forEach(btn=>{
+        btn.addEventListener("click", (e)=>{
+          e.stopPropagation();
+          const key = btn.getAttribute("data-review-detail");
+          const review = allReviewsCache.get(key);
+          if(review) openReviewDetails(review);
+          else showToast("❌ لا توجد بيانات للتفاصيل.");
+        });
+      });
+
+      // ✅ ربط طباعة الموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
           e.stopPropagation();
@@ -1255,6 +1309,7 @@
 
           const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
+          // طباعة تحتاج الشكل اللي عندك: reviews فيها time/reviewer/phone/rating/comment
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
@@ -1263,7 +1318,13 @@
             good: empObj.good,
             acceptable: empObj.acceptable,
             total: empObj.total,
-            reviews: empObj.reviews
+            reviews: empObj.reviews.map(r => ({
+              time: r.time,
+              reviewer: r.reviewer,
+              phone: r.phone,
+              rating: r.rating,
+              comment: r.comment
+            }))
           });
         });
       });
