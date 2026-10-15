@@ -46,7 +46,6 @@
       padding: 18px 0 calc(18px + env(safe-area-inset-bottom));
     }
 
-    /* ================== شاشة الدخول ================== */
     .loginCard{
       width:100%;
       max-width:560px;
@@ -620,6 +619,15 @@
                   <canvas id="topExcellentEmployeesChart"></canvas>
                 </div>
               </div>
+
+              <!-- ✅ الرسم البياني الرابع (مضاف) -->
+              <div class="chartCard">
+                <div class="chartCardHead">الموظفون متدني المستوى (مقبول + جيد) — اضغط للاطلاع على المراكز</div>
+                <div class="chartCardBody">
+                  <canvas id="lowLevelEmployeesChart"></canvas>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -904,7 +912,6 @@
           }
 
           let excellentEmployees = 0, goodExcellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
-
           let sumPoints = 0, countFinalEmployees = 0;
 
           for(const [, data] of empMap.entries()){
@@ -990,14 +997,10 @@
           };
         });
 
-        // ✅ تعديل الألوان المطلوبة فقط لـ:
-        // - مقبول: أحمر فاتح مطفي
-        // - جيد: أصفر فاتح مطفي
-        // وباقي الدرجات (جيد جدا / ممتاز) بدون تغيير
-        const GOOD_COLOR_BG = "rgba(255, 214, 102, 0.28)";   // أصفر فاتح مطفي
+        const GOOD_COLOR_BG = "rgba(255, 214, 102, 0.28)";
         const GOOD_COLOR_BORDER = "rgba(180, 120, 0, 0.70)";
 
-        const ACCEPTABLE_COLOR_BG = "rgba(255, 120, 120, 0.24)"; // أحمر فاتح مطفي
+        const ACCEPTABLE_COLOR_BG = "rgba(255, 120, 120, 0.24)";
         const ACCEPTABLE_COLOR_BORDER = "rgba(200, 60, 60, 0.75)";
 
         charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
@@ -1016,7 +1019,7 @@
               {
                 label: "جيد جدا",
                 data: allCentersAll.map(x => x.goodExcellentEmployees),
-                backgroundColor: "rgba(11,61,145,0.30)",   // نفس لونك السابق (لا تغيير)
+                backgroundColor: "rgba(11,61,145,0.30)",
                 borderColor:"rgba(11,61,145,0.95)",
                 borderWidth:1,
                 stack:"s1"
@@ -1024,7 +1027,7 @@
               {
                 label: "جيد",
                 data: allCentersAll.map(x => x.goodEmployees),
-                backgroundColor: GOOD_COLOR_BG,          // ✅ أصفر فاتح مطفي
+                backgroundColor: GOOD_COLOR_BG,
                 borderColor: GOOD_COLOR_BORDER,
                 borderWidth:1,
                 stack:"s1"
@@ -1032,7 +1035,7 @@
               {
                 label: "مقبول",
                 data: allCentersAll.map(x => x.acceptableEmployees),
-                backgroundColor: ACCEPTABLE_COLOR_BG,    // ✅ أحمر فاتح مطفي
+                backgroundColor: ACCEPTABLE_COLOR_BG,
                 borderColor: ACCEPTABLE_COLOR_BORDER,
                 borderWidth:1,
                 stack:"s1"
@@ -1049,8 +1052,8 @@
 
         const allAll = [...currentReviews, ...archiveReviews];
 
+        // ✅ top excellent chart (ممتاز فقط) - مثل كودك
         const empToCenterExcellentCounts = new Map();
-
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
           if(!emp) continue;
@@ -1147,6 +1150,179 @@
 
           empCentersModal.classList.add("show");
         });
+
+        // ==========================================================
+        // ✅ الرسم البياني الرابع: الموظفون متدني المستوى (مقبول + جيد)
+        // - عند الضغط على الاسم: يظهر مركز/مراكز الموظف
+        // ==========================================================
+        // سنبني خرائط: لكل موظف => لكل مركز => counts ثم نحسب "التقييم النهائي داخل المركز"
+        const empToCenterCounts = new Map(); // emp => center => counts
+        for(const r of allAll){
+          const emp = String(r.employeeName || "").trim();
+          const center = String(r.center || "").trim();
+          if(!emp || !center) continue;
+
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
+
+          if(!empToCenterCounts.has(emp)) empToCenterCounts.set(emp, new Map());
+          const centerMap = empToCenterCounts.get(emp);
+
+          if(!centerMap.has(center)){
+            centerMap.set(center, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
+          }
+          const counts = centerMap.get(center);
+
+          if(finalRating === "ممتاز") counts.excellent++;
+          else if(finalRating === "جيد جدا") counts.goodExcellent++;
+          else if(finalRating === "جيد") counts.good++;
+          else if(finalRating === "مقبول") counts.acceptable++;
+        }
+
+        // حساب الموظفين الذين تقييمهم النهائي داخل المركز = (مقبول أو جيد)
+        // نُظهر أسماء الموظفين (Top) على مستوى كل المراكز
+        const lowLevelEmpToCenterFinalMap = new Map(); // emp => Map(center => finalLowCnt) where cnt = number of "instances" (تُحسب كـ 1 لكل مركز عند توفر تقييم منخفض)
+        // سنعتبر "instance" = وجود تقييم منخفض في هذا المركز (نفس الموظف)
+        const lowEmpTotal = new Map(); // emp => totalLowInstances
+        const empWorstLowLabel = new Map(); // emp => "مقبول" أولوية لو وجد
+
+        for(const [emp, centerMap] of empToCenterCounts.entries()){
+          for(const [center, cts] of centerMap.entries()){
+            const final = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
+            if(final !== "مقبول" && final !== "جيد") continue;
+
+            if(!lowLevelEmpToCenterFinalMap.has(emp)) lowLevelEmpToCenterFinalMap.set(emp, new Map());
+            const m = lowLevelEmpToCenterFinalMap.get(emp);
+
+            // إذا كان هناك تقييم منخفض داخل هذا المركز، نعتبره instance واحدة
+            if(!m.has(center)) m.set(center, 1);
+
+            lowEmpTotal.set(emp, (lowEmpTotal.get(emp) || 0) + (m.get(center) === 1 ? 0 : 0)); // لن نزيد أكثر من 1 لكل مركز
+            // تعيين الأهم: مقبول إذا موجود
+            const prev = empWorstLowLabel.get(emp);
+            if(final === "مقبول"){
+              empWorstLowLabel.set(emp, "مقبول");
+            }else{
+              if(!prev) empWorstLowLabel.set(emp, "جيد");
+            }
+          }
+        }
+
+        // تجهيز بيانات الرسم: نعرض فقط الموظفين الموجودين في الخريطة
+        const lowEmployeesArr = Array.from(lowLevelEmpToCenterFinalMap.entries()).map(([emp, centerMap])=>{
+          const worst = empWorstLowLabel.get(emp) || "جيد";
+          const totalInstances = Array.from(centerMap.values()).reduce((s, v)=> s + v, 0); // غالباً = عدد المراكز التي فيها منخفض
+          return { emp, worst, totalInstances };
+        });
+
+        // ترتيب: مقبول أولاً ثم الأكثر تكراراً (عدد المراكز التي ظهر فيها)
+        lowEmployeesArr.sort((a,b)=>{
+          const aw = a.worst === "مقبول" ? 0 : 1;
+          const bw = b.worst === "مقبول" ? 0 : 1;
+          if(aw !== bw) return aw - bw;
+          return (b.totalInstances - a.totalInstances);
+        });
+
+        const lowTop = lowEmployeesArr.slice(0, 12); // حد أقصى لعدم ازدحام الرسم
+
+        const canvasLow = document.getElementById("lowLevelEmployeesChart");
+        if(canvasLow){
+          // تجاهل أي chart سابق (داخل destroyCharts هذا بيتم غالباً، لكن نضيف أمان)
+          if(charts.lowLevelEmployeesChart){
+            try{ charts.lowLevelEmployeesChart.destroy(); }catch(e){}
+            charts.lowLevelEmployeesChart = null;
+          }
+
+          if(lowTop.length === 0){
+            const parent = canvasLow.parentElement;
+            parent.innerHTML = '<div class="fineprint" style="margin:0; padding:10px 0;">لا يوجد موظفون بتقييم (مقبول/جيد) حالياً حسب البيانات الحالية.</div>';
+          }else{
+            const labels = lowTop.map(x => x.emp);
+            const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
+
+            const colors = lowTop.map(x => x.worst === "مقبول"
+              ? "rgba(255, 120, 120, 0.45)"  // أحمر فاتح مطفي
+              : "rgba(255, 214, 102, 0.50)"  // أصفر فاتح مطفي
+            );
+
+            charts.lowLevelEmployeesChart = new Chart(canvasLow, {
+              type: "bar",
+              data: {
+                labels,
+                datasets: [{
+                  label: "التقييم النهائي المتدني (داخل المركز)",
+                  data: values,
+                  backgroundColor: colors,
+                  borderWidth: 0
+                }]
+              },
+              options: {
+                indexAxis: "y",
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                  tooltip: {
+                    callbacks: {
+                      label: function(ctx){
+                        const v = ctx.raw;
+                        return v === 4 ? "مقبول" : "جيد";
+                      }
+                    }
+                  }
+                },
+                scales: {
+                  x: {
+                    beginAtZero: true,
+                    ticks: {
+                      callback: function(value){
+                        if(value === 4) return "مقبول";
+                        if(value === 3) return "جيد";
+                        return value;
+                      }
+                    }
+                  }
+                }
+              }
+            });
+
+            const chartLow = charts.lowLevelEmployeesChart;
+            chartLow.canvas.addEventListener("click", (evt) => {
+              const points = chartLow.getElementsAtEventForMode(
+                evt,
+                'nearest',
+                { intersect: true },
+                true
+              );
+              if(!points || points.length === 0) return;
+
+              const idx = points[0].index;
+              const empName = labels[idx];
+              if(!empName) return;
+
+              const centerMap = lowLevelEmpToCenterFinalMap.get(empName) || new Map();
+              const centersArr = Array.from(centerMap.entries())
+                .map(([center, cnt]) => ({ center, cnt }))
+                .sort((a,b)=> b.cnt - a.cnt);
+
+              empCentersModalTitle.textContent = `مراكز الموظف المتدني: ${empName}`;
+              if(centersArr.length === 0){
+                empCentersModalMeta.textContent = "لا توجد مراكز لهذا الموظف (مقبول/جيد) حسب البيانات الحالية.";
+                empCentersModalList.innerHTML = "";
+              }else{
+                const total = centersArr.length; // كل مركز instance واحدة
+                empCentersModalMeta.textContent = `عدد المراكز التي ظهر فيها (مقبول/جيد): ${total}`;
+                empCentersModalList.innerHTML = centersArr.map(x => `
+                  <div class="centerRow">
+                    <div class="centerName">${escapeHtml(x.center)}</div>
+                    <div class="centerCount">× ${x.cnt}</div>
+                  </div>
+                `).join("");
+              }
+              empCentersModal.classList.add("show");
+            });
+          }
+        }
       }
 
       function printFinalForEmployee(center, empObj){
