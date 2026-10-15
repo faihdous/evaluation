@@ -548,13 +548,16 @@
 </head>
 
 <body>
+
   <div class="wrap" id="loginView">
     <div class="loginCard">
       <div class="loginInner">
         <div class="logoBox">
           <img src="logo.png" alt="لوغو" />
         </div>
+
         <h1>إدارة الهوية الوطنية</h1>
+
         <button class="btn" id="enterAdminBtn" type="button">دخول الإدارة</button>
       </div>
     </div>
@@ -879,6 +882,83 @@
         return "مقبول";
       }
 
+      // =========================================================
+      // ✅ NEW: عرض أسماء فقط (بدون تفاصيل مراجعات/طباعة)
+      // =========================================================
+      function renderNamesOnlyForCenter(center, ratingFilterLabel){
+        statusLine.textContent = "جارٍ جلب الأسماء...";
+
+        const currentReviews = loadJson(LS_KEYS.current, []);
+        const archiveReviews = loadJson(LS_KEYS.archive, []);
+        const qs = loadJson(LS_KEYS.questions, []);
+
+        currentQuestionsCache = Array.isArray(qs) ? qs : [];
+        reviewById.clear();
+
+        finalRatingEmployeesWrap.innerHTML = "";
+        emptyMsg.style.display = "none";
+        emptyMsg.textContent = "";
+
+        if(!Array.isArray(qs) || qs.length === 0){
+          statusLine.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "أضف أسئلة التقييم من لوحة أي مركز أولاً.";
+          return;
+        }
+
+        const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
+        if(all.length === 0){
+          statusLine.textContent = "لا توجد تقييمات لهذا المركز حتى الآن.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "لن يظهر أي موظف إلا بعد توفر مراجعات كافية.";
+          return;
+        }
+
+        const nameSet = new Set();
+
+        for(const r of all){
+          const emp = String(r.employeeName || "").trim();
+          if(!emp) continue;
+
+          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+          if(finalRating === "—") continue;
+
+          if(ratingFilterLabel && finalRating !== ratingFilterLabel) continue;
+
+          nameSet.add(emp);
+        }
+
+        const names = Array.from(nameSet);
+
+        if(names.length === 0){
+          statusLine.textContent = "لا توجد أسماء مطابقة للفئة حسب البيانات الحالية.";
+          emptyMsg.style.display = "block";
+          emptyMsg.textContent = "جرّب فئة أخرى أو تأكد من توفر مراجعات مكتملة.";
+          return;
+        }
+
+        statusLine.textContent = `تم التجميع ✅ (عدد الأسماء: ${names.length})`;
+
+        finalRatingEmployeesWrap.innerHTML = `
+          <div style="
+            display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;
+            align-items:center; justify-content:flex-start;
+          ">
+            ${names.map(n => `
+              <span style="
+                border:1px solid rgba(11,27,42,0.14);
+                background: rgba(11,27,42,0.05);
+                border-radius:999px;
+                padding:8px 12px;
+                font-weight:950;
+                color:rgba(11,27,42,0.90);
+                white-space:nowrap;
+              ">${escapeHtml(n)}</span>
+            `).join("")}
+          </div>
+        `;
+      }
+
       function buildCenterSummaries(currentReviews, archiveReviews, qs){
         const centerSummaries = [];
 
@@ -972,7 +1052,7 @@
         const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
         const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
 
-        // ✅ helper: عند الضغط على الرسم -> افتح تفاصيل المركز (وتظهر أسماء الموظفين)
+        // ✅ معدل: الرسم 1 يطلع أسماء ممتاز فقط
         const openCenterDetailsFromCharts = (centerName) => {
           if(!centerName) return;
 
@@ -984,8 +1064,9 @@
 
           centerSelect.value = centerName;
           chartsPositionUnderEmployees();
-          centerTitle.textContent = `التقييم النهائي - ${centerName}`;
-          renderFinalForCenter(centerName);
+          centerTitle.textContent = `أسماء ممتاز - ${centerName}`;
+
+          renderNamesOnlyForCenter(centerName, "ممتاز");
         };
 
         // ========= الرسم 1: أفضل المراكز =========
@@ -1009,7 +1090,6 @@
           }
         });
 
-        // ✅ تفعيل الضغط على الرسم 1
         const bestCanvas = document.getElementById("bestCentersChart");
         if(bestCanvas){
           bestCanvas.style.cursor = "pointer";
@@ -1087,7 +1167,7 @@
           }
         });
 
-        // ✅ تفعيل الضغط على الرسم 2 (أي فئة -> مركز العمود)
+        // ✅ معدل: الرسم 2 يطلع أسماء الفئة المضغوطة داخل نفس المركز
         const centersRatingCanvas = document.getElementById("centersRatingChart");
         if(centersRatingCanvas){
           centersRatingCanvas.style.cursor = "pointer";
@@ -1100,17 +1180,25 @@
             );
             if(!points || points.length === 0) return;
 
-            const idx = points[0].index; // index للمركز على المحور الأفقي
+            const idx = points[0].index;               // مركز
+            const datasetIndex = points[0].datasetIndex; // فئة (0..3)
             const centerName = allCentersAll[idx]?.center;
-            if(centerName) openCenterDetailsFromCharts(centerName);
+            if(!centerName) return;
+
+            const ratingLabelsByDataset = ["ممتاز", "جيد جدا", "جيد", "مقبول"];
+            const ratingLabel = ratingLabelsByDataset[datasetIndex] || null;
+
+            centerSelect.value = centerName;
+            chartsPositionUnderEmployees();
+            centerTitle.textContent = `أسماء (${ratingLabel}) - ${centerName}`;
+
+            renderNamesOnlyForCenter(centerName, ratingLabel);
           });
         }
 
-        // ========= (باقي الرسوم كما هي من كودك) =========
-
+        // ========= الرسم 3 (ممتاز فقط) =========
         const allAll = [...currentReviews, ...archiveReviews];
 
-        // ========= الرسم 3 (ممتاز فقط) =========
         const empToCenterExcellentCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1172,7 +1260,7 @@
         chartTop.canvas.addEventListener("click", (evt) => {
           const points = chartTop.getElementsAtEventForMode(
             evt,
-            "nearest",
+            'nearest',
             { intersect: true },
             true
           );
@@ -1331,7 +1419,7 @@
             chartLow.canvas.addEventListener("click", (evt) => {
               const points = chartLow.getElementsAtEventForMode(
                 evt,
-                "nearest",
+                'nearest',
                 { intersect: true },
                 true
               );
@@ -1365,6 +1453,7 @@
         }
       }
 
+      // === بقايا كودك (بدون تغيير كبير) ===
       function printFinalForEmployee(center, empObj){
         const w = window.open("", "_blank");
         if(!w) return showToast("❌ فعّل النوافذ المنبثقة للطباعة.");
