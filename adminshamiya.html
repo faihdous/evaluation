@@ -350,6 +350,38 @@
       min-height: 40px !important;
     }
     .btn.printPurple:hover{ transform: translateY(-1px); }
+
+    /* ✅ تلوين الأزرار حسب الحالة (حسب طلبك) */
+    #showCurrentBtn{
+      background: rgba(11,27,42,0.06);
+      color: var(--text);
+      border: 1px solid rgba(11,27,42,0.16);
+    }
+
+    #showFinalRatingBtn{
+      background: rgba(11,27,42,0.06);
+      color: var(--text);
+      border: 1px solid rgba(11,27,42,0.16);
+    }
+
+    /* عند التفعيل/المنع (Disabled) */
+    #showCurrentBtn:disabled{
+      background: rgba(14,122,75,0.22) !important; /* أخضر فاتح */
+      color: #0b3f25 !important;
+      border: 1px solid rgba(14,122,75,0.45) !important;
+      opacity: 0.95 !important; /* نخلي التلوين واضح */
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+
+    #showFinalRatingBtn:disabled{
+      background: rgba(255,210,74,0.28) !important; /* أصفر فاتح */
+      color: #3a2b00 !important;
+      border: 1px solid rgba(255,210,74,0.55) !important;
+      opacity: 0.95 !important; /* نخلي التلوين واضح */
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
   </style>
 </head>
 
@@ -586,6 +618,7 @@
         .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
+    const toastMsg = document.getElementById("toastMsg");
     function showToast(html){
       toastMsg.style.display = "block";
       toastMsg.innerHTML = html;
@@ -654,13 +687,13 @@
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
     const adminLoginBox = document.getElementById("adminLoginBox");
     const adminWorkspace = document.getElementById("adminWorkspace");
-    const toastMsg = document.getElementById("toastMsg");
 
     const currentReviewsTbody = document.getElementById("currentReviewsTbody");
 
     const adminAdjustBtn = document.getElementById("adminAdjustBtn");
     const backToReviewsBtn = document.getElementById("backToReviewsBtn");
     const adminAdjustPage = document.getElementById("adminAdjustPage");
+
     const tabEmployeesBtn = document.getElementById("tabEmployeesBtn");
     const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
@@ -884,7 +917,7 @@
 
     // === Current Table (Current only) ===
     function renderCurrentTablesForCenter(center){
-      // تحديث البيانات من التخزين قبل العرض (مفيد لو تغيرت من جهاز آخر/جلسات)
+      // تحديث من التخزين
       currentReviews = loadJson(LS_KEYS.current, []);
 
       const cur = currentReviews.filter(r => r.center === center);
@@ -1194,6 +1227,17 @@
       });
     }
 
+    // === Toggle Buttons State ===
+    function setViewButtons(view){
+      if(view === "current"){
+        showCurrentBtn.disabled = true;
+        showFinalRatingBtn.disabled = false;
+      }else if(view === "final"){
+        showFinalRatingBtn.disabled = true;
+        showCurrentBtn.disabled = false;
+      }
+    }
+
     // === Buttons / Navigation ===
     function enterAdminWorkspace(){
       adminCenterSession = LOCK_CENTER;
@@ -1205,14 +1249,14 @@
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
-      // Initial view
+      // Initial page
       adminAdjustPage.classList.add("hide");
+      // Set default button states (Current is default)
+      setViewButtons("current");
 
-      // Load
       renderEmployeesForCenter(LOCK_CENTER);
       renderQuestions();
 
-      // Default view
       showCurrentBtn.click();
     }
 
@@ -1240,39 +1284,46 @@
     adminAdjustBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
 
-      // hide views
       currentSection.classList.add("hide");
       finalRatingSection.classList.add("hide");
 
       adminAdjustPage.classList.remove("hide");
+      // default to employees tab
       tabEmployeesBtn.click();
     });
 
     backToReviewsBtn.addEventListener("click", ()=>{
       adminAdjustPage.classList.add("hide");
-      // show current (default)
+
+      // show current
       currentSection.classList.remove("hide");
       finalRatingSection.classList.add("hide");
+
+      setViewButtons("current");
       renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
     showCurrentBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
       adminAdjustPage.classList.add("hide");
 
       finalRatingSection.classList.add("hide");
       currentSection.classList.remove("hide");
 
+      setViewButtons("current"); // ✅ تلوين/تعطيل حسب طلبك
       renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
       adminAdjustPage.classList.add("hide");
 
       currentSection.classList.add("hide");
       finalRatingSection.classList.remove("hide");
 
+      setViewButtons("final"); // ✅ تلوين/تعطيل حسب طلبك
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
 
@@ -1282,10 +1333,13 @@
     adminLogoutBtn.disabled = true;
 
     reviewDetailsModal.classList.add("hide");
-    exitAdminWorkspace(); // ensures start at login
+    // start at login screen
+    exitAdminWorkspace();
 
-    // render placeholder questions/employees (optional)
+    // default questions render
     renderQuestions();
+    // set initial buttons state (safe)
+    setViewButtons("current");
   </script>
 </body>
 </html>
