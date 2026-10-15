@@ -396,9 +396,9 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // ✅ تعديل: إضافة "جيد جدًا" داخل dropdown
+    // ✅ توحيد النص مع كود الإدارة: "جيد جدا" (بدون "ً")
     function getRatingOptions(){
-      return ["ممتاز", "جيد جدًا", "جيد", "مقبول"];
+      return ["ممتاز", "جيد جدا", "جيد", "مقبول"];
     }
 
     const employeeSelect = document.getElementById("employeeSelect");
@@ -408,7 +408,6 @@
 
     const submitReviewBtn = document.getElementById("submitReviewBtn");
     const clearBtn = document.getElementById("clearBtn");
-    const toastMsg = document.getElementById("toastMsg");
 
     const questionsContainer = document.getElementById("questionsContainer");
 
@@ -512,7 +511,7 @@
         questionAnswers[q.id] = value;
       }
 
-      const rating = questionAnswers[qs[0].id]; // الآن مضمون أنه موجود
+      const rating = questionAnswers[qs[0].id]; // أي سؤال يكفي لتخزين rating مختصر
 
       const currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -548,6 +547,9 @@
       toastMsg.style.display = "none";
       renderQuestionDropdowns();
     });
+
+    // عناصر toast
+    const toastMsg = document.getElementById("toastMsg");
 
     renderEmployeesForCenter();
     renderQuestionDropdowns();
