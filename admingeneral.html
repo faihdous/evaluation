@@ -411,8 +411,6 @@
     }
 
     @media (max-width: 420px){
-      .logoBox{ width:128px; height:128px; }
-      h1{ font-size:17px; }
       select{ width: 100%; }
       .topBar{ grid-template-columns: 1fr auto 1fr; }
     }
@@ -550,16 +548,13 @@
 </head>
 
 <body>
-
   <div class="wrap" id="loginView">
     <div class="loginCard">
       <div class="loginInner">
         <div class="logoBox">
           <img src="logo.png" alt="لوغو" />
         </div>
-
         <h1>إدارة الهوية الوطنية</h1>
-
         <button class="btn" id="enterAdminBtn" type="button">دخول الإدارة</button>
       </div>
     </div>
@@ -965,7 +960,6 @@
 
         const topBest = sortedByExcellent.slice(0, Math.min(7, sortedByExcellent.length));
 
-        // ✅ ألوان مطابقة لشارات التقييم
         const EXCELLENT_BG = "rgba(14,122,75,0.35)";
         const EXCELLENT_BORDER = "rgba(14,122,75,0.95)";
 
@@ -978,13 +972,10 @@
         const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
         const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
 
-        // =========================================================
-        // ✅ helper: عند الضغط على الرسم -> افتح تفاصيل المركز
-        // =========================================================
+        // ✅ helper: عند الضغط على الرسم -> افتح تفاصيل المركز (وتظهر أسماء الموظفين)
         const openCenterDetailsFromCharts = (centerName) => {
           if(!centerName) return;
 
-          // التأكد من أن centerName موجود في الاختيار
           const options = centerSelect?.options;
           if(!options) return;
 
@@ -992,10 +983,7 @@
           if(!foundOpt) return;
 
           centerSelect.value = centerName;
-
-          // إظهار مكان الرسومات تحت الجدول حسب منطق الكود
           chartsPositionUnderEmployees();
-
           centerTitle.textContent = `التقييم النهائي - ${centerName}`;
           renderFinalForCenter(centerName);
         };
@@ -1017,9 +1005,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: true } },
-            scales: { y: { beginAtZero: true } },
-            // مهم عشان يكون الضغط دقيق
-            onClick: (e) => { /* نستخدم addEventListener تحت */ }
+            scales: { y: { beginAtZero: true } }
           }
         });
 
@@ -1097,8 +1083,7 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: true } },
-            scales: { y: { stacked: true, beginAtZero: true } },
-            onClick: (e) => { /* نستخدم addEventListener تحت */ }
+            scales: { y: { stacked: true, beginAtZero: true } }
           }
         });
 
@@ -1120,6 +1105,8 @@
             if(centerName) openCenterDetailsFromCharts(centerName);
           });
         }
+
+        // ========= (باقي الرسوم كما هي من كودك) =========
 
         const allAll = [...currentReviews, ...archiveReviews];
 
@@ -1185,7 +1172,7 @@
         chartTop.canvas.addEventListener("click", (evt) => {
           const points = chartTop.getElementsAtEventForMode(
             evt,
-            'nearest',
+            "nearest",
             { intersect: true },
             true
           );
@@ -1344,7 +1331,7 @@
             chartLow.canvas.addEventListener("click", (evt) => {
               const points = chartLow.getElementsAtEventForMode(
                 evt,
-                'nearest',
+                "nearest",
                 { intersect: true },
                 true
               );
@@ -1699,7 +1686,6 @@
           btn.addEventListener("click",(e)=>{
             e.stopPropagation();
             const empName = btn.getAttribute("data-print-emp");
-
             const empObj = rows.find(r => r.emp === empName);
             if(!empObj) return;
 
