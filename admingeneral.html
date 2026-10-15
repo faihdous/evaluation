@@ -330,7 +330,6 @@
       white-space:nowrap;
     }
 
-    /* زر تفاصيل داخل كل مراجعة */
     .reviewDetailsBtn{
       border:1px solid rgba(139,92,246,0.35);
       background: rgba(139,92,246,0.10);
@@ -366,7 +365,6 @@
       font-size:13px;
     }
 
-    /* =================== لوحة الرسومات (مربعات) =================== */
     .chartsWrap{
       display:block;
       margin-top:14px;
@@ -420,7 +418,6 @@
       .topBar{ grid-template-columns: 1fr auto 1fr; }
     }
 
-    /* =================== مودل تفاصيل التقييم =================== */
     #reviewDetailsModal{
       position: fixed;
       inset: 0;
@@ -465,11 +462,11 @@
       border:none;
       cursor:pointer;
       background: rgba(11,42,42,0.06);
-      border:1px solid rgba(11,27,42,0.16);
+      border:1px solid rgba(11,42,42,0.16);
       border-radius:14px;
       padding:10px 14px;
       font-weight:950;
-      color: rgba(11,27,42,0.85);
+      color: rgba(11,42,42,0.85);
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -510,7 +507,6 @@
       line-height:1.6;
     }
 
-    /* =================== مودل مراكز الموظف (بديل toast) =================== */
     #empCentersModal{
       position: fixed;
       inset: 0;
@@ -602,7 +598,6 @@
         </div>
 
         <div class="cardBody" style="padding:14px;">
-          <!-- ✅ الرسومات (مربعات) -->
           <div class="chartsWrap" id="chartsWrap">
             <div class="chartsGrid">
               <div class="chartCard">
@@ -613,7 +608,7 @@
               </div>
 
               <div class="chartCard">
-                <div class="chartCardHead">عدد الموظفين حسب التقييم داخل كل مركز</div>
+                <div class="chartCardHead">عدد الموظفين حسب التقييم داخل كل مركز (4 فئات)</div>
                 <div class="chartCardBody">
                   <canvas id="centersRatingChart"></canvas>
                 </div>
@@ -628,7 +623,6 @@
             </div>
           </div>
 
-          <!-- قائمة الموظفين بعد اختيار المركز -->
           <div id="finalRatingEmployeesWrap"></div>
           <div class="fineprint" id="emptyMsg" style="display:none;"></div>
           <div class="toast" id="toastMsg"></div>
@@ -831,15 +825,18 @@
         });
       }
 
+      // ✅ 4 فئات - متطابقة مع ادمن الشامية
       function pointsForRating(r){
         if(r === "ممتاز") return 1;
-        if(r === "جيد") return 2;
-        if(r === "مقبول") return 3;
+        if(r === "جيد جدا") return 2;
+        if(r === "جيد") return 3;
+        if(r === "مقبول") return 4;
         return null;
       }
 
       function ratingClass(r){
         if(r === "ممتاز") return "excellent";
+        if(r === "جيد جدا") return "good";
         if(r === "جيد") return "good";
         return "acceptable";
       }
@@ -856,29 +853,33 @@
         }
         if(count === 0) return "—";
 
-        if(count === 3){
-          if(sum <= 4) return "ممتاز";
-          if(sum <= 6) return "جيد";
-          return "مقبول";
-        }
-
-        const minSum = count * 1;
-        const maxSum = count * 3;
+        const minSum = count * 1; // ممتاز
+        const maxSum = count * 4; // مقبول
         const t = (sum - minSum) / (maxSum - minSum || 1);
-        if(t <= 0.33) return "ممتاز";
-        if(t <= 0.66) return "جيد";
+
+        if(t <= 0.20) return "ممتاز";
+        if(t <= 0.45) return "جيد جدا";
+        if(t <= 0.75) return "جيد";
         return "مقبول";
       }
 
-      function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
-        const n = excellentCount + goodCount + acceptableCount;
+      function computeFinalByCounts(excellentCount, goodExcellentCount, goodCount, acceptableCount){
+        const n = excellentCount + goodExcellentCount + goodCount + acceptableCount;
         if(n === 0) return "—";
-        const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+
+        const sumPoints =
+          (excellentCount * 1) +
+          (goodExcellentCount * 2) +
+          (goodCount * 3) +
+          (acceptableCount * 4);
+
         const minSum = n * 1;
-        const maxSum = n * 3;
+        const maxSum = n * 4;
         const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-        if(t <= 0.33) return "ممتاز";
-        if(t <= 0.66) return "جيد";
+
+        if(t <= 0.20) return "ممتاز";
+        if(t <= 0.45) return "جيد جدا";
+        if(t <= 0.75) return "جيد";
         return "مقبول";
       }
 
@@ -897,20 +898,27 @@
             if(finalRating === "—") continue;
 
             if(!empMap.has(emp)){
-              empMap.set(emp, { excellent:0, good:0, acceptable:0 });
+              empMap.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
             }
 
             const it = empMap.get(emp);
             if(finalRating === "ممتاز") it.excellent++;
+            else if(finalRating === "جيد جدا") it.goodExcellent++;
             else if(finalRating === "جيد") it.good++;
             else if(finalRating === "مقبول") it.acceptable++;
           }
 
-          let excellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
+          let excellentEmployees = 0, goodExcellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
           let sumPoints = 0, countFinalEmployees = 0;
 
           for(const [, data] of empMap.entries()){
-            const final = computeFinalByCounts(data.excellent, data.good, data.acceptable);
+            const final = computeFinalByCounts(
+              data.excellent,
+              data.goodExcellent,
+              data.good,
+              data.acceptable
+            );
+
             if(final === "—") continue;
 
             const p = pointsForRating(final);
@@ -920,6 +928,7 @@
             countFinalEmployees++;
 
             if(final === "ممتاز") excellentEmployees++;
+            else if(final === "جيد جدا") goodExcellentEmployees++;
             else if(final === "جيد") goodEmployees++;
             else if(final === "مقبول") acceptableEmployees++;
           }
@@ -928,6 +937,7 @@
             centerSummaries.push({
               center: c,
               excellentEmployees,
+              goodExcellentEmployees,
               goodEmployees,
               acceptableEmployees,
               finalEmployeesCount: countFinalEmployees,
@@ -975,7 +985,13 @@
 
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
-          return found || { center:c, excellentEmployees:0, goodEmployees:0, acceptableEmployees:0 };
+          return found || {
+            center: c,
+            excellentEmployees:0,
+            goodExcellentEmployees:0,
+            goodEmployees:0,
+            acceptableEmployees:0
+          };
         });
 
         charts.centersRatingChart = new Chart(document.getElementById("centersRatingChart"), {
@@ -992,10 +1008,18 @@
                 stack:"s1"
               },
               {
+                label: "جيد جدا",
+                data: allCentersAll.map(x => x.goodExcellentEmployees),
+                backgroundColor: "rgba(11,61,145,0.30)",
+                borderColor:"rgba(11,61,145,0.95)",
+                borderWidth:1,
+                stack:"s1"
+              },
+              {
                 label: "جيد",
                 data: allCentersAll.map(x => x.goodEmployees),
-                backgroundColor: "rgba(11,61,145,0.25)",
-                borderColor:"rgba(11,61,145,0.95)",
+                backgroundColor: "rgba(11,61,145,0.18)",
+                borderColor:"rgba(11,61,145,0.65)",
                 borderWidth:1,
                 stack:"s1"
               },
@@ -1019,7 +1043,7 @@
 
         const allAll = [...currentReviews, ...archiveReviews];
 
-        // ✅ Map: emp -> { center -> countExcellent }
+        // ✅ Map: emp -> { center -> countExcellent } (ممتاز فقط كما هو)
         const empToCenterExcellentCounts = new Map();
 
         for(const r of allAll){
@@ -1033,13 +1057,13 @@
           if(!center) continue;
 
           if(!empToCenterExcellentCounts.has(emp)){
-            empToCenterExcellentCounts.set(emp, new Map()); // center -> count
+            empToCenterExcellentCounts.set(emp, new Map());
           }
           const centerMap = empToCenterExcellentCounts.get(emp);
           centerMap.set(center, (centerMap.get(center) || 0) + 1);
         }
 
-        // ✅ أعلى موظفين ممتاز (على مستوى كل المراكز) = حسب ممتاز فقط
+        // ✅ أعلى موظفين ممتاز (على مستوى كل المراكز)
         const empMap = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1049,8 +1073,7 @@
           if(finalRating !== "ممتاز") continue;
 
           if(!empMap.has(emp)) empMap.set(emp, { excellent:0 });
-          const it = empMap.get(emp);
-          it.excellent++;
+          empMap.get(emp).excellent++;
         }
 
         const topEmp = Array.from(empMap.entries())
@@ -1195,7 +1218,11 @@
                 </div>
 
                 <div class="meta">
-                  ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
+                  ممتاز: ${empObj.excellent}
+                  | جيد جدا: ${empObj.goodExcellent}
+                  | جيد: ${empObj.good}
+                  | مقبول: ${empObj.acceptable}
+                  | المجموع: ${empObj.total}
                 </div>
 
                 <div class="reviews">${htmlReviews}</div>
@@ -1301,12 +1328,19 @@
           if(finalRating === "—") continue;
 
           if(!map.has(emp)){
-            map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
+            map.set(emp, {
+              excellent:0,
+              goodExcellent:0,
+              good:0,
+              acceptable:0,
+              reviews:[]
+            });
           }
 
           const item = map.get(emp);
 
           if(finalRating === "ممتاز") item.excellent++;
+          else if(finalRating === "جيد جدا") item.goodExcellent++;
           else if(finalRating === "جيد") item.good++;
           else if(finalRating === "مقبول") item.acceptable++;
 
@@ -1324,7 +1358,7 @@
           .map(([emp, data]) => ({
             emp,
             ...data,
-            total: data.excellent + data.good + data.acceptable
+            total: data.excellent + data.goodExcellent + data.good + data.acceptable
           }))
           .filter(x => x.total > 0)
           .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
@@ -1340,7 +1374,7 @@
 
         for(const x of rows){
           x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
-          const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+          const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
           finalRatingEmployeesWrap.innerHTML += `
             <details class="finalEmployeeDetails">
@@ -1376,7 +1410,11 @@
                 </span>
 
                 <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
-                  ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
+                  ممتاز: ${x.excellent}
+                  | جيد جدا: ${x.goodExcellent}
+                  | جيد: ${x.good}
+                  | مقبول: ${x.acceptable}
+                  | المجموع: ${x.total}
                 </span>
               </summary>
 
@@ -1433,12 +1471,13 @@
             const empObj = rows.find(r => r.emp === empName);
             if(!empObj) return;
 
-            const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
+            const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
             printFinalForEmployee(center, {
               emp: empObj.emp,
               final,
               excellent: empObj.excellent,
+              goodExcellent: empObj.goodExcellent,
               good: empObj.good,
               acceptable: empObj.acceptable,
               total: empObj.total,
@@ -1483,7 +1522,6 @@
         emptyMsg.style.display = "none";
         emptyMsg.textContent = "";
 
-        // ✅ رسم الرسومات العامة فوق القائمة فور الدخول
         originalChartsPosition();
         renderChartsGeneral(currentReviews, archiveReviews, qs);
 
