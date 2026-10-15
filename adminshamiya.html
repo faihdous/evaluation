@@ -351,7 +351,6 @@
     }
     .btn.printPurple:hover{ transform: translateY(-1px); }
 
-    /* ✅ تلوين الأزرار حسب الحالة (حسب طلبك) */
     #showCurrentBtn{
       background: rgba(11,27,42,0.06);
       color: var(--text);
@@ -364,21 +363,20 @@
       border: 1px solid rgba(11,27,42,0.16);
     }
 
-    /* عند التفعيل/المنع (Disabled) */
     #showCurrentBtn:disabled{
-      background: rgba(14,122,75,0.22) !important; /* أخضر فاتح */
+      background: rgba(14,122,75,0.22) !important;
       color: #0b3f25 !important;
       border: 1px solid rgba(14,122,75,0.45) !important;
-      opacity: 0.95 !important; /* نخلي التلوين واضح */
+      opacity: 0.95 !important;
       cursor: not-allowed !important;
       transform: none !important;
     }
 
     #showFinalRatingBtn:disabled{
-      background: rgba(255,210,74,0.28) !important; /* أصفر فاتح */
+      background: rgba(255,210,74,0.28) !important;
       color: #3a2b00 !important;
       border: 1px solid rgba(255,210,74,0.55) !important;
-      opacity: 0.95 !important; /* نخلي التلوين واضح */
+      opacity: 0.95 !important;
       cursor: not-allowed !important;
       transform: none !important;
     }
@@ -435,7 +433,6 @@
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
             </div>
 
-            <!-- الأدوات (بدون أرشيف) -->
             <div class="row two" style="align-items:end; margin-top:4px;">
               <div></div>
               <div>
@@ -447,7 +444,6 @@
               </div>
             </div>
 
-            <!-- ===== Current ===== -->
             <div id="currentSection">
               <h3>التقييمات الحالية</h3>
               <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
@@ -467,7 +463,6 @@
               </div>
             </div>
 
-            <!-- ===== Final rating (Current فقط) ===== -->
             <div id="finalRatingSection" class="hide" style="margin-top:10px;">
               <h3>التقييم النهائي لكل موظف</h3>
               <div class="fineprint" style="margin-top:0;">
@@ -481,7 +476,6 @@
               </div>
             </div>
 
-            <!-- ===== Admin Adjust Page ===== -->
             <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
               <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
                 <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
@@ -606,8 +600,10 @@
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
 
+    // ✅ تعديل: دعم "جيد جدا"
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
+      if(r === "جيد جدا") return "good";
       if(r === "جيد") return "good";
       return "acceptable";
     }
@@ -625,15 +621,19 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    // ✅ تعديل: نقاط جديدة (ممتاز=1، جيد جدا=2، جيد=3، مقبول=4)
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
-      if(r === "جيد") return 2;
-      if(r === "مقبول") return 3;
+      if(r === "جيد جدا") return 2;
+      if(r === "جيد") return 3;
+      if(r === "مقبول") return 4;
       return null;
     }
 
+    // ✅ تعديل: التقييم النهائي (من إجابات المراجعة نفسها) لدعم 4 فئات
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
+
       let sum = 0;
       let count = 0;
 
@@ -645,36 +645,41 @@
       }
       if(count === 0) return "—";
 
-      if(count === 3){
-        if(sum <= 4) return "ممتاز";
-        if(sum <= 6) return "جيد";
-        return "مقبول";
-      }
+      const minSum = count * 1;   // ممتاز
+      const maxSum = count * 4;   // مقبول
 
-      const minSum = count * 1;
-      const maxSum = count * 3;
-      const t = (sum - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
+      const t = (sum - minSum) / (maxSum - minSum || 1); // 0 ممتاز -> 1 مقبول
+
+      if(t <= 0.20) return "ممتاز";
+      if(t <= 0.45) return "جيد جدا";
+      if(t <= 0.75) return "جيد";
       return "مقبول";
     }
 
-    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
-      const n = excellentCount + goodCount + acceptableCount;
+    // ✅ تعديل: حساب التقييم النهائي لكل موظف حسب العدّات (4 فئات)
+    function computeFinalByCounts(excellentCount, goodExcellentCount, goodCount, acceptableCount){
+      const n = excellentCount + goodExcellentCount + goodCount + acceptableCount;
       if(n === 0) return "—";
-      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+
+      const sumPoints =
+        (excellentCount * 1) +
+        (goodExcellentCount * 2) +
+        (goodCount * 3) +
+        (acceptableCount * 4);
+
       const minSum = n * 1;
-      const maxSum = n * 3;
+      const maxSum = n * 4;
 
       const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
+
+      if(t <= 0.20) return "ممتاز";
+      if(t <= 0.45) return "جيد جدا";
+      if(t <= 0.75) return "جيد";
       return "مقبول";
     }
 
     // === Data (Current فقط) ===
     let currentReviews = loadJson(LS_KEYS.current, []);
-
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
 
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
@@ -834,7 +839,7 @@
 
     // === Questions Admin ===
     const questionsListEl = document.getElementById("questionsList");
-    const noQuestionsMsg = document.getElementById("noQuestionsMsg");
+    const noQuestionsMsg2 = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
     const addQuestionBtn = document.getElementById("addQuestionBtn");
     const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
@@ -844,10 +849,10 @@
     function renderQuestions(){
       questionsListEl.innerHTML = "";
       if(!questions.length){
-        noQuestionsMsg.style.display = "block";
+        noQuestionsMsg2.style.display = "block";
         return;
       }
-      noQuestionsMsg.style.display = "none";
+      noQuestionsMsg2.style.display = "none";
 
       questions.forEach((q, index)=>{
         const wrap = document.createElement("div");
@@ -917,7 +922,6 @@
 
     // === Current Table (Current only) ===
     function renderCurrentTablesForCenter(center){
-      // تحديث من التخزين
       currentReviews = loadJson(LS_KEYS.current, []);
 
       const cur = currentReviews.filter(r => r.center === center);
@@ -1049,7 +1053,11 @@
               </div>
 
               <div class="meta">
-                ممتاز: ${empObj.excellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
+                ممتاز: ${empObj.excellent} |
+                جيد جدا: ${empObj.goodExcellent} |
+                جيد: ${empObj.good} |
+                مقبول: ${empObj.acceptable} |
+                المجموع: ${empObj.total}
               </div>
 
               <div class="reviews">
@@ -1110,11 +1118,12 @@
         if(finalRating === "—") continue;
 
         if(!map.has(emp)){
-          map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
+          map.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0, reviews:[] });
         }
         const item = map.get(emp);
 
         if(finalRating === "ممتاز") item.excellent++;
+        else if(finalRating === "جيد جدا") item.goodExcellent++;
         else if(finalRating === "جيد") item.good++;
         else if(finalRating === "مقبول") item.acceptable++;
 
@@ -1132,7 +1141,7 @@
         .map(([emp, data]) => ({
           emp,
           ...data,
-          total: data.excellent + data.good + data.acceptable
+          total: data.excellent + data.goodExcellent + data.good + data.acceptable
         }))
         .filter(x => x.total > 0)
         .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
@@ -1148,7 +1157,7 @@
 
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
-        const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+        const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
         finalRatingEmployeesWrap.innerHTML += `
           <details class="finalEmployeeDetails">
@@ -1171,7 +1180,7 @@
               </span>
 
               <span style="font-size:12px; color: rgba(11,27,42,0.65); font-weight: 900; white-space:nowrap;">
-                ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
+                ممتاز: ${x.excellent} | جيد جدا: ${x.goodExcellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
 
@@ -1212,12 +1221,13 @@
           const empObj = rows.find(r => r.emp === empName);
           if(!empObj) return;
 
-          const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
+          const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
             excellent: empObj.excellent,
+            goodExcellent: empObj.goodExcellent,
             good: empObj.good,
             acceptable: empObj.acceptable,
             total: empObj.total,
@@ -1249,9 +1259,7 @@
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
-      // Initial page
       adminAdjustPage.classList.add("hide");
-      // Set default button states (Current is default)
       setViewButtons("current");
 
       renderEmployeesForCenter(LOCK_CENTER);
@@ -1288,14 +1296,12 @@
       finalRatingSection.classList.add("hide");
 
       adminAdjustPage.classList.remove("hide");
-      // default to employees tab
       tabEmployeesBtn.click();
     });
 
     backToReviewsBtn.addEventListener("click", ()=>{
       adminAdjustPage.classList.add("hide");
 
-      // show current
       currentSection.classList.remove("hide");
       finalRatingSection.classList.add("hide");
 
@@ -1311,7 +1317,7 @@
       finalRatingSection.classList.add("hide");
       currentSection.classList.remove("hide");
 
-      setViewButtons("current"); // ✅ تلوين/تعطيل حسب طلبك
+      setViewButtons("current");
       renderCurrentTablesForCenter(LOCK_CENTER);
     });
 
@@ -1323,7 +1329,7 @@
       currentSection.classList.add("hide");
       finalRatingSection.classList.remove("hide");
 
-      setViewButtons("final"); // ✅ تلوين/تعطيل حسب طلبك
+      setViewButtons("final");
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
 
@@ -1333,12 +1339,9 @@
     adminLogoutBtn.disabled = true;
 
     reviewDetailsModal.classList.add("hide");
-    // start at login screen
     exitAdminWorkspace();
 
-    // default questions render
     renderQuestions();
-    // set initial buttons state (safe)
     setViewButtons("current");
   </script>
 </body>
