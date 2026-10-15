@@ -206,7 +206,6 @@
       box-shadow: 0 10px 20px rgba(255,77,77,0.20);
     }
 
-    /* ✅ زر حذف السجلات: أحمر فاتح مطفي */
     .btn.dangerLight{
       background: rgba(255, 120, 120, 0.22);
       color: #4a0f0f;
@@ -297,6 +296,8 @@
       text-align:center;
     }
 
+    /* ===================== */
+    /* ✅ ألوان التقييم (مع تمييز جيد جدا) */
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
@@ -304,9 +305,31 @@
       background: rgba(11,27,42,0.05); white-space:nowrap;
       color: var(--text);
     }
-    .ratingTag.excellent{ border-color: rgba(14,122,75,0.55); background: rgba(14,122,75,0.08); }
-    .ratingTag.good{ border-color: rgba(11,61,145,0.55); background: rgba(11,61,145,0.08); }
-    .ratingTag.acceptable{ border-color: rgba(255,210,74,0.70); background: rgba(255,210,74,0.10); }
+
+    /* ممتاز (لا تغيير حسب طلبك) */
+    .ratingTag.excellent{ 
+      border-color: rgba(14,122,75,0.55); 
+      background: rgba(14,122,75,0.08); 
+    }
+
+    /* جيد (أصفر فاتح مطفي) */
+    .ratingTag.good{ 
+      border-color: rgba(255,210,74,0.85);
+      background: rgba(255,210,74,0.16); 
+    }
+
+    /* جيد جدا (أزرق فاتح مطفي) */
+    .ratingTag.good2{ 
+      border-color: rgba(11,61,145,0.55);
+      background: rgba(11,61,145,0.10); 
+    }
+
+    /* مقبول (أحمر فاتح مطفي) */
+    .ratingTag.acceptable{ 
+      border-color: rgba(255,120,120,0.55);
+      background: rgba(255,120,120,0.16); 
+    }
+    /* ===================== */
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
@@ -553,7 +576,6 @@
               </div>
 
             </div>
-
           </div>
         </div>
       </section>
@@ -595,7 +617,7 @@
 
     const LS_KEYS = {
       current: "reviews_current_v3",
-      archive: "reviews_archive_v3", // ✅ أضفنا Archive لحذف السجلات بالكامل
+      archive: "reviews_archive_v3",
       adminCenter: "admin_center_session_v3",
       employeesByCenter: "employees_by_center_v1",
       questions: "rating_questions_v1"
@@ -615,10 +637,10 @@
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
 
-    // ✅ تعديل: دعم "جيد جدا"
+    // ✅ تعديل: تمييز "جيد جدا" عن "جيد"
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
-      if(r === "جيد جدا") return "good";
+      if(r === "جيد جدا") return "good2";
       if(r === "جيد") return "good";
       return "acceptable";
     }
@@ -636,7 +658,6 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // ✅ تعديل: نقاط جديدة (ممتاز=1، جيد جدا=2، جيد=3، مقبول=4)
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
       if(r === "جيد جدا") return 2;
@@ -645,7 +666,6 @@
       return null;
     }
 
-    // ✅ تعديل: التقييم النهائي (من إجابات المراجعة نفسها) لدعم 4 فئات
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
 
@@ -660,9 +680,9 @@
       }
       if(count === 0) return "—";
 
-      const minSum = count * 1;   // ممتاز
-      const maxSum = count * 4;   // مقبول
-      const t = (sum - minSum) / (maxSum - minSum || 1); // 0 ممتاز -> 1 مقبول
+      const minSum = count * 1;
+      const maxSum = count * 4;
+      const t = (sum - minSum) / (maxSum - minSum || 1);
 
       if(t <= 0.20) return "ممتاز";
       if(t <= 0.45) return "جيد جدا";
@@ -670,7 +690,6 @@
       return "مقبول";
     }
 
-    // ✅ تعديل: حساب التقييم النهائي لكل موظف حسب العدّات (4 فئات)
     function computeFinalByCounts(excellentCount, goodExcellentCount, goodCount, acceptableCount){
       const n = excellentCount + goodExcellentCount + goodCount + acceptableCount;
       if(n === 0) return "—";
@@ -692,14 +711,12 @@
       return "مقبول";
     }
 
-    // === Data (Current فقط) ===
     let currentReviews = loadJson(LS_KEYS.current, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
 
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
-    // === Elements ===
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -729,7 +746,7 @@
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
 
-    const deleteRecordsBtn = document.getElementById("deleteRecordsBtn"); // ✅ زر حذف السجلات
+    const deleteRecordsBtn = document.getElementById("deleteRecordsBtn");
 
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
@@ -1229,7 +1246,6 @@
         `;
       }
 
-      // handlers print
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener('click', (e)=>{
           e.stopPropagation();
@@ -1253,7 +1269,6 @@
       });
     }
 
-    // === Toggle Buttons State ===
     function setViewButtons(view){
       if(view === "current"){
         showCurrentBtn.disabled = true;
@@ -1264,7 +1279,6 @@
       }
     }
 
-    // ✅ حذف السجلات بالكامل
     function deleteAllRecords(){
       const ok = confirm("⚠️ هل أنت متأكد؟ سيتم حذف السجلات بالكامل (Current + Archive) من جهازك لهذا الموقع.\nلا يمكن التراجع.");
       if(!ok) return;
@@ -1281,12 +1295,9 @@
       finalRatingEmployeesWrap.innerHTML = "";
       reviewDetailsModal.classList.add("hide");
 
-      // تحديث الواجهات حسب الحالة الحالية
-      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
       renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
       setViewButtons("current");
 
-      // إغلاق/تحديث الأقسام الظاهرة
       currentSection.classList.remove("hide");
       finalRatingSection.classList.add("hide");
       adminAdjustPage.classList.add("hide");
@@ -1294,7 +1305,6 @@
       showToast("✅ تم حذف السجلات بالكامل.");
     }
 
-    // === Buttons / Navigation ===
     function enterAdminWorkspace(){
       adminCenterSession = LOCK_CENTER;
       localStorage.setItem(LS_KEYS.adminCenter, adminCenterSession);
@@ -1351,7 +1361,6 @@
       finalRatingSection.classList.add("hide");
 
       setViewButtons("current");
-      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
       renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
     });
 
@@ -1364,7 +1373,6 @@
       currentSection.classList.remove("hide");
 
       setViewButtons("current");
-      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
       renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
     });
 
@@ -1380,7 +1388,6 @@
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
 
-    // ✅ ربط زر حذف السجلات
     deleteRecordsBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
       deleteAllRecords();
