@@ -396,8 +396,9 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    // ✅ تعديل: إضافة "جيد جدًا" داخل dropdown
     function getRatingOptions(){
-      return ["ممتاز","جيد","مقبول"];
+      return ["ممتاز", "جيد جدًا", "جيد", "مقبول"];
     }
 
     const employeeSelect = document.getElementById("employeeSelect");
@@ -444,7 +445,6 @@
       return loadJson(LS_KEYS.questions, []); // [{id,text}]
     }
 
-    // ✅ الأسئلة إلزامية: أول خيار قيمة "" عشان يجبره يختار
     function renderQuestionDropdowns(){
       const qs = loadQuestions();
       questionsContainer.innerHTML = "";
@@ -499,7 +499,6 @@
 
       const questionAnswers = {};
 
-      // ✅ إلزامي: كل سؤال لازم يكون فيه اختيار حقيقي (قيمة ليست فارغة)
       for(const q of qs){
         const sel = document.querySelector(`select[data-qid="${q.id}"]`);
         if(!sel) return showToast("❌ حدث خطأ. لم يتم العثور على سؤال.");
