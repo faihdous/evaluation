@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -1273,7 +1273,6 @@
         localStorage.setItem(LS_KEYS.current, JSON.stringify([]));
         localStorage.setItem(LS_KEYS.archive, JSON.stringify([]));
       }catch(err){
-        // لو فشل Set، جرّب remove
         try{ localStorage.removeItem(LS_KEYS.current); }catch(e){}
         try{ localStorage.removeItem(LS_KEYS.archive); }catch(e){}
       }
@@ -1283,7 +1282,8 @@
       reviewDetailsModal.classList.add("hide");
 
       // تحديث الواجهات حسب الحالة الحالية
-      renderCurrentTablesForCenter(LOCK_CENTER);
+      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
       setViewButtons("current");
 
       // إغلاق/تحديث الأقسام الظاهرة
@@ -1351,7 +1351,8 @@
       finalRatingSection.classList.add("hide");
 
       setViewButtons("current");
-      renderCurrentTablesForCenter(LOCK_CENTER);
+      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
     });
 
     showCurrentBtn.addEventListener("click", ()=>{
@@ -1363,7 +1364,8 @@
       currentSection.classList.remove("hide");
 
       setViewButtons("current");
-      renderCurrentTablesForCenter(LOCK_CENTER);
+      // ✅ تعديل: استخدم adminCenterSession بدل LOCK_CENTER الثابت
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
     });
 
     showFinalRatingBtn.addEventListener("click", ()=>{
