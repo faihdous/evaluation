@@ -112,7 +112,6 @@
     .btn:hover{ transform: translateY(-1px); }
     .btn:active{ transform: translateY(0px); }
 
-    /* ================== شاشة التفاصيل ================== */
     .detailsPage{ display:none; }
 
     .topBar{
@@ -828,7 +827,6 @@
         });
       }
 
-      // 4 فئات
       function pointsForRating(r){
         if(r === "ممتاز") return 1;
         if(r === "جيد جدا") return 2;
@@ -856,8 +854,8 @@
         }
         if(count === 0) return "—";
 
-        const minSum = count * 1;   // ممتاز
-        const maxSum = count * 4;   // مقبول
+        const minSum = count * 1;
+        const maxSum = count * 4;
         const t = (sum - minSum) / (maxSum - minSum || 1);
 
         if(t <= 0.20) return "ممتاز";
@@ -957,7 +955,6 @@
         if(!chartsWrapEl) return;
         if(!Array.isArray(qs) || qs.length === 0) return;
 
-        // تأكد: تدمير ثم إعادة بناء (حتى Refresh ما يخرب)
         destroyCharts();
 
         const centerSummaries = buildCenterSummaries(currentReviews, archiveReviews, qs);
@@ -981,7 +978,29 @@
         const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
         const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
 
-        // ========= الرسم 1: أفضل المراكز (ممتاز) =========
+        // =========================================================
+        // ✅ helper: عند الضغط على الرسم -> افتح تفاصيل المركز
+        // =========================================================
+        const openCenterDetailsFromCharts = (centerName) => {
+          if(!centerName) return;
+
+          // التأكد من أن centerName موجود في الاختيار
+          const options = centerSelect?.options;
+          if(!options) return;
+
+          const foundOpt = Array.from(options).find(opt => opt.value === centerName);
+          if(!foundOpt) return;
+
+          centerSelect.value = centerName;
+
+          // إظهار مكان الرسومات تحت الجدول حسب منطق الكود
+          chartsPositionUnderEmployees();
+
+          centerTitle.textContent = `التقييم النهائي - ${centerName}`;
+          renderFinalForCenter(centerName);
+        };
+
+        // ========= الرسم 1: أفضل المراكز =========
         charts.bestCentersChart = new Chart(document.getElementById("bestCentersChart"), {
           type: "bar",
           data: {
@@ -998,9 +1017,30 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: true } },
-            scales: { y: { beginAtZero: true } }
+            scales: { y: { beginAtZero: true } },
+            // مهم عشان يكون الضغط دقيق
+            onClick: (e) => { /* نستخدم addEventListener تحت */ }
           }
         });
+
+        // ✅ تفعيل الضغط على الرسم 1
+        const bestCanvas = document.getElementById("bestCentersChart");
+        if(bestCanvas){
+          bestCanvas.style.cursor = "pointer";
+          bestCanvas.addEventListener("click", (evt) => {
+            const points = charts.bestCentersChart.getElementsAtEventForMode(
+              evt,
+              "nearest",
+              { intersect: true },
+              true
+            );
+            if(!points || points.length === 0) return;
+
+            const idx = points[0].index;
+            const centerName = topBest[idx]?.center;
+            if(centerName) openCenterDetailsFromCharts(centerName);
+          });
+        }
 
         // ========= الرسم 2: 4 فئات داخل كل مركز =========
         const allCentersAll = CENTERS.map(c => {
@@ -1057,9 +1097,29 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: true } },
-            scales: { y: { stacked: true, beginAtZero: true } }
+            scales: { y: { stacked: true, beginAtZero: true } },
+            onClick: (e) => { /* نستخدم addEventListener تحت */ }
           }
         });
+
+        // ✅ تفعيل الضغط على الرسم 2 (أي فئة -> مركز العمود)
+        const centersRatingCanvas = document.getElementById("centersRatingChart");
+        if(centersRatingCanvas){
+          centersRatingCanvas.style.cursor = "pointer";
+          centersRatingCanvas.addEventListener("click", (evt) => {
+            const points = charts.centersRatingChart.getElementsAtEventForMode(
+              evt,
+              "nearest",
+              { intersect: true },
+              true
+            );
+            if(!points || points.length === 0) return;
+
+            const idx = points[0].index; // index للمركز على المحور الأفقي
+            const centerName = allCentersAll[idx]?.center;
+            if(centerName) openCenterDetailsFromCharts(centerName);
+          });
+        }
 
         const allAll = [...currentReviews, ...archiveReviews];
 
@@ -1100,7 +1160,6 @@
           .sort((a,b)=> b.excellent - a.excellent)
           .slice(0, 10);
 
-        // أخضر (مطابق ممتاز)
         charts.topExcellentEmployeesChart = new Chart(document.getElementById("topExcellentEmployeesChart"), {
           type: "bar",
           data: {
@@ -1236,8 +1295,8 @@
             const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
 
             const colors = lowTop.map(x => x.worst === "مقبول"
-              ? "rgba(255, 120, 120, 0.45)"   // مقبول
-              : "rgba(255, 210, 74, 0.50)"    // جيد
+              ? "rgba(255, 120, 120, 0.45)"
+              : "rgba(255, 210, 74, 0.50)"
             );
 
             charts.lowLevelEmployeesChart = new Chart(canvasLow, {
