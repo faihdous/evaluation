@@ -7,10 +7,9 @@
 
   <style>
     /* =========================
-       Neon Glass Theme (NEW)
+       Neon Glass Theme (Laptop-Grade)
        ========================= */
     :root{
-      /* New palette */
       --bg1: #0b1026;
       --bg2: #06162c;
 
@@ -33,14 +32,9 @@
       --radius: 14px;
       --fieldPad: 12px;
 
-      /* Pills */
       --pillBg: rgba(255,255,255,0.12);
       --pillBorder: rgba(77,163,255,0.25);
 
-      /* Focus */
-      --focus: rgba(77,163,255,0.35);
-
-      /* Gradients */
       --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
       --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.24), transparent 60%);
       --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.14), transparent 60%);
@@ -53,17 +47,13 @@
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
       color: var(--text);
-      background:
-        var(--g1),
-        var(--g2),
-        var(--g3),
-        var(--g4);
+      background: var(--g1), var(--g2), var(--g3), var(--g4);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
     }
 
-    /* Subtle animated grain / glow */
+    /* Subtle animated grain / glow (kept fakhama on mobile too) */
     body::before{
       content:"";
       position: fixed;
@@ -85,7 +75,6 @@
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
 
-    /* Header glow / border */
     header{
       display:flex;
       gap: 12px;
@@ -180,8 +169,7 @@
     .card .cardHead{
       padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.10);
-      background:
-        linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14));
+      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14));
       position: relative;
     }
     .card .cardHead::after{
@@ -216,18 +204,6 @@
       text-align:center;
       padding: 10px 0;
       gap: 10px;
-    }
-
-    @media (max-width: 520px){
-      .loginStage{ min-height: 62vh; }
-      .card .cardBody{ padding: 12px; }
-      .brandPill{ padding: 10px 12px; }
-      .brandPill .title{ font-size:16px; }
-      .loginLogo{
-        width: 160px; height: 160px;
-        margin-top: -6px; margin-bottom: -10px;
-        transform: translateY(-28px);
-      }
     }
 
     /* Buttons */
@@ -423,7 +399,6 @@
       font-weight: 850;
     }
 
-    /* ✅ Rating Tags (NEW look but same semantics) */
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
@@ -431,26 +406,10 @@
       background: rgba(255,255,255,0.06); white-space:nowrap;
       color: rgba(255,255,255,0.92);
     }
-    .ratingTag.excellent{
-      border-color: rgba(33,209,159,0.58);
-      background: rgba(33,209,159,0.12);
-      color: rgba(233,255,247,0.98);
-    }
-    .ratingTag.good{
-      border-color: rgba(255,209,102,0.85);
-      background: rgba(255,209,102,0.16);
-      color: rgba(255,248,227,0.98);
-    }
-    .ratingTag.good2{
-      border-color: rgba(77,163,255,0.55);
-      background: rgba(77,163,255,0.12);
-      color: rgba(232,248,255,0.98);
-    }
-    .ratingTag.acceptable{
-      border-color: rgba(255,90,122,0.55);
-      background: rgba(255,90,122,0.16);
-      color: rgba(255,235,239,0.98);
-    }
+    .ratingTag.excellent{ border-color: rgba(33,209,159,0.58); background: rgba(33,209,159,0.12); color: rgba(233,255,247,0.98); }
+    .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); color: rgba(255,248,227,0.98); }
+    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
+    .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); color: rgba(255,235,239,0.98); }
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
@@ -510,7 +469,6 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
-    /* Purple print button style kept */
     .btn.printPurple{
       background: rgba(139,92,246,0.16) !important;
       color: rgba(236,227,255,0.96) !important;
@@ -549,7 +507,6 @@
       transform: none !important;
     }
 
-    /* Employee final detail boxes */
     .finalReviewItem{
       border:1px solid rgba(255,255,255,0.14);
       border-radius:14px;
@@ -582,6 +539,109 @@
     @keyframes sectionIn{
       from{ opacity: 0; transform: translateY(6px); }
       to{ opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================================================
+       Mobile Overrides (MAINTAIN Laptop Luxury/Fakhama)
+       Only reduce “وزن” الستايل بدون ما نخليه شكله مختلف
+       ========================================================= */
+    @media (max-width: 520px){
+      /* اترك النيون فخم لكن أقل “حدة” */
+      body::before{
+        opacity: 0.72;
+        filter: blur(20px);
+      }
+
+      header{
+        padding: 10px 10px;
+        top: 6px;
+        border-radius: 18px;
+      }
+
+      .brandPill{
+        padding: 9px 10px;
+      }
+      .brandPill .title{
+        font-size: 16px;
+      }
+
+      .loginStage{
+        min-height: 62vh;
+        padding: 14px 0 6px;
+        gap: 10px;
+      }
+
+      .loginLogo{
+        width: 150px;
+        height: 150px;
+        margin-top: -2px;
+        margin-bottom: -6px;
+        transform: translateY(-22px);
+      }
+
+      .card{
+        border-radius: 20px;
+      }
+      .card .cardBody{
+        padding: 12px;
+      }
+      .card .cardHead{
+        padding: 12px 12px;
+      }
+
+      /* اجعل الأزرار “مليانة” ومناسبة للمس */
+      .btn{
+        min-height: 50px;
+        border-radius: 18px;
+        padding: 12px 12px;
+        font-size: 14px;
+      }
+      .btn.alt{
+        border-radius: 18px;
+      }
+      .smallBtn{
+        min-height: 42px;
+        border-radius: 16px;
+      }
+
+      label{
+        font-size: 14px;
+      }
+
+      input, select, textarea{
+        font-size: 16px;
+        padding: 13px 12px;
+        border-radius: 16px;
+      }
+
+      h3{
+        font-size: 16px;
+        margin: 14px 0 10px;
+      }
+
+      .fineprint{
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 10px;
+        padding: 0 4px;
+      }
+
+      /* Table: خليه يشتغل زي اللابتوب مع نفس الستايل */
+      th, td{
+        padding: 10px 8px;
+        font-size: 12.5px;
+      }
+
+      /* modal */
+      #reviewDetailsModal > div{
+        border-radius: 20px !important;
+        padding: 12px !important;
+      }
+
+      /* لا تلغي الحركات بالكامل (عشان فخامة) */
+      #currentSection, #finalRatingSection, #adminAdjustPage{
+        animation-duration: 0.28s;
+      }
     }
   </style>
 </head>
@@ -805,7 +865,6 @@
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
 
-    // ✅ تمييز "جيد جدا" عن "جيد"
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
       if(r === "جيد جدا") return "good2";
@@ -1282,7 +1341,6 @@
       w.document.close();
     }
 
-    // ✅ === Final rating (Current only) مع تفاصيل كل مراجعة ===
     function renderFinalRatingForEmployees(center){
       currentReviews = loadJson(LS_KEYS.current, []);
 
@@ -1311,7 +1369,6 @@
 
       const map = new Map();
 
-      // نجمع عدد التقييم + نخزن questionAnswers داخل كل مراجعة
       for(const r of all){
         const emp = String(r.employeeName || "").trim();
         if(!emp) continue;
@@ -1365,12 +1422,11 @@
         return;
       }
 
-      const allReviewsCache = new Map(); // key: `${emp}__${reviewId}` -> review object
+      const allReviewsCache = new Map();
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
         const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
-        // نخزن reviews عشان تفاصيل modal
         for(const rev of x.reviews){
           allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
         }
@@ -1441,7 +1497,6 @@
         `;
       }
 
-      // ✅ ربط أزرار تفاصيل المراجعة داخل modal
       finalRatingEmployeesWrap.querySelectorAll("button[data-review-detail]").forEach(btn=>{
         btn.addEventListener("click",(e)=>{
           e.stopPropagation();
@@ -1452,7 +1507,6 @@
         });
       });
 
-      // ✅ ربط طباعة الموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener("click",(e)=>{
           e.stopPropagation();
