@@ -595,8 +595,99 @@
       white-space:nowrap;
     }
 
-    /* Mobile safety: keep layout stable */
+    /* ==========================================================
+       Mobile FIX (iPhone + Android) - keep exactly same look
+       ========================================================== */
     @media (max-width: 900px){
+
+      /* تثبيت الخلفية مثل اللابتوب وتجنب أي تفتيح */
+      html, body{
+        background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
+        color: var(--text) !important;
+      }
+
+      /* تقوية الـglow على الموبايل */
+      body::before{
+        opacity: 0.95 !important;
+        filter: blur(20px) !important;
+        z-index: -1 !important;
+      }
+
+      /* Card / Header / Login */
+      .wrap{
+        background: transparent !important;
+      }
+      .loginCard{
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.16) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: var(--shadow) !important;
+      }
+
+      header{
+        background: rgba(255,255,255,0.08) !important;
+        border:1px solid rgba(255,255,255,0.14) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.25) !important;
+      }
+
+      .card{
+        background: rgba(255,255,255,0.08) !important;
+        border:1px solid rgba(255,255,255,0.14) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: var(--shadow) !important;
+      }
+
+      .chartCard{
+        background: rgba(255,255,255,0.06) !important;
+        border:1px solid rgba(255,255,255,0.12) !important;
+        backdrop-filter: blur(10px) !important;
+        box-shadow: 0 18px 45px rgba(0,0,0,0.18) !important;
+      }
+
+      .chartCardHead{
+        background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.12)) !important;
+      }
+
+      /* MUST: لا نخلي canvas يطلع فاتح */
+      .chartCardBody canvas{
+        background: transparent !important;
+      }
+      .chartCardBody{
+        background: transparent !important;
+      }
+
+      /* Modal */
+      .modalBox{
+        background: rgba(255,255,255,0.10) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: var(--shadow) !important;
+      }
+      .modalBody{
+        background: rgba(0,0,0,0.16) !important;
+        border:1px solid rgba(255,255,255,0.14) !important;
+      }
+
+      /* النصوص/الوسوم */
+      h1, h2, h3, .barTitle, .sub2, .fineprint, .ratingTag, .modalTitle{
+        color: rgba(255,255,255,0.95) !important;
+      }
+
+      .toast{
+        background: rgba(255,255,255,0.08) !important;
+        border:1px solid rgba(255,255,255,0.14) !important;
+        color: rgba(255,255,255,0.78) !important;
+      }
+
+      /* السيلكت */
+      select{
+        background: rgba(0,0,0,0.18) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
+        color: var(--text) !important;
+      }
+
+      /* Radius/Layout */
       header{ border-radius: 18px; }
       .card{ border-radius: 20px; }
       .chartCard{ min-height: 240px; border-radius: 18px; }
