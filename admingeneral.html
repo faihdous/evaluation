@@ -8,17 +8,37 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <style>
+    /* =========================
+       Neon Glass (same palette as Survey)
+       ========================= */
     :root{
-      --text:#0b1b2a;
-      --muted: rgba(11,27,42,0.65);
-      --border: rgba(11,27,42,0.14);
-      --yellow:#ffd24a;
-      --shadow:0 18px 45px rgba(2,6,23,0.16);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.66);
+      --border: rgba(255,255,255,0.16);
+
+      --yellow:#ffd166;
+      --shadow: 0 22px 70px rgba(0,0,0,0.45);
       --radius2:22px;
       --radius:14px;
 
-      --modalBg: rgba(0,0,0,0.35);
+      --modalBg: rgba(0,0,0,0.55);
+
+      --blue: #4da3ff;
+      --green: #21d19f;
+      --danger: #ff5a7a;
+
+      --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
+      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.24), transparent 60%);
+      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.14), transparent 60%);
+      --g4: linear-gradient(180deg, #0d1435, #070f22);
+
+      --panel: rgba(255,255,255,0.10);
+      --panel2: rgba(255,255,255,0.08);
+
       --purple:#3b1c84;
+      --printPurpleBg: rgba(139,92,246,0.16);
+      --printPurpleBorder: rgba(139,92,246,0.38);
+      --printPurpleText: #3b1c84;
     }
 
     *{ box-sizing:border-box; }
@@ -26,14 +46,33 @@
     body{
       margin:0;
       font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 10% 0%, rgba(11,61,145,0.20), transparent 60%),
-        radial-gradient(900px 500px at 90% 0%, rgba(14,122,75,0.18), transparent 60%),
-        linear-gradient(180deg, #f3f6ff, #eef3ff);
+      color: var(--text);
+
+      background: var(--g1), var(--g2), var(--g3), var(--g4);
       min-height:100vh;
       overflow-x:hidden;
       overflow-y:auto;
+      position: relative;
+    }
+
+    /* glow layer */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: -40px;
+      pointer-events: none;
+      background:
+        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.20), transparent 58%),
+        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.18), transparent 60%),
+        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.10), transparent 62%);
+      filter: blur(18px);
+      opacity: 0.85;
+      animation: glowFloat 10s ease-in-out infinite;
+      z-index: -1;
+    }
+    @keyframes glowFloat{
+      0%,100%{ transform: translate3d(0,0,0); }
+      50%{ transform: translate3d(0,-10px,0); }
     }
 
     .wrap{
@@ -49,8 +88,8 @@
     .loginCard{
       width:100%;
       max-width:560px;
-      background: rgba(255,255,255,0.82);
-      border:1px solid var(--border);
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.16);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
@@ -91,6 +130,7 @@
       font-size:18px;
       font-weight:950;
       letter-spacing:0.2px;
+      color: rgba(255,255,255,0.95);
     }
 
     .btn{
@@ -100,8 +140,8 @@
       padding:14px 18px;
       border-radius: 16px;
       font-weight:950;
-      background: var(--yellow);
-      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.88));
+      box-shadow: 0 12px 30px rgba(255,209,102,0.18);
       transition:0.2s;
       width:100%;
       max-width: 340px;
@@ -127,31 +167,33 @@
     .barTitle{
       text-align:center;
       font-weight:950;
+      color: rgba(255,255,255,0.95);
     }
 
     .logoutBtn{
       justify-self: end;
-      border:1px solid rgba(11,27,42,0.18);
-      background: rgba(255,255,255,0.85);
-      color:#0b1b2a;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.92);
       padding:10px 14px;
       border-radius:16px;
       cursor:pointer;
       font-weight:950;
-      box-shadow: 0 10px 20px rgba(2,6,23,0.06);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.10);
       white-space:nowrap;
       -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(12px);
     }
 
     .containerDetails{ width:min(1200px,96vw); margin:12px auto 22px; }
 
     header{
       padding:14px;
-      background: rgba(255,255,255,0.72);
-      border:1px solid var(--border);
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.14);
       border-radius: 22px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -164,11 +206,12 @@
       font-size:16px;
       font-weight:950;
       letter-spacing:0.2px;
+      color: rgba(255,255,255,0.95);
     }
 
     .sub2{
       margin-top:6px;
-      color: rgba(11,27,42,0.65);
+      color: rgba(255,255,255,0.65);
       font-weight:900;
       font-size:12px;
     }
@@ -185,14 +228,15 @@
       max-width: 80vw;
       padding: 14px 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(11,27,42,0.18);
-      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.18);
       color: var(--text);
       outline:none;
       appearance:none;
       -webkit-appearance:none;
       font-size:15px;
       direction: rtl;
+      backdrop-filter: blur(10px);
     }
 
     .btnRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
@@ -204,8 +248,8 @@
       border-radius:16px;
       font-weight:950;
       color:#071018;
-      background: var(--yellow);
-      box-shadow: 0 10px 20px rgba(255,210,74,0.18);
+      background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.88));
+      box-shadow: 0 12px 30px rgba(255,209,102,0.18);
       transition:0.2s;
       min-height:46px;
       -webkit-tap-highlight-color: transparent;
@@ -213,16 +257,16 @@
     .btnDetail:hover{ transform: translateY(-1px); }
 
     .btnDetail.alt{
-      background: rgba(11,27,42,0.06);
-      border:1px solid rgba(11,27,42,0.16);
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.16);
       box-shadow:none;
-      color:rgba(11,27,42,0.8);
+      color: rgba(255,255,255,0.92);
     }
 
     .card{
       margin-top:14px;
-      background: rgba(255,255,255,0.78);
-      border:1px solid var(--border);
+      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.14);
       border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
@@ -231,8 +275,8 @@
 
     .cardHead{
       padding:12px 14px;
-      border-bottom:1px solid rgba(11,27,42,0.10);
-      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+      border-bottom:1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.12));
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
@@ -246,11 +290,13 @@
       letter-spacing:0.2px;
       font-weight:950;
       text-align:right;
+      color: rgba(255,255,255,0.95);
     }
 
     #centerTitle{
       text-align:center !important;
       width:100%;
+      color: rgba(255,255,255,0.95) !important;
     }
 
     .ratingTag{
@@ -259,19 +305,20 @@
       border-radius:999px;
       font-weight:900;
       font-size:12px;
-      border: 1px solid rgba(11,27,42,0.14);
-      background: rgba(11,27,42,0.05);
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
       white-space:nowrap;
+      color: rgba(255,255,255,0.90);
     }
-    .ratingTag.excellent{ border-color: rgba(14,122,75,0.55); background: rgba(14,122,75,0.08); }
-    .ratingTag.good{ border-color: rgba(255,210,74,0.85); background: rgba(255,210,74,0.16); }
-    .ratingTag.good2{ border-color: rgba(11,61,145,0.55); background: rgba(11,61,145,0.10); }
-    .ratingTag.acceptable{ border-color: rgba(255,120,120,0.55); background: rgba(255,120,120,0.16); }
+    .ratingTag.excellent{ border-color: rgba(33,209,159,0.55); background: rgba(33,209,159,0.10); }
+    .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); }
+    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.10); }
+    .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); }
 
     details.finalEmployeeDetails{
-      border:1px solid rgba(11,27,42,0.12);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius:14px;
-      background: rgba(11,61,145,0.04);
+      background: rgba(77,163,255,0.06);
       margin-top:10px;
       overflow:hidden;
     }
@@ -289,7 +336,7 @@
 
     .finalEmployeeMeta{
       padding:10px 12px 14px;
-      border-top:1px solid rgba(11,27,42,0.10);
+      border-top:1px solid rgba(255,255,255,0.10);
     }
 
     .finalReviewsList{
@@ -300,10 +347,10 @@
     }
 
     .finalReviewItem{
-      border:1px solid rgba(11,27,42,0.12);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius:12px;
       padding:10px 12px;
-      background: rgba(255,255,255,0.65);
+      background: rgba(255,255,255,0.06);
     }
 
     .finalReviewItem .metaLine{
@@ -314,14 +361,14 @@
       justify-content:flex-start;
       margin-bottom:6px;
       font-weight:900;
-      color: rgba(11,27,42,0.75);
+      color: rgba(255,255,255,0.75);
       font-size:12px;
     }
 
     .btn.printPurple{
-      background: rgba(139,92,246,0.16) !important;
-      color:#3b1c84 !important;
-      border:1px solid rgba(139,92,246,0.38) !important;
+      background: var(--printPurpleBg) !important;
+      color: var(--printPurpleText) !important;
+      border:1px solid var(--printPurpleBorder) !important;
       box-shadow: 0 10px 20px rgba(139,92,246,0.12) !important;
       padding:8px 10px !important;
       border-radius:14px !important;
@@ -332,7 +379,7 @@
     .reviewDetailsBtn{
       border:1px solid rgba(139,92,246,0.35);
       background: rgba(139,92,246,0.10);
-      color:#3b1c84;
+      color:#d6c8ff;
       padding:8px 10px;
       border-radius:12px;
       font-weight:950;
@@ -343,7 +390,7 @@
     }
 
     .fineprint{
-      color: rgba(11,27,42,0.58);
+      color: rgba(255,255,255,0.62);
       font-size: 12px;
       margin-top:10px;
       line-height:1.7;
@@ -356,12 +403,13 @@
       margin-top:12px;
       padding:12px;
       border-radius:14px;
-      border:1px solid rgba(11,27,42,0.14);
-      background: rgba(255,255,255,0.78);
-      color: rgba(11,27,42,0.72);
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.78);
       text-align:center;
       font-weight:850;
       font-size:13px;
+      backdrop-filter: blur(12px);
     }
 
     .chartsWrap{
@@ -378,10 +426,10 @@
     }
 
     .chartCard{
-      background: rgba(255,255,255,0.62);
-      border:1px solid rgba(11,27,42,0.12);
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius:22px;
-      box-shadow: 0 18px 45px rgba(2,6,23,0.10);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.18);
       backdrop-filter: blur(10px);
       overflow:hidden;
       min-height: 260px;
@@ -391,11 +439,12 @@
 
     .chartCardHead{
       padding:10px 12px;
-      border-bottom:1px solid rgba(11,27,42,0.08);
-      background: linear-gradient(90deg, rgba(14,122,75,0.14), rgba(11,61,145,0.12));
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.12));
       font-weight:950;
       font-size:14px;
       text-align:center;
+      color: rgba(255,255,255,0.95);
     }
 
     .chartCardBody{
@@ -429,8 +478,8 @@
 
     .modalBox{
       width: min(980px, 94vw);
-      background: rgba(255,255,255,0.86);
-      border: 1px solid rgba(11,27,42,0.18);
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(12px);
@@ -453,23 +502,24 @@
     .modalTitle{
       font-weight:950;
       font-size:16px;
+      color: rgba(255,255,255,0.95);
     }
 
     .closeBtn{
       border:none;
       cursor:pointer;
-      background: rgba(11,42,42,0.06);
-      border:1px solid rgba(11,42,42,0.16);
+      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.14);
       border-radius:14px;
       padding:10px 14px;
       font-weight:950;
-      color: rgba(11,42,42,0.85);
+      color: rgba(255,255,255,0.88);
       -webkit-tap-highlight-color: transparent;
     }
 
     .modalMeta{
       font-size:13px;
-      color: rgba(11,27,42,0.65);
+      color: rgba(255,255,255,0.70);
       font-weight:900;
       line-height:1.7;
       margin-bottom:10px;
@@ -477,30 +527,30 @@
 
     .modalBody{
       overflow:auto;
-      border:1px solid rgba(11,27,42,0.14);
+      border:1px solid rgba(255,255,255,0.14);
       border-radius:14px;
-      background: rgba(255,255,255,0.55);
+      background: rgba(0,0,0,0.16);
       padding: 12px;
     }
 
     .modalQ{
       padding:10px 12px;
-      border:1px solid rgba(11,27,42,0.10);
+      border:1px solid rgba(255,255,255,0.10);
       border-radius:14px;
-      background: rgba(11,61,145,0.04);
+      background: rgba(77,163,255,0.06);
       margin-bottom:10px;
     }
 
     .modalQTitle{
       font-weight:950;
-      color: rgba(11,27,42,0.85);
+      color: rgba(255,255,255,0.88);
       margin-bottom:6px;
       font-size:13px;
     }
 
     .modalQAns{
       font-weight:900;
-      color: rgba(11,27,42,0.65);
+      color: rgba(255,255,255,0.65);
       font-size:13px;
       word-break:break-word;
       line-height:1.6;
@@ -509,7 +559,7 @@
     #empCentersModal{
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.45);
       z-index: 9998;
       display: none;
       align-items: center;
@@ -518,12 +568,10 @@
     }
     #empCentersModal.show{ display:flex; }
 
-    .modalBox{ color: var(--text); }
-
     .centerRow{
-      border:1px solid rgba(11,27,42,0.12);
+      border:1px solid rgba(255,255,255,0.12);
       border-radius:14px;
-      background: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.06);
       padding:10px 12px;
       display:flex;
       align-items:center;
@@ -534,17 +582,26 @@
 
     .centerName{
       font-weight:950;
-      color: rgba(11,27,42,0.85);
+      color: rgba(255,255,255,0.88);
     }
 
     .centerCount{
       font-weight:950;
-      color:#071018;
-      border:1px solid rgba(14,122,75,0.35);
-      background: rgba(14,122,75,0.08);
+      color: rgba(255,255,255,0.92);
+      border:1px solid rgba(77,163,255,0.35);
+      background: rgba(77,163,255,0.10);
       padding:6px 12px;
       border-radius:999px;
       white-space:nowrap;
+    }
+
+    /* Mobile safety: keep layout stable */
+    @media (max-width: 900px){
+      header{ border-radius: 18px; }
+      .card{ border-radius: 20px; }
+      .chartCard{ min-height: 240px; border-radius: 18px; }
+      .modalBox{ border-radius: 20px; }
+      .btnDetail.alt{ width: auto; }
     }
   </style>
 </head>
@@ -884,9 +941,6 @@
         return "مقبول";
       }
 
-      // ================================
-      // ✅ NEW: فتح نافذة أسماء (بنفس modal)
-      // ================================
       function openEmployeesModalByCenterAndCategory(centerName, ratingLabel){
         const currentReviews = loadJson(LS_KEYS.current, []);
         const archiveReviews = loadJson(LS_KEYS.archive, []);
@@ -912,7 +966,7 @@
           return;
         }
 
-        const empCounts = new Map(); // emp -> {excellent, goodExcellent, good, acceptable}
+        const empCounts = new Map();
 
         for(const r of allCenterReviews){
           const emp = String(r.employeeName || "").trim();
@@ -947,7 +1001,7 @@
           ? names.map(n => `
               <div class="centerRow" style="justify-content:flex-start;">
                 <div class="centerName">${escapeHtml(n)}</div>
-                <div class="centerCount" style="margin-inline-start:auto; border-color: rgba(11,61,145,0.35); background: rgba(11,61,145,0.08);">
+                <div class="centerCount" style="margin-inline-start:auto; border-color: rgba(77,163,255,0.35); background: rgba(77,163,255,0.10);">
                   —
                 </div>
               </div>
@@ -955,162 +1009,6 @@
           : "";
 
         empCentersModal.classList.add("show");
-      }
-
-      // =========================================================
-      // (تبقى دالة renderNamesOnlyForCenter كما هي في كودك إن تحبها)
-      // لكن لن نستخدمها الآن في الرسم 1 و2
-      // =========================================================
-      function renderNamesOnlyForCenter(center, ratingFilterLabel){
-        statusLine.textContent = "جارٍ جلب الأسماء...";
-
-        const currentReviews = loadJson(LS_KEYS.current, []);
-        const archiveReviews = loadJson(LS_KEYS.archive, []);
-        const qs = loadJson(LS_KEYS.questions, []);
-
-        currentQuestionsCache = Array.isArray(qs) ? qs : [];
-        reviewById.clear();
-
-        finalRatingEmployeesWrap.innerHTML = "";
-        emptyMsg.style.display = "none";
-        emptyMsg.textContent = "";
-
-        if(!Array.isArray(qs) || qs.length === 0){
-          statusLine.textContent = "لا توجد أسئلة مضافة (rating_questions_v1).";
-          emptyMsg.style.display = "block";
-          emptyMsg.textContent = "أضف أسئلة التقييم من لوحة أي مركز أولاً.";
-          return;
-        }
-
-        const allCenterReviews = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
-        if(allCenterReviews.length === 0){
-          statusLine.textContent = "لا توجد تقييمات لهذا المركز حتى الآن.";
-          emptyMsg.style.display = "block";
-          emptyMsg.textContent = "لن يظهر أي موظف إلا بعد توفر مراجعات كافية.";
-          return;
-        }
-
-        const empCounts = new Map();
-
-        for(const r of allCenterReviews){
-          const emp = String(r.employeeName || "").trim();
-          if(!emp) continue;
-
-          const finalRatingPerReview = finalRatingFromAnswers(qs, r.questionAnswers || {});
-          if(finalRatingPerReview === "—") continue;
-
-          if(!empCounts.has(emp)){
-            empCounts.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
-          }
-          const cts = empCounts.get(emp);
-
-          if(finalRatingPerReview === "ممتاز") cts.excellent++;
-          else if(finalRatingPerReview === "جيد جدا") cts.goodExcellent++;
-          else if(finalRatingPerReview === "جيد") cts.good++;
-          else if(finalRatingPerReview === "مقبول") cts.acceptable++;
-        }
-
-        const names = [];
-        for(const [emp, cts] of empCounts.entries()){
-          const finalForEmp = computeFinalByCounts(cts.excellent, cts.goodExcellent, cts.good, cts.acceptable);
-          if(finalForEmp === "—") continue;
-          if(ratingFilterLabel && finalForEmp !== ratingFilterLabel) continue;
-          names.push(emp);
-        }
-
-        if(names.length === 0){
-          statusLine.textContent = "لا توجد أسماء مطابقة للفئة حسب التقييم النهائي.";
-          emptyMsg.style.display = "block";
-          emptyMsg.textContent = "جرّب فئة أخرى أو تأكد من توفر مراجعات مكتملة.";
-          return;
-        }
-
-        statusLine.textContent = `تم التجميع ✅ (عدد الأسماء: ${names.length})`;
-
-        finalRatingEmployeesWrap.innerHTML = `
-          <div style="
-            display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;
-            align-items:center; justify-content:flex-start;
-          ">
-            ${names.map(n => `
-              <span style="
-                border:1px solid rgba(11,27,42,0.14);
-                background: rgba(11,27,42,0.05);
-                border-radius:999px;
-                padding:8px 12px;
-                font-weight:950;
-                color:rgba(11,27,42,0.90);
-                white-space:nowrap;
-              ">${escapeHtml(n)}</span>
-            `).join("")}
-          </div>
-        `;
-      }
-
-      function buildCenterSummaries(currentReviews, archiveReviews, qs){
-        const centerSummaries = [];
-
-        for(const c of CENTERS){
-          const all = [...currentReviews, ...archiveReviews].filter(r => r.center === c);
-          const empMap = new Map();
-
-          for(const r of all){
-            const emp = String(r.employeeName || "").trim();
-            if(!emp) continue;
-
-            const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-            if(finalRating === "—") continue;
-
-            if(!empMap.has(emp)){
-              empMap.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
-            }
-
-            const it = empMap.get(emp);
-            if(finalRating === "ممتاز") it.excellent++;
-            else if(finalRating === "جيد جدا") it.goodExcellent++;
-            else if(finalRating === "جيد") it.good++;
-            else if(finalRating === "مقبول") it.acceptable++;
-          }
-
-          let excellentEmployees = 0, goodExcellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
-          let sumPoints = 0, countFinalEmployees = 0;
-
-          for(const [, data] of empMap.entries()){
-            const final = computeFinalByCounts(
-              data.excellent,
-              data.goodExcellent,
-              data.good,
-              data.acceptable
-            );
-
-            if(final === "—") continue;
-
-            const p = pointsForRating(final);
-            if(p == null) continue;
-
-            sumPoints += p;
-            countFinalEmployees++;
-
-            if(final === "ممتاز") excellentEmployees++;
-            else if(final === "جيد جدا") goodExcellentEmployees++;
-            else if(final === "جيد") goodEmployees++;
-            else if(final === "مقبول") acceptableEmployees++;
-          }
-
-          if(countFinalEmployees > 0){
-            centerSummaries.push({
-              center: c,
-              excellentEmployees,
-              goodExcellentEmployees,
-              goodEmployees,
-              acceptableEmployees,
-              finalEmployeesCount: countFinalEmployees,
-              avgPoint: sumPoints / countFinalEmployees
-            });
-          }
-        }
-
-        return centerSummaries;
       }
 
       function renderChartsGeneral(currentReviews, archiveReviews, qs){
@@ -1126,19 +1024,18 @@
 
         const topBest = sortedByExcellent.slice(0, Math.min(7, sortedByExcellent.length));
 
-        const EXCELLENT_BG = "rgba(14,122,75,0.35)";
-        const EXCELLENT_BORDER = "rgba(14,122,75,0.95)";
+        const EXCELLENT_BG = "rgba(33,209,159,0.35)";
+        const EXCELLENT_BORDER = "rgba(33,209,159,0.95)";
 
-        const GOOD2_BG = "rgba(11,61,145,0.30)";
-        const GOOD2_BORDER = "rgba(11,61,145,0.95)";
+        const GOOD2_BG = "rgba(77,163,255,0.30)";
+        const GOOD2_BORDER = "rgba(77,163,255,0.95)";
 
-        const GOOD_BG = "rgba(255,210,74,0.28)";
-        const GOOD_BORDER = "rgba(180,120,0,0.75)";
+        const GOOD_BG = "rgba(255,209,102,0.28)";
+        const GOOD_BORDER = "rgba(180,140,0,0.75)";
 
-        const ACCEPTABLE_BG = "rgba(255,120,120,0.24)";
-        const ACCEPTABLE_BORDER = "rgba(200,60,60,0.75)";
+        const ACCEPTABLE_BG = "rgba(255,90,122,0.24)";
+        const ACCEPTABLE_BORDER = "rgba(255,60,80,0.75)";
 
-        // ✅ تعديل: الرسم 1 يفتح modal أسماء فئة ممتاز داخل المركز
         const openModalForBestCenters = (centerName) => {
           openEmployeesModalByCenterAndCategory(centerName, "ممتاز");
         };
@@ -1158,8 +1055,9 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: true } },
-            scales: { y: { beginAtZero: true } }
+            plugins: { legend: { display: true, labels: { color: "rgba(255,255,255,0.9)" } } },
+            scales: { y: { beginAtZero: true, ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.08)" } },
+                      x: { ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.05)" } } }
           }
         });
 
@@ -1181,7 +1079,6 @@
           });
         }
 
-        // ========= الرسم 2: 4 فئات =========
         const allCentersAll = CENTERS.map(c => {
           const found = centerSummaries.find(x => x.center === c);
           return found || {
@@ -1198,45 +1095,20 @@
           data: {
             labels: allCentersAll.map(x => x.center),
             datasets: [
-              {
-                label: "ممتاز",
-                data: allCentersAll.map(x => x.excellentEmployees),
-                backgroundColor: EXCELLENT_BG,
-                borderColor: EXCELLENT_BORDER,
-                borderWidth: 1,
-                stack:"s1"
-              },
-              {
-                label: "جيد جدا",
-                data: allCentersAll.map(x => x.goodExcellentEmployees),
-                backgroundColor: GOOD2_BG,
-                borderColor: GOOD2_BORDER,
-                borderWidth: 1,
-                stack:"s1"
-              },
-              {
-                label: "جيد",
-                data: allCentersAll.map(x => x.goodEmployees),
-                backgroundColor: GOOD_BG,
-                borderColor: GOOD_BORDER,
-                borderWidth: 1,
-                stack:"s1"
-              },
-              {
-                label: "مقبول",
-                data: allCentersAll.map(x => x.acceptableEmployees),
-                backgroundColor: ACCEPTABLE_BG,
-                borderColor: ACCEPTABLE_BORDER,
-                borderWidth: 1,
-                stack:"s1"
-              }
+              { label: "ممتاز", data: allCentersAll.map(x => x.excellentEmployees), backgroundColor: EXCELLENT_BG, borderColor: EXCELLENT_BORDER, borderWidth: 1, stack:"s1" },
+              { label: "جيد جدا", data: allCentersAll.map(x => x.goodExcellentEmployees), backgroundColor: GOOD2_BG, borderColor: GOOD2_BORDER, borderWidth: 1, stack:"s1" },
+              { label: "جيد", data: allCentersAll.map(x => x.goodEmployees), backgroundColor: GOOD_BG, borderColor: GOOD_BORDER, borderWidth: 1, stack:"s1" },
+              { label: "مقبول", data: allCentersAll.map(x => x.acceptableEmployees), backgroundColor: ACCEPTABLE_BG, borderColor: ACCEPTABLE_BORDER, borderWidth: 1, stack:"s1" }
             ]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: true } },
-            scales: { y: { stacked: true, beginAtZero: true } }
+            plugins: { legend: { display: true, labels: { color: "rgba(255,255,255,0.9)" } } },
+            scales: {
+              y: { stacked: true, beginAtZero: true, ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.08)" } },
+              x: { ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.05)" } }
+            }
           }
         });
 
@@ -1260,12 +1132,10 @@
             const ratingLabelsByDataset = ["ممتاز", "جيد جدا", "جيد", "مقبول"];
             const ratingLabel = ratingLabelsByDataset[datasetIndex] || null;
 
-            // ✅ تعديل: بدال قائمة فوق/مكان غلط -> modal
             openEmployeesModalByCenterAndCategory(centerName, ratingLabel);
           });
         }
 
-        // ========= الرسم 3 (ممتاز فقط) كما في كودك =========
         const allAll = [...currentReviews, ...archiveReviews];
 
         const empToCenterExcellentCounts = new Map();
@@ -1320,8 +1190,8 @@
             indexAxis: "y",
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: true } },
-            scales: { x: { beginAtZero: true } }
+            plugins: { legend: { display: true, labels: { color: "rgba(255,255,255,0.9)" } } },
+            scales: { x: { beginAtZero: true, ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.08)" } } }
           }
         });
 
@@ -1364,7 +1234,6 @@
           empCentersModal.classList.add("show");
         });
 
-        // ========= الرسم 4 (متدني المستوى) كما في كودك =========
         const empToCenterCounts = new Map();
         for(const r of allAll){
           const emp = String(r.employeeName || "").trim();
@@ -1439,8 +1308,8 @@
             const values = lowTop.map(x => x.worst === "مقبول" ? 4 : 3);
 
             const colors = lowTop.map(x => x.worst === "مقبول"
-              ? "rgba(255, 120, 120, 0.45)"
-              : "rgba(255, 210, 74, 0.50)"
+              ? "rgba(255, 90, 122, 0.45)"
+              : "rgba(255, 209, 102, 0.50)"
             );
 
             charts.lowLevelEmployeesChart = new Chart(canvasLow, {
@@ -1473,13 +1342,16 @@
                   x: {
                     beginAtZero: true,
                     ticks: {
+                      color: "rgba(255,255,255,0.85)",
                       callback: function(value){
                         if(value === 4) return "مقبول";
                         if(value === 3) return "جيد";
                         return value;
                       }
-                    }
-                  }
+                    },
+                    grid: { color: "rgba(255,255,255,0.08)" }
+                  },
+                  y: { ticks: { color: "rgba(255,255,255,0.85)" }, grid: { display:false } }
                 }
               }
             });
@@ -1522,7 +1394,72 @@
         }
       }
 
-      // === بقايا كودك (بدون تغيير كبير) ===
+      function buildCenterSummaries(currentReviews, archiveReviews, qs){
+        const centerSummaries = [];
+
+        for(const c of CENTERS){
+          const all = [...currentReviews, ...archiveReviews].filter(r => r.center === c);
+          const empMap = new Map();
+
+          for(const r of all){
+            const emp = String(r.employeeName || "").trim();
+            if(!emp) continue;
+
+            const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+            if(finalRating === "—") continue;
+
+            if(!empMap.has(emp)){
+              empMap.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0 });
+            }
+
+            const it = empMap.get(emp);
+            if(finalRating === "ممتاز") it.excellent++;
+            else if(finalRating === "جيد جدا") it.goodExcellent++;
+            else if(finalRating === "جيد") it.good++;
+            else if(finalRating === "مقبول") it.acceptable++;
+          }
+
+          let excellentEmployees = 0, goodExcellentEmployees = 0, goodEmployees = 0, acceptableEmployees = 0;
+          let sumPoints = 0, countFinalEmployees = 0;
+
+          for(const [, data] of empMap.entries()){
+            const final = computeFinalByCounts(
+              data.excellent,
+              data.goodExcellent,
+              data.good,
+              data.acceptable
+            );
+
+            if(final === "—") continue;
+
+            const p = pointsForRating(final);
+            if(p == null) continue;
+
+            sumPoints += p;
+            countFinalEmployees++;
+
+            if(final === "ممتاز") excellentEmployees++;
+            else if(final === "جيد جدا") goodExcellentEmployees++;
+            else if(final === "جيد") goodEmployees++;
+            else if(final === "مقبول") acceptableEmployees++;
+          }
+
+          if(countFinalEmployees > 0){
+            centerSummaries.push({
+              center: c,
+              excellentEmployees,
+              goodExcellentEmployees,
+              goodEmployees,
+              acceptableEmployees,
+              finalEmployeesCount: countFinalEmployees,
+              avgPoint: sumPoints / countFinalEmployees
+            });
+          }
+        }
+
+        return centerSummaries;
+      }
+
       function printFinalForEmployee(center, empObj){
         const w = window.open("", "_blank");
         if(!w) return showToast("❌ فعّل النوافذ المنبثقة للطباعة.");
@@ -1786,7 +1723,7 @@
                   >🖨️ طباعة</button>
                 </span>
 
-                <span style="font-size:12px;color:rgba(11,27,42,0.65);font-weight:900;white-space:nowrap;">
+                <span style="font-size:12px;color:rgba(255,255,255,0.65);font-weight:900;white-space:nowrap;">
                   ممتاز: ${x.excellent}
                   | جيد جدا: ${x.goodExcellent}
                   | جيد: ${x.good}
@@ -1796,7 +1733,7 @@
               </summary>
 
               <div class="finalEmployeeMeta">
-                <div style="font-weight:950;color:rgba(11,27,42,0.75);font-size:13px;">
+                <div style="font-weight:950;color:rgba(255,255,255,0.75);font-size:13px;">
                   تفاصيل تقييماته السابقة:
                 </div>
 
@@ -1821,7 +1758,7 @@
                         >تفاصيل</button>
                       </div>
 
-                      <div style="font-size:13px;color:rgba(11,27,42,0.72);font-weight:850;line-height:1.6;">
+                      <div style="font-size:13px;color:rgba(255,255,255,0.72);font-weight:850;line-height:1.6;">
                         الملاحظة: ${escapeHtml(r.comment)}
                       </div>
                     </div>
