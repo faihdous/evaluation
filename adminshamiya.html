@@ -309,6 +309,26 @@
       background: rgba(255,90,122,0.24);
     }
 
+    /* =========================
+       NEW: adminAdjustBtn orange muted
+       ========================= */
+    #adminAdjustBtn{
+      background: rgba(255,140,0,0.18) !important;          /* برتقالي مطفي */
+      color: rgba(255,236,214,0.98) !important;
+      border: 1px solid rgba(255,140,0,0.45) !important;
+      box-shadow:
+        0 12px 25px rgba(255,140,0,0.10),
+        0 0 0 1px rgba(255,140,0,0.18) inset !important;
+    }
+    #adminAdjustBtn:hover{
+      background: rgba(255,140,0,0.26) !important;
+      border-color: rgba(255,140,0,0.65) !important;
+      box-shadow:
+        0 18px 40px rgba(255,140,0,0.16),
+        0 0 0 1px rgba(255,140,0,0.25) inset !important;
+      transform: translateY(-1px) !important;
+    }
+
     /* Table */
     table{
       width:100%;
@@ -490,22 +510,6 @@
       color: rgba(255,255,255,0.92);
       border: 1px solid rgba(255,255,255,0.16);
     }
-    #showCurrentBtn:disabled{
-      background: rgba(33,209,159,0.22) !important;
-      color: rgba(205,255,238,0.98) !important;
-      border: 1px solid rgba(33,209,159,0.45) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
-    #showFinalRatingBtn:disabled{
-      background: rgba(255,209,102,0.22) !important;
-      color: rgba(255,244,208,0.98) !important;
-      border: 1px solid rgba(255,209,102,0.55) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
 
     .finalReviewItem{
       border:1px solid rgba(255,255,255,0.14);
@@ -543,11 +547,8 @@
 
     /* =========================================================
        Mobile Overrides (FIX - FORCE SAME NEON COLORS)
-       - changed breakpoint to 900px
-       - force background on html/body
        ========================================================= */
     @media (max-width: 900px){
-      /* قفل الخلفية والستايل */
       html, body{
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
         color: var(--text) !important;
@@ -597,7 +598,6 @@
       .card .cardBody{ padding: 12px; }
       .card .cardHead{ padding: 12px 12px; }
 
-      /* اجعل الأزرار “مليانة” ومناسبة للمس */
       .btn{
         min-height: 50px;
         border-radius: 18px;
