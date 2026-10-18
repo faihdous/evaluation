@@ -542,17 +542,28 @@
     }
 
     /* =========================================================
-       Mobile Overrides (MAINTAIN Laptop Luxury/Fakhama)
+       Mobile Overrides (FIX - FORCE SAME NEON COLORS)
+       - changed breakpoint to 900px
+       - force background on html/body
        ========================================================= */
-    @media (max-width: 520px){
-      /* قفل الخلفية والستايل حتى لا يصير أبيض */
-      body{
+    @media (max-width: 900px){
+      /* قفل الخلفية والستايل */
+      html, body{
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
         color: var(--text) !important;
       }
+      .container{
+        background: transparent !important;
+      }
+      .card, section.card{
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.14) !important;
+        backdrop-filter: blur(14px) !important;
+        box-shadow: var(--shadow) !important;
+      }
 
       body::before{
-        opacity: 0.72;
+        opacity: 0.78;
         filter: blur(20px);
       }
 
@@ -563,18 +574,6 @@
         background: rgba(255,255,255,0.08) !important;
         border: 1px solid rgba(255,255,255,0.14) !important;
         backdrop-filter: blur(14px) !important;
-      }
-
-      /* نفس شكل اللابتوب للـ card عشان ما تصير فاتحة */
-      .card{
-        background: rgba(255,255,255,0.08) !important;
-        border: 1px solid rgba(255,255,255,0.14) !important;
-        backdrop-filter: blur(14px) !important;
-        box-shadow: var(--shadow) !important;
-      }
-      .card .cardHead{
-        background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14)) !important;
-        border-bottom: 1px solid rgba(255,255,255,0.10) !important;
       }
 
       .brandPill{ padding: 9px 10px !important; }
@@ -639,7 +638,6 @@
         font-size: 12.5px;
       }
 
-      /* modal داخل الموبايل */
       #reviewDetailsModal > div{
         border-radius: 20px !important;
         padding: 12px !important;
