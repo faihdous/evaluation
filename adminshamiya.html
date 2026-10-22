@@ -8,39 +8,43 @@
   <style>
     /* =========================
        Neon Glass Theme (Laptop-Grade)
+       (Light Mode Open)
        ========================= */
     :root{
-      --bg1: #0b1026;
-      --bg2: #06162c;
+      /* Light background */
+      --g1: radial-gradient(900px 500px at 10% 0%, rgba(47,124,255,0.22), transparent 58%);
+      --g2: radial-gradient(900px 520px at 90% 0%, rgba(16,185,129,0.18), transparent 60%);
+      --g3: radial-gradient(680px 420px at 50% 10%, rgba(245,158,11,0.14), transparent 60%);
+      --g4: linear-gradient(180deg, #f8fbff, #eef3ff);
 
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.66);
+      --text: rgba(10,18,40,0.92);
+      --muted: rgba(10,18,40,0.62);
 
-      --panel: rgba(255,255,255,0.10);
-      --panel2: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.16);
+      --panel: rgba(255,255,255,0.72);
+      --panel2: rgba(255,255,255,0.58);
+      --border: rgba(10,18,40,0.14);
 
-      --blue: #4da3ff;
-      --green: #21d19f;
-      --danger: #ff5a7a;
-      --yellow: #ffd166;
+      --blue: #2f7cff;
+      --green: #10b981;
+      --danger: #ef4444;
+      --yellow: #f59e0b;
 
-      --shadow: 0 22px 70px rgba(0,0,0,0.45);
+      --shadow: 0 22px 70px rgba(15,23,42,0.18);
 
-      --modalBg: rgba(0,0,0,0.55);
+      --modalBg: rgba(255,255,255,0.75);
+      --modalText: rgba(10,18,40,0.92);
+
       --radius2: 22px;
       --radius: 14px;
       --fieldPad: 12px;
 
-      --pillBg: rgba(255,255,255,0.12);
-      --pillBorder: rgba(77,163,255,0.25);
-
-      --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
-      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.24), transparent 60%);
-      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.14), transparent 60%);
-      --g4: linear-gradient(180deg, #0d1435, #070f22);
+      --pillBg: rgba(47,124,255,0.10);
+      --pillBorder: rgba(47,124,255,0.26);
     }
 
+    /* =========================
+       Base
+       ========================= */
     *{ box-sizing: border-box; }
 
     body{
@@ -53,18 +57,18 @@
       position: relative;
     }
 
-    /* Subtle animated grain / glow (kept fakhama on mobile too) */
+    /* Subtle animated grain / glow (lighter) */
     body::before{
       content:"";
       position: fixed;
       inset: -40px;
       pointer-events: none;
       background:
-        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.20), transparent 58%),
-        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.18), transparent 60%),
-        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.10), transparent 62%);
+        radial-gradient(800px 420px at 20% 15%, rgba(47,124,255,0.20), transparent 58%),
+        radial-gradient(700px 380px at 80% 20%, rgba(16,185,129,0.14), transparent 60%),
+        radial-gradient(620px 340px at 50% 0%, rgba(245,158,11,0.10), transparent 62%);
       filter: blur(18px);
-      opacity: 0.85;
+      opacity: 0.55;
       animation: glowFloat 10s ease-in-out infinite;
       z-index: -1;
     }
@@ -81,8 +85,8 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(10,18,40,0.12);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
@@ -101,8 +105,8 @@
       background: var(--pillBg);
       border: 1px solid var(--pillBorder);
       box-shadow:
-        0 0 0 1px rgba(77,163,255,0.10) inset,
-        0 18px 55px rgba(77,163,255,0.12);
+        0 0 0 1px rgba(47,124,255,0.08) inset,
+        0 18px 55px rgba(47,124,255,0.10);
       max-width: 100%;
       position: relative;
       overflow: hidden;
@@ -111,7 +115,7 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.28), rgba(33,209,159,0.0));
+      background: linear-gradient(90deg, rgba(47,124,255,0.0), rgba(47,124,255,0.22), rgba(16,185,129,0.0));
       transform: translateX(-60%);
       animation: shimmer 2.8s ease-in-out infinite;
       opacity: 0.55;
@@ -125,7 +129,7 @@
       font-weight: 950;
       font-size: 18px;
       letter-spacing: 0.2px;
-      color: rgba(255,255,255,0.95);
+      color: rgba(10,18,40,0.92);
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
@@ -139,11 +143,11 @@
       height: 88px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid rgba(77,163,255,0.35);
-      background: rgba(77,163,255,0.10);
+      border: 2px solid rgba(47,124,255,0.35);
+      background: rgba(47,124,255,0.10);
       box-shadow:
-        0 0 0 1px rgba(77,163,255,0.10) inset,
-        0 18px 45px rgba(77,163,255,0.18);
+        0 0 0 1px rgba(47,124,255,0.10) inset,
+        0 18px 45px rgba(47,124,255,0.16);
       margin-top: 4px;
       margin-bottom: 2px;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -151,25 +155,26 @@
     .loginLogo:hover{
       transform: translateY(-2px);
       box-shadow:
-        0 0 0 1px rgba(77,163,255,0.16) inset,
-        0 28px 60px rgba(77,163,255,0.24);
+        0 0 0 1px rgba(47,124,255,0.18) inset,
+        0 28px 60px rgba(47,124,255,0.22);
     }
 
     .card{
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.62);
+      border: 1px solid rgba(10,18,40,0.12);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       overflow:hidden;
       width: 100%;
       transform: translateZ(0);
+      color: var(--text);
     }
 
     .card .cardHead{
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14));
+      border-bottom: 1px solid rgba(10,18,40,0.10);
+      background: linear-gradient(90deg, rgba(16,185,129,0.18), rgba(47,124,255,0.16));
       position: relative;
     }
     .card .cardHead::after{
@@ -177,8 +182,8 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.25), transparent 60%),
-        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.22), transparent 60%);
+        radial-gradient(500px 130px at 10% 50%, rgba(47,124,255,0.20), transparent 60%),
+        radial-gradient(500px 130px at 90% 50%, rgba(16,185,129,0.16), transparent 60%);
       opacity: 0.65;
       pointer-events:none;
     }
@@ -187,7 +192,7 @@
       margin:0;
       font-size:15px;
       letter-spacing:0.2px;
-      color: rgba(255,255,255,0.95);
+      color: rgba(10,18,40,0.92);
       text-align:center;
       position: relative;
       z-index: 2;
@@ -247,16 +252,16 @@
       justify-content:center;
       position: relative;
 
-      background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.88));
+      background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.90));
       box-shadow:
-        0 12px 30px rgba(255,209,102,0.18),
-        0 0 0 1px rgba(255,209,102,0.20) inset;
+        0 12px 30px rgba(245,158,11,0.18),
+        0 0 0 1px rgba(245,158,11,0.22) inset;
     }
     .btn:hover{
       transform: translateY(-1px);
       box-shadow:
-        0 18px 45px rgba(255,209,102,0.25),
-        0 0 0 1px rgba(255,209,102,0.25) inset;
+        0 18px 45px rgba(245,158,11,0.25),
+        0 0 0 1px rgba(245,158,11,0.25) inset;
     }
     .btn:disabled{
       opacity: 0.6; cursor:not-allowed; transform:none;
@@ -264,70 +269,67 @@
     }
 
     .btn.blue{
-      background: linear-gradient(180deg, rgba(77,163,255,1), rgba(77,163,255,0.82));
+      background: linear-gradient(180deg, rgba(47,124,255,1), rgba(47,124,255,0.85));
       box-shadow:
-        0 12px 30px rgba(77,163,255,0.18),
-        0 0 0 1px rgba(77,163,255,0.22) inset;
+        0 12px 30px rgba(47,124,255,0.18),
+        0 0 0 1px rgba(47,124,255,0.22) inset;
       color:#fff;
     }
     .btn.green{
-      background: linear-gradient(180deg, rgba(33,209,159,1), rgba(33,209,159,0.82));
+      background: linear-gradient(180deg, rgba(16,185,129,1), rgba(16,185,129,0.82));
       box-shadow:
-        0 12px 30px rgba(33,209,159,0.18),
-        0 0 0 1px rgba(33,209,159,0.22) inset;
+        0 12px 30px rgba(16,185,129,0.18),
+        0 0 0 1px rgba(16,185,129,0.22) inset;
       color:#fff;
     }
 
     .btn.alt{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.55);
+      color: rgba(10,18,40,0.92);
+      border: 1px solid rgba(10,18,40,0.14);
       box-shadow: none;
     }
     .btn.alt:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.68);
+      border-color: rgba(10,18,40,0.22);
       transform: translateY(-1px);
     }
 
     .btn.danger{
-      background: linear-gradient(180deg, rgba(255,90,122,1), rgba(255,90,122,0.82));
+      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(239,68,68,0.82));
       box-shadow:
-        0 12px 30px rgba(255,90,122,0.18),
-        0 0 0 1px rgba(255,90,122,0.22) inset;
-      color:#140607;
+        0 12px 30px rgba(239,68,68,0.18),
+        0 0 0 1px rgba(239,68,68,0.22) inset;
+      color:#fff;
     }
 
     .btn.dangerLight{
-      background: rgba(255,90,122,0.18);
-      color: rgba(255,255,255,0.95);
-      border: 1px solid rgba(255,90,122,0.40);
-      box-shadow: 0 10px 20px rgba(255,90,122,0.10);
+      background: rgba(239,68,68,0.14);
+      color: rgba(239,68,68,0.96);
+      border: 1px solid rgba(239,68,68,0.42);
+      box-shadow: 0 10px 20px rgba(239,68,68,0.10);
     }
     .btn.dangerLight:hover{
       transform: translateY(-1px);
-      background: rgba(255,90,122,0.24);
+      background: rgba(239,68,68,0.20);
     }
 
-    /* =========================
-       تعديل زر التعديلات فقط
-       برتقالي مطفي + يحافظ على hover/disabled
-       ========================= */
+    /* Orange adjustment button (same behavior) */
     #adminAdjustBtn{
-      background: rgba(255,140,0,0.14) !important; /* برتقالي مطفي */
-      color: rgba(255,236,214,0.98) !important;
-      border: 1px solid rgba(255,140,0,0.40) !important;
+      background: rgba(245,158,11,0.18) !important;
+      color: rgba(109,52,0,0.95) !important;
+      border: 1px solid rgba(245,158,11,0.55) !important;
       box-shadow:
-        0 12px 25px rgba(255,140,0,0.08),
-        0 0 0 1px rgba(255,140,0,0.18) inset !important;
+        0 12px 25px rgba(245,158,11,0.10),
+        0 0 0 1px rgba(245,158,11,0.18) inset !important;
     }
     #adminAdjustBtn:hover{
-      background: rgba(255,140,0,0.22) !important;
-      border-color: rgba(255,140,0,0.60) !important;
+      background: rgba(245,158,11,0.26) !important;
+      border-color: rgba(245,158,11,0.75) !important;
       box-shadow:
-        0 18px 40px rgba(255,140,0,0.14),
-        0 0 0 1px rgba(255,140,0,0.28) inset !important;
-      transform: translateY(-1px) !important; /* الحفاظ على خصائص الحركة */
+        0 18px 40px rgba(245,158,11,0.14),
+        0 0 0 1px rgba(245,158,11,0.28) inset !important;
+      transform: translateY(-1px) !important;
     }
     #adminAdjustBtn:disabled{
       opacity: 0.6 !important;
@@ -342,24 +344,24 @@
       border-collapse: collapse;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(10,18,40,0.14);
+      background: rgba(255,255,255,0.70);
       color: var(--text);
     }
     th, td{
       padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.10);
+      border-bottom:1px solid rgba(10,18,40,0.10);
       text-align:center;
       font-size:13px;
       vertical-align: middle;
       white-space: nowrap;
     }
     th{
-      background: rgba(77,163,255,0.10);
-      color: rgba(255,255,255,0.72);
+      background: rgba(47,124,255,0.10);
+      color: rgba(10,18,40,0.72);
       font-weight:900;
     }
-    td{ color: rgba(255,255,255,0.92); }
+    td{ color: rgba(10,18,40,0.92); }
     tr:last-child td{ border-bottom:none; }
 
     label{
@@ -374,9 +376,9 @@
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.15);
-      color: rgba(255,255,255,0.94);
+      border: 1px solid rgba(10,18,40,0.18);
+      background: rgba(255,255,255,0.55);
+      color: rgba(10,18,40,0.92);
       outline:none;
       appearance: none;
       -webkit-appearance: none;
@@ -385,17 +387,17 @@
     }
 
     input:focus, select:focus, textarea:focus{
-      border-color: rgba(77,163,255,0.55);
-      box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
-      background: rgba(0,0,0,0.20);
+      border-color: rgba(47,124,255,0.55);
+      box-shadow: 0 0 0 4px rgba(47,124,255,0.18);
+      background: rgba(255,255,255,0.70);
     }
 
     select{
       padding-left: 40px;
       background-image:
-        linear-gradient(45deg, transparent 50%, rgba(77,163,255,0.85) 50%),
-        linear-gradient(135deg, rgba(77,163,255,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(255,255,255,0.16), rgba(255,255,255,0.16));
+        linear-gradient(45deg, transparent 50%, rgba(47,124,255,0.85) 50%),
+        linear-gradient(135deg, rgba(47,124,255,0.85) 50%, transparent 50%),
+        linear-gradient(to right, rgba(10,18,40,0.14), rgba(10,18,40,0.14));
       background-position:
         calc(10px) 50%,
         calc(18px) 50%,
@@ -407,18 +409,17 @@
       background-repeat: no-repeat;
     }
 
-    option{ background:#0b1026; color:#fff; }
-
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.45); }
+    option{ background:#fff; color:#0b1026; }
+    input::placeholder, textarea::placeholder{ color: rgba(10,18,40,0.45); }
 
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
 
-    h3{ margin:14px 0 8px; font-size:15px; color: rgba(255,255,255,0.78); font-weight: 950; }
+    h3{ margin:14px 0 8px; font-size:15px; color: rgba(10,18,40,0.76); font-weight: 950; }
     .hide{ display:none; }
 
     .fineprint{
-      color: rgba(255,255,255,0.60);
+      color: rgba(10,18,40,0.60);
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
@@ -429,56 +430,58 @@
     .ratingTag{
       display:inline-flex; padding:6px 10px; border-radius:999px;
       font-weight:900; font-size:12px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06); white-space:nowrap;
-      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(10,18,40,0.14);
+      background: rgba(255,255,255,0.42); white-space:nowrap;
+      color: rgba(10,18,40,0.92);
     }
-    .ratingTag.excellent{ border-color: rgba(33,209,159,0.58); background: rgba(33,209,159,0.12); color: rgba(233,255,247,0.98); }
-    .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); color: rgba(255,248,227,0.98); }
-    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
-    .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); color: rgba(255,235,239,0.98); }
+    .ratingTag.excellent{ border-color: rgba(16,185,129,0.55); background: rgba(16,185,129,0.14); color: rgba(7,71,40,0.98); }
+    .ratingTag.good{ border-color: rgba(245,158,11,0.70); background: rgba(245,158,11,0.16); color: rgba(92,45,0,0.98); }
+    .ratingTag.good2{ border-color: rgba(47,124,255,0.55); background: rgba(47,124,255,0.14); color: rgba(9,44,92,0.98); }
+    .ratingTag.acceptable{ border-color: rgba(239,68,68,0.55); background: rgba(239,68,68,0.14); color: rgba(102,13,22,0.98); }
 
     .smallBtn{
       padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
-      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.92);
-      border:1px solid rgba(255,255,255,0.16); box-shadow:none;
+      background: rgba(255,255,255,0.55);
+      color: rgba(10,18,40,0.92);
+      border:1px solid rgba(10,18,40,0.14);
+      box-shadow:none;
       white-space:nowrap; min-height: 40px;
       transition: 0.2s;
     }
     .smallBtn:hover{
       transform: translateY(-1px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.70);
+      border-color: rgba(10,18,40,0.22);
     }
 
     .msg{
       margin-top:12px; padding:12px; border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.78);
+      border:1px solid rgba(10,18,40,0.14);
+      background: rgba(255,255,255,0.65);
+      color: rgba(10,18,40,0.78);
       line-height:1.7; font-weight:850; font-size:13px;
       display:none;
       text-align:center;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.10);
     }
 
     .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
     .employeeChip{
       display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
       border-radius:999px;
-      background: rgba(77,163,255,0.08);
-      border: 1px solid rgba(77,163,255,0.18);
-      color: rgba(255,255,255,0.92); font-weight:900; font-size:13px;
+      background: rgba(47,124,255,0.10);
+      border: 1px solid rgba(47,124,255,0.18);
+      color: rgba(10,18,40,0.92); font-weight:900; font-size:13px;
     }
     .employeeChip button{
       min-height: 34px; min-width: 34px; padding:0 10px; border-radius: 999px;
       border:none; cursor:pointer;
-      background: rgba(255,90,122,0.20); color: rgba(255,220,228,0.98);
-      border: 1px solid rgba(255,90,122,0.35); font-weight:950;
+      background: rgba(239,68,68,0.18); color: rgba(102,13,22,0.98);
+      border: 1px solid rgba(239,68,68,0.35); font-weight:950;
       transition: 0.2s;
     }
     .employeeChip button:hover{
-      background: rgba(255,90,122,0.28);
+      background: rgba(239,68,68,0.26);
       transform: translateY(-1px);
     }
 
@@ -487,6 +490,7 @@
       position: fixed;
       inset: 0;
       background: var(--modalBg);
+      color: var(--modalText);
       z-index: 9999;
       display: none;
       align-items: center;
@@ -496,49 +500,11 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
-    .btn.printPurple{
-      background: rgba(139,92,246,0.16) !important;
-      color: rgba(236,227,255,0.96) !important;
-      border: 1px solid rgba(139,92,246,0.40) !important;
-      box-shadow: 0 12px 25px rgba(139,92,246,0.14) !important;
-      padding: 8px 10px !important;
-      border-radius: 14px !important;
-      min-height: 40px !important;
-    }
-    .btn.printPurple:hover{ transform: translateY(-1px); }
-
-    #showCurrentBtn{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
-    }
-    #showFinalRatingBtn{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
-    }
-    #showCurrentBtn:disabled{
-      background: rgba(33,209,159,0.22) !important;
-      color: rgba(205,255,238,0.98) !important;
-      border: 1px solid rgba(33,209,159,0.45) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
-    #showFinalRatingBtn:disabled{
-      background: rgba(255,209,102,0.22) !important;
-      color: rgba(255,244,208,0.98) !important;
-      border: 1px solid rgba(255,209,102,0.55) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
-
     .finalReviewItem{
-      border:1px solid rgba(255,255,255,0.14);
+      border:1px solid rgba(10,18,40,0.14);
       border-radius:14px;
       padding:10px 12px;
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.52);
       margin-top:10px;
     }
     .finalReviewTop{
@@ -547,7 +513,7 @@
       flex-wrap:wrap;
       align-items:center;
       font-weight:900;
-      color: rgba(255,255,255,0.80);
+      color: rgba(10,18,40,0.78);
       font-size:13px;
     }
     .finalReviewActions{
@@ -568,9 +534,7 @@
       to{ opacity: 1; transform: translateY(0); }
     }
 
-    /* =========================================================
-       Mobile Overrides (FIX - FORCE SAME NEON COLORS)
-       ========================================================= */
+    /* Mobile Overrides */
     @media (max-width: 900px){
       html, body{
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
@@ -580,14 +544,14 @@
         background: transparent !important;
       }
       .card, section.card{
-        background: rgba(255,255,255,0.08) !important;
-        border: 1px solid rgba(255,255,255,0.14) !important;
+        background: rgba(255,255,255,0.62) !important;
+        border: 1px solid rgba(10,18,40,0.14) !important;
         backdrop-filter: blur(14px) !important;
         box-shadow: var(--shadow) !important;
       }
 
       body::before{
-        opacity: 0.78;
+        opacity: 0.45;
         filter: blur(20px);
       }
 
@@ -595,8 +559,8 @@
         padding: 10px 10px !important;
         top: 6px !important;
         border-radius: 18px !important;
-        background: rgba(255,255,255,0.08) !important;
-        border: 1px solid rgba(255,255,255,0.14) !important;
+        background: rgba(255,255,255,0.55) !important;
+        border: 1px solid rgba(10,18,40,0.14) !important;
         backdrop-filter: blur(14px) !important;
       }
 
@@ -628,6 +592,7 @@
         font-size: 14px;
       }
       .btn.alt{ border-radius: 18px; }
+
       .smallBtn{
         min-height: 42px;
         border-radius: 16px;
@@ -639,9 +604,9 @@
         font-size: 16px;
         padding: 13px 12px;
         border-radius: 16px;
-        background: rgba(0,0,0,0.15) !important;
-        color: rgba(255,255,255,0.94) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
+        background: rgba(255,255,255,0.60) !important;
+        color: rgba(10,18,40,0.94) !important;
+        border: 1px solid rgba(10,18,40,0.18) !important;
       }
 
       h3{
@@ -659,15 +624,6 @@
       th, td{
         padding: 10px 8px;
         font-size: 12.5px;
-      }
-
-      #reviewDetailsModal > div{
-        border-radius: 20px !important;
-        padding: 12px !important;
-      }
-
-      #currentSection, #finalRatingSection, #adminAdjustPage{
-        animation-duration: 0.28s;
       }
     }
   </style>
@@ -698,8 +654,8 @@
               </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
-                background: rgba(77,163,255,0.10);
-                border: 1px solid rgba(77,163,255,0.24);
+                background: rgba(47,124,255,0.12);
+                border: 1px solid rgba(47,124,255,0.22);
                 padding: 10px 16px;
                 border-radius: 14px;
                 font-weight: 950;
@@ -840,8 +796,8 @@
   <div id="reviewDetailsModal" class="hide">
     <div style="
       width: min(900px, 94vw);
-      background: rgba(10,14,40,0.72);
-      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(10,18,40,0.18);
       border-radius: 22px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
@@ -859,8 +815,8 @@
         max-height: 55vh;
         overflow:auto;
         border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.14);
-        background: rgba(0,0,0,0.18);
+        border: 1px solid rgba(10,18,40,0.14);
+        background: rgba(255,255,255,0.60);
       ">
         <div id="reviewDetailsQuestions" style="padding: 12px; display:flex; flex-direction:column; gap:10px;"></div>
       </div>
@@ -1033,10 +989,10 @@
           const ans = (answers && answers[q.id] != null) ? answers[q.id] : "—";
           return `
             <div style="
-              border:1px solid rgba(255,255,255,0.14);
+              border:1px solid rgba(10,18,40,0.14);
               border-radius:14px;
               padding:10px 12px;
-              background: rgba(255,255,255,0.06);
+              background: rgba(255,255,255,0.62);
             ">
               <div style="font-weight:950; margin-bottom:6px; color: var(--text);">${i+1}) ${escapeHtml(q.text)}</div>
               <div class="ratingTag ${ratingClass(ans)}" style="font-size:13px; display:inline-flex;">
@@ -1143,17 +1099,19 @@
 
       questions.forEach((q, index)=>{
         const wrap = document.createElement("div");
-        wrap.style.border="1px solid rgba(255,255,255,0.14)";
+        wrap.style.border="1px solid rgba(10,18,40,0.14)";
         wrap.style.borderRadius="14px";
         wrap.style.padding="10px 12px";
-        wrap.style.background="rgba(77,163,255,0.08)";
+        wrap.style.background="rgba(47,124,255,0.10)";
 
         wrap.innerHTML = `
           <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
             <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
             <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
           </div>
-          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد جدا / جيد / مقبول</div>
+          <div class="fineprint" style="margin-top:6px; text-align:center; color: var(--muted);">
+            الاختيارات: ممتاز / جيد جدا / جيد / مقبول
+          </div>
         `;
 
         wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
@@ -1221,10 +1179,8 @@
       saveJson(LS_KEYS.current, filtered);
       currentReviews = filtered;
 
-      // إعادة رسم Current
       renderCurrentTablesForCenter(center);
 
-      // إعادة حساب Final إذا كانت ظاهرة الآن
       if(!finalRatingSection.classList.contains("hide")){
         renderFinalRatingForEmployees(center);
         setViewButtons("final");
@@ -1243,7 +1199,7 @@
 
       if(cur.length === 0){
         const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(255,255,255,0.65); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        tr.innerHTML = `<td colspan="6" style="color: rgba(10,18,40,0.65); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
         currentReviewsTbody.appendChild(tr);
         return;
       }
@@ -1266,7 +1222,7 @@
                 data-action="delete"
                 data-id="${escapeHtml(r.id)}"
                 title="حذف هذه الاستجابة من Current"
-                style="background: rgba(255,90,122,0.14); border:1px solid rgba(255,90,122,0.35); color: rgba(255,220,228,0.98);">
+                style="background: rgba(239,68,68,0.16); border:1px solid rgba(239,68,68,0.35); color: rgba(102,13,22,0.98);">
                 حذف
               </button>
             </div>
@@ -1514,22 +1470,22 @@
                 </span>
 
                 <button
-                  class="btn printPurple"
+                  class="btn"
                   type="button"
                   title="طباعة التقييم النهائي لهذا الموظف"
                   data-print-emp="${escapeHtml(x.emp)}"
-                >
+                  style="background: rgba(139,92,246,0.14) !important; color: rgba(71,33,170,0.95) !important; border: 1px solid rgba(139,92,246,0.35) !important;">
                   🖨️ طباعة
                 </button>
               </span>
 
-              <span style="font-size:12px; color: rgba(255,255,255,0.65); font-weight: 900; white-space:nowrap;">
+              <span style="font-size:12px; color: rgba(10,18,40,0.65); font-weight: 900; white-space:nowrap;">
                 ممتاز: ${x.excellent} | جيد جدا: ${x.goodExcellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
 
             <div style="margin-top:12px;">
-              <div style="font-weight:950; color: rgba(255,255,255,0.78); font-size:13px; margin-bottom:8px;">
+              <div style="font-weight:950; color: rgba(10,18,40,0.78); font-size:13px; margin-bottom:8px;">
                 تفاصيل مراجعاته السابقة:
               </div>
 
@@ -1547,7 +1503,7 @@
                       </span>
                     </div>
 
-                    <div style="margin-top:10px; font-size:13px; color: rgba(255,255,255,0.78); font-weight:850; line-height:1.6;">
+                    <div style="margin-top:10px; font-size:13px; color: rgba(10,18,40,0.78); font-weight:850; line-height:1.6;">
                       الملاحظة: ${escapeHtml(rev.comment)}
                     </div>
 
