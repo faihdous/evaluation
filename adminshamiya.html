@@ -7,7 +7,7 @@
 
   <style>
     /* =========================
-       Neon Glass Theme (Laptop-Grade)
+       Neon Glass Theme (Laptop-Grade) - MATCH Survey Page
        ========================= */
     :root{
       --bg1: #0b1026;
@@ -32,12 +32,12 @@
       --radius: 14px;
       --fieldPad: 12px;
 
-      --pillBg: rgba(255,255,255,0.12);
-      --pillBorder: rgba(77,163,255,0.25);
+      --pillBg: rgba(255,255,255,0.14);     /* ✅ مثل الاستبيان */
+      --pillBorder: rgba(77,163,255,0.28); /* ✅ مثل الاستبيان */
 
       --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
-      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.24), transparent 60%);
-      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.14), transparent 60%);
+      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.26), transparent 60%);
+      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.16), transparent 60%);
       --g4: linear-gradient(180deg, #0d1435, #070f22);
     }
 
@@ -53,24 +53,34 @@
       position: relative;
     }
 
-    /* Subtle animated grain / glow (kept fakhama on mobile too) */
+    /* ✅ فتح الخلفية + الإضاءة مثل صفحة الاستبيان */
     body::before{
       content:"";
       position: fixed;
       inset: -40px;
       pointer-events: none;
       background:
-        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.20), transparent 58%),
-        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.18), transparent 60%),
-        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.10), transparent 62%);
-      filter: blur(18px);
-      opacity: 0.85;
+        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.26), transparent 58%),
+        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.22), transparent 60%),
+        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.12), transparent 62%);
+      filter: blur(18px) brightness(1.12) saturate(1.05);
+      opacity: 0.68; /* ✅ كان 0.85 في Admin الأصلي */
       animation: glowFloat 10s ease-in-out infinite;
       z-index: -1;
     }
     @keyframes glowFloat{
       0%,100%{ transform: translate3d(0,0,0); }
       50%{ transform: translate3d(0,-10px,0); }
+    }
+
+    /* ✅ طبقة فتح خفيفة */
+    body::after{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: rgba(0,0,0,0.06);
     }
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
@@ -81,8 +91,10 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
+
+      /* ✅ فتح خفيف مثل الاستبيان */
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
@@ -98,11 +110,14 @@
       justify-content:center;
       padding: 10px 14px;
       border-radius: 999px;
+
       background: var(--pillBg);
       border: 1px solid var(--pillBorder);
+
       box-shadow:
         0 0 0 1px rgba(77,163,255,0.10) inset,
         0 18px 55px rgba(77,163,255,0.12);
+
       max-width: 100%;
       position: relative;
       overflow: hidden;
@@ -111,10 +126,10 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.28), rgba(33,209,159,0.0));
+      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.30), rgba(33,209,159,0.0));
       transform: translateX(-60%);
       animation: shimmer 2.8s ease-in-out infinite;
-      opacity: 0.55;
+      opacity: 0.62; /* ✅ مثل الاستبيان */
     }
     @keyframes shimmer{
       0%, 100%{ transform: translateX(-60%); }
@@ -125,7 +140,7 @@
       font-weight: 950;
       font-size: 18px;
       letter-spacing: 0.2px;
-      color: rgba(255,255,255,0.95);
+      color: rgba(255,255,255,0.97);
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
@@ -155,11 +170,12 @@
         0 28px 60px rgba(77,163,255,0.24);
     }
 
+    /* ✅ الكروت/الزجاج فتح مثل الاستبيان */
     .card{
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.20);
       border-radius: var(--radius2);
-      box-shadow: var(--shadow);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
       backdrop-filter: blur(14px);
       overflow:hidden;
       width: 100%;
@@ -168,8 +184,8 @@
 
     .card .cardHead{
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.10);
-      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14));
+      border-bottom: 1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(90deg, rgba(33,209,159,0.22), rgba(77,163,255,0.20));
       position: relative;
     }
     .card .cardHead::after{
@@ -177,9 +193,9 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.25), transparent 60%),
-        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.22), transparent 60%);
-      opacity: 0.65;
+        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.30), transparent 60%),
+        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.26), transparent 60%);
+      opacity: 0.70;
       pointer-events:none;
     }
 
@@ -187,7 +203,7 @@
       margin:0;
       font-size:15px;
       letter-spacing:0.2px;
-      color: rgba(255,255,255,0.95);
+      color: rgba(255,255,255,0.98);
       text-align:center;
       position: relative;
       z-index: 2;
@@ -234,7 +250,10 @@
     .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
     .btn{
-      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
+      border:none;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius:16px;
       font-weight:950;
       color: rgba(255,255,255,0.95);
       transition:0.2s;
@@ -279,14 +298,14 @@
     }
 
     .btn.alt{
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.10);
       color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
       box-shadow: none;
     }
     .btn.alt:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.25);
       transform: translateY(-1px);
     }
 
@@ -309,12 +328,9 @@
       background: rgba(255,90,122,0.24);
     }
 
-    /* =========================
-       تعديل زر التعديلات فقط
-       برتقالي مطفي + يحافظ على hover/disabled
-       ========================= */
+    /* تعديل زر التعديلات فقط (كما هو في كودك) */
     #adminAdjustBtn{
-      background: rgba(255,140,0,0.14) !important; /* برتقالي مطفي */
+      background: rgba(255,140,0,0.14) !important;
       color: rgba(255,236,214,0.98) !important;
       border: 1px solid rgba(255,140,0,0.40) !important;
       box-shadow:
@@ -327,7 +343,7 @@
       box-shadow:
         0 18px 40px rgba(255,140,0,0.14),
         0 0 0 1px rgba(255,140,0,0.28) inset !important;
-      transform: translateY(-1px) !important; /* الحفاظ على خصائص الحركة */
+      transform: translateY(-1px) !important;
     }
     #adminAdjustBtn:disabled{
       opacity: 0.6 !important;
@@ -342,20 +358,20 @@
       border-collapse: collapse;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.20);
+      background: rgba(255,255,255,0.08);
       color: var(--text);
     }
     th, td{
       padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.10);
+      border-bottom:1px solid rgba(255,255,255,0.12);
       text-align:center;
       font-size:13px;
       vertical-align: middle;
       white-space: nowrap;
     }
     th{
-      background: rgba(77,163,255,0.10);
+      background: rgba(77,163,255,0.12);
       color: rgba(255,255,255,0.72);
       font-weight:900;
     }
@@ -370,13 +386,14 @@
       font-size: 13px;
     }
 
+    /* ✅ Inputs مثل الاستبيان */
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(0,0,0,0.15);
-      color: rgba(255,255,255,0.94);
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.10);
+      color: rgba(255,255,255,0.96);
       outline:none;
       appearance: none;
       -webkit-appearance: none;
@@ -385,17 +402,17 @@
     }
 
     input:focus, select:focus, textarea:focus{
-      border-color: rgba(77,163,255,0.55);
+      border-color: rgba(77,163,255,0.62);
       box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
-      background: rgba(0,0,0,0.20);
+      background: rgba(0,0,0,0.14);
     }
 
     select{
       padding-left: 40px;
       background-image:
-        linear-gradient(45deg, transparent 50%, rgba(77,163,255,0.85) 50%),
-        linear-gradient(135deg, rgba(77,163,255,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(255,255,255,0.16), rgba(255,255,255,0.16));
+        linear-gradient(45deg, transparent 50%, rgba(77,163,255,0.90) 50%),
+        linear-gradient(135deg, rgba(77,163,255,0.90) 50%, transparent 50%),
+        linear-gradient(to right, rgba(255,255,255,0.18), rgba(255,255,255,0.18));
       background-position:
         calc(10px) 50%,
         calc(18px) 50%,
@@ -408,8 +425,7 @@
     }
 
     option{ background:#0b1026; color:#fff; }
-
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.45); }
+    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.52); }
 
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
@@ -418,7 +434,7 @@
     .hide{ display:none; }
 
     .fineprint{
-      color: rgba(255,255,255,0.60);
+      color: rgba(255,255,255,0.68);
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
@@ -569,7 +585,7 @@
     }
 
     /* =========================================================
-       Mobile Overrides (FIX - FORCE SAME NEON COLORS)
+       Mobile Overrides (مثل الاستبيان + فتح)
        ========================================================= */
     @media (max-width: 900px){
       html, body{
@@ -580,23 +596,26 @@
         background: transparent !important;
       }
       .card, section.card{
-        background: rgba(255,255,255,0.08) !important;
-        border: 1px solid rgba(255,255,255,0.14) !important;
+        background: rgba(255,255,255,0.14) !important;
+        border: 1px solid rgba(255,255,255,0.20) !important;
         backdrop-filter: blur(14px) !important;
         box-shadow: var(--shadow) !important;
       }
 
       body::before{
-        opacity: 0.78;
+        opacity: 0.72;
         filter: blur(20px);
+      }
+      body::after{
+        background: rgba(0,0,0,0.05);
       }
 
       header{
         padding: 10px 10px !important;
         top: 6px !important;
         border-radius: 18px !important;
-        background: rgba(255,255,255,0.08) !important;
-        border: 1px solid rgba(255,255,255,0.14) !important;
+        background: rgba(255,255,255,0.10) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
         backdrop-filter: blur(14px) !important;
       }
 
@@ -639,9 +658,9 @@
         font-size: 16px;
         padding: 13px 12px;
         border-radius: 16px;
-        background: rgba(0,0,0,0.15) !important;
-        color: rgba(255,255,255,0.94) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
+        background: rgba(0,0,0,0.08) !important;
+        color: rgba(255,255,255,0.96) !important;
+        border: 1px solid rgba(255,255,255,0.20) !important;
       }
 
       h3{
@@ -1050,7 +1069,7 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
-    // === Employees Admin ===
+    /* === Employees Admin === */
     const newEmployeeName = document.getElementById("newEmployeeName");
     const addEmployeeBtn = document.getElementById("addEmployeeBtn");
     const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
@@ -1124,7 +1143,7 @@
     newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
     clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
 
-    // === Questions Admin ===
+    /* === Questions Admin === */
     const questionsListEl = document.getElementById("questionsList");
     const noQuestionsMsg2 = document.getElementById("noQuestionsMsg");
     const newQuestionText = document.getElementById("newQuestionText");
@@ -1197,7 +1216,7 @@
     newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
     clearQuestionsBtn.addEventListener("click", clearQuestions);
 
-    // === Tabs ===
+    /* === Tabs === */
     tabEmployeesBtn.addEventListener("click", ()=>{
       employeesAdminPanel.classList.remove("hide");
       questionsAdminPanel.classList.add("hide");
@@ -1207,10 +1226,9 @@
       questionsAdminPanel.classList.remove("hide");
     });
 
-    // === Delete current review + recalc Final ===
+    /* === Delete current review + recalc Final === */
     function deleteCurrentReviewByIdAndRecalculate(center, reviewId){
       const allCurrent = loadJson(LS_KEYS.current, []);
-
       const idStr = String(reviewId);
 
       const filtered = allCurrent.filter(r => {
@@ -1221,10 +1239,8 @@
       saveJson(LS_KEYS.current, filtered);
       currentReviews = filtered;
 
-      // إعادة رسم Current
       renderCurrentTablesForCenter(center);
 
-      // إعادة حساب Final إذا كانت ظاهرة الآن
       if(!finalRatingSection.classList.contains("hide")){
         renderFinalRatingForEmployees(center);
         setViewButtons("final");
@@ -1233,10 +1249,9 @@
       showToast("✅ تم حذف الاستبيان من Current وإعادة حساب الـ Final.");
     }
 
-    // === Current Table (Current only) ===
+    /* === Current Table === */
     function renderCurrentTablesForCenter(center){
       currentReviews = loadJson(LS_KEYS.current, []);
-
       const cur = currentReviews.filter(r => r.center === center);
       currentReviewsTbody.innerHTML = "";
       const qs = loadJson(LS_KEYS.questions, []);
@@ -1290,7 +1305,6 @@
           if(action === "delete"){
             const ok = confirm("⚠️ هل أنت متأكد؟ سيتم حذف هذه الاستجابة من Current.\nوسيتم إعادة حساب الـ Final.");
             if(!ok) return;
-
             deleteCurrentReviewByIdAndRecalculate(center, id);
             return;
           }
@@ -1298,7 +1312,7 @@
       });
     }
 
-    // === Print final ===
+    /* === Print final === */
     function printFinalForEmployee(center, empObj){
       const w = window.open("", "_blank");
       if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
@@ -1413,9 +1427,9 @@
       w.document.close();
     }
 
+    /* === Final Rating === */
     function renderFinalRatingForEmployees(center){
       currentReviews = loadJson(LS_KEYS.current, []);
-
       const all = currentReviews.filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
 
