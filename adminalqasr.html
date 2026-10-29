@@ -142,6 +142,27 @@
       z-index: 2;
     }
 
+    .loginLogo{
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(77,163,255,0.35);
+      background: rgba(77,163,255,0.10);
+      box-shadow:
+        0 0 0 1px rgba(77,163,255,0.10) inset,
+        0 18px 45px rgba(77,163,255,0.18);
+      margin-top: 4px;
+      margin-bottom: 2px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .loginLogo:hover{
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 1px rgba(77,163,255,0.16) inset,
+        0 28px 60px rgba(77,163,255,0.24);
+    }
+
     .card{
       background: rgba(255,255,255,0.13);
       border: 1px solid rgba(255,255,255,0.20);
@@ -191,27 +212,6 @@
       text-align:center;
       padding: 10px 0;
       gap: 10px;
-    }
-
-    .loginLogo{
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(77,163,255,0.35);
-      background: rgba(77,163,255,0.10);
-      box-shadow:
-        0 0 0 1px rgba(77,163,255,0.10) inset,
-        0 18px 45px rgba(77,163,255,0.18);
-      margin-top: 4px;
-      margin-bottom: 2px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .loginLogo:hover{
-      transform: translateY(-2px);
-      box-shadow:
-        0 0 0 1px rgba(77,163,255,0.16) inset,
-        0 28px 60px rgba(77,163,255,0.24);
     }
 
     .toolbarGrid{
@@ -387,7 +387,6 @@
       -webkit-appearance: none;
       font-size: 15px;
       transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      text-align: right;
     }
 
     input:focus, select:focus, textarea:focus{
@@ -486,6 +485,7 @@
       transform: translateY(-1px);
     }
 
+    /* Modal */
     #reviewDetailsModal{
       position: fixed;
       inset: 0;
@@ -499,6 +499,7 @@
     }
     #reviewDetailsModal:not(.hide){ display: flex; }
 
+    /* ✅ زر الطباعة البنفسجي */
     .btn.printPurple{
       background: rgba(139,92,246,0.16) !important;
       color: rgba(236,227,255,0.96) !important;
@@ -509,6 +510,59 @@
       min-height: 40px !important;
     }
     .btn.printPurple:hover{ transform: translateY(-1px); }
+
+    /* ✅ الألوان مثل الشامية حرفيًا */
+    #showCurrentBtn{
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    #showFinalRatingBtn{
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    #showCurrentBtn:disabled{
+      background: rgba(33,209,159,0.22) !important;
+      color: rgba(205,255,238,0.98) !important;
+      border: 1px solid rgba(33,209,159,0.45) !important;
+      opacity: 0.95 !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+    #showFinalRatingBtn:disabled{
+      background: rgba(255,209,102,0.22) !important;
+      color: rgba(255,244,208,0.98) !important;
+      border: 1px solid rgba(255,209,102,0.55) !important;
+      opacity: 0.95 !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+
+    .finalReviewItem{
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:14px;
+      padding:10px 12px;
+      background: rgba(255,255,255,0.06);
+      margin-top:10px;
+    }
+    .finalReviewTop{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-weight:900;
+      color: rgba(255,255,255,0.80);
+      font-size:13px;
+    }
+    .finalReviewActions{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start;
+    }
 
     #currentSection, #finalRatingSection, #adminAdjustPage{
       animation: sectionIn 0.35s ease both;
@@ -523,19 +577,33 @@
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
         color: var(--text) !important;
       }
-      .container{ background: transparent !important; }
+      .container{
+        background: transparent !important;
+      }
       .card, section.card{
         background: rgba(255,255,255,0.14) !important;
         border: 1px solid rgba(255,255,255,0.20) !important;
         backdrop-filter: blur(14px) !important;
-        box-shadow: 0 18px 60px rgba(0,0,0,0.32) !important;
-        border-radius: 20px;
+        box-shadow: var(--shadow) !important;
       }
+
+      body::before{
+        opacity: 0.72;
+        filter: blur(20px);
+      }
+      body::after{
+        background: rgba(0,0,0,0.05);
+      }
+
       header{
         padding: 10px 10px !important;
         top: 6px !important;
         border-radius: 18px !important;
+        background: rgba(255,255,255,0.10) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
+        backdrop-filter: blur(14px) !important;
       }
+
       .brandPill{ padding: 9px 10px !important; }
       .brandPill .title{ font-size: 16px !important; }
 
@@ -544,6 +612,7 @@
         padding: 14px 0 6px;
         gap: 10px;
       }
+
       .loginLogo{
         width: 150px;
         height: 150px;
@@ -552,12 +621,23 @@
         transform: translateY(-22px);
       }
 
+      .card{ border-radius: 20px; }
+      .card .cardBody{ padding: 12px; }
+      .card .cardHead{ padding: 12px 12px; }
+
       .btn{
         min-height: 50px;
         border-radius: 18px;
         padding: 12px 12px;
         font-size: 14px;
       }
+      .btn.alt{ border-radius: 18px; }
+      .smallBtn{
+        min-height: 42px;
+        border-radius: 16px;
+      }
+
+      label{ font-size: 14px; }
 
       input, select, textarea{
         font-size: 16px;
@@ -568,9 +648,30 @@
         border: 1px solid rgba(255,255,255,0.20) !important;
       }
 
+      h3{
+        font-size: 16px;
+        margin: 14px 0 10px;
+      }
+
+      .fineprint{
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 10px;
+        padding: 0 4px;
+      }
+
       th, td{
         padding: 10px 8px;
         font-size: 12.5px;
+      }
+
+      #reviewDetailsModal > div{
+        border-radius: 20px !important;
+        padding: 12px !important;
+      }
+
+      #currentSection, #finalRatingSection, #adminAdjustPage{
+        animation-duration: 0.28s;
       }
     }
   </style>
@@ -597,7 +698,7 @@
               <img class="loginLogo" alt="Logo" src="logo.png" />
 
               <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
-                مركز الهوية الوطنية
+               مركز الهوية الوطنية
               </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
@@ -771,6 +872,7 @@
   </div>
 
   <script>
+    // ✅ نفس منطق الشامية حرفيًا مع تغيير LOCK_CENTER فقط
     const LOCK_CENTER = "محافظة الجهراء (القصر)";
 
     const LS_KEYS = {
