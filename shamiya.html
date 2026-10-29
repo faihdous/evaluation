@@ -53,7 +53,6 @@
       position: relative;
     }
 
-    /* ✅ فتح الخلفية + الإضاءة (بدون حذف خصائص الـNeon Glass) */
     body::before{
       content:"";
       position: fixed;
@@ -64,24 +63,22 @@
         radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.22), transparent 60%),
         radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.12), transparent 62%);
       filter: blur(18px) brightness(1.12) saturate(1.05);
-      opacity: 0.68; /* ✅ كان 0.85 */
+      opacity: 0.68;
       animation: glowFloat 10s ease-in-out infinite;
       z-index: -1;
     }
-
     @keyframes glowFloat{
       0%,100%{ transform: translate3d(0,0,0); }
       50%{ transform: translate3d(0,-10px,0); }
     }
 
-    /* ✅ خيار إضافي (يفتح بدون تدمير التصميم): إذا تبغى أكثر/أقل عدل القيمة */
     body::after{
       content:"";
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: -1;
-      background: rgba(0,0,0,0.06); /* ✅ كان غير موجود (أو كان تعتيم عالي). هذا يفتح */
+      background: rgba(0,0,0,0.06);
     }
 
     .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
@@ -92,7 +89,7 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
-      background: rgba(255,255,255,0.10); /* ✅ فتح خفيف */
+      background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
@@ -109,7 +106,7 @@
       justify-content:center;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.14); /* ✅ فتح */
+      background: rgba(255,255,255,0.14);
       border: 1px solid rgba(77,163,255,0.28);
       box-shadow:
         0 0 0 1px rgba(77,163,255,0.10) inset,
@@ -126,9 +123,8 @@
       background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.30), rgba(33,209,159,0.0));
       transform: translateX(-60%);
       animation: shimmer 2.8s ease-in-out infinite;
-      opacity: 0.62; /* ✅ فتح */
+      opacity: 0.62;
     }
-
     @keyframes shimmer{
       0%, 100%{ transform: translateX(-60%); }
       50%{ transform: translateX(60%); }
@@ -150,7 +146,7 @@
 
     header .brandSub{
       margin-top: 4px;
-      color: rgba(255,255,255,0.78); /* ✅ فتح */
+      color: rgba(255,255,255,0.78);
       font-weight: 850;
       font-size: 12.5px;
       position: relative;
@@ -162,12 +158,11 @@
       max-width: 100%;
     }
 
-    /* ✅ فتح الكروت/الزجاج */
     .card{
-      background: rgba(255,255,255,0.13); /* ✅ كان 0.08 */
-      border: 1px solid rgba(255,255,255,0.20); /* ✅ */
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.20);
       border-radius: var(--radius2);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.35); /* ✅ أهدأ */
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
       backdrop-filter: blur(14px);
       overflow:hidden;
       width: 100%;
@@ -176,8 +171,8 @@
 
     .card .cardHead{
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.16); /* ✅ */
-      background: linear-gradient(90deg, rgba(33,209,159,0.22), rgba(77,163,255,0.20)); /* ✅ */
+      border-bottom: 1px solid rgba(255,255,255,0.16);
+      background: linear-gradient(90deg, rgba(33,209,159,0.22), rgba(77,163,255,0.20));
       position: relative;
     }
 
@@ -188,7 +183,7 @@
       background:
         radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.30), transparent 60%),
         radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.26), transparent 60%);
-      opacity: 0.70; /* ✅ */
+      opacity: 0.70;
       pointer-events:none;
     }
 
@@ -235,7 +230,7 @@
 
     label{
       display:block;
-      color: rgba(255,255,255,0.72); /* ✅ */
+      color: rgba(255,255,255,0.72);
       font-weight: 800;
       margin-bottom: 8px;
       font-size: 13px;
@@ -243,13 +238,12 @@
       width: 100%;
     }
 
-    /* ✅ فتح حقول الإدخال */
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.22); /* ✅ */
-      background: rgba(0,0,0,0.10); /* ✅ كان 0.15 */
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.10);
       color: rgba(255,255,255,0.96);
       outline:none;
       appearance: none;
@@ -262,7 +256,7 @@
     input:focus, select:focus, textarea:focus{
       border-color: rgba(77,163,255,0.62);
       box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
-      background: rgba(0,0,0,0.14); /* ✅ */
+      background: rgba(0,0,0,0.14);
     }
 
     select{
@@ -283,7 +277,7 @@
     }
 
     option{ background:#0b1026; color:#fff; }
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.52); } /* ✅ */
+    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.52); }
     textarea{ min-height: 86px; resize: vertical; }
 
     .btnRow{
@@ -303,7 +297,6 @@
       border-radius:16px;
       font-weight:950;
       color: rgba(255,255,255,0.95);
-
       transition: 0.2s;
       user-select:none;
       white-space: nowrap;
@@ -313,7 +306,6 @@
       align-items:center;
       justify-content:center;
       position: relative;
-
       background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.88));
       box-shadow:
         0 12px 30px rgba(255,209,102,0.18),
@@ -333,14 +325,14 @@
     }
 
     .btn.alt{
-      background: rgba(255,255,255,0.10); /* ✅ فتح */
+      background: rgba(255,255,255,0.10);
       color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.18); /* ✅ */
+      border: 1px solid rgba(255,255,255,0.18);
       box-shadow: none;
     }
     .btn.alt:hover{
-      background: rgba(255,255,255,0.14); /* ✅ */
-      border-color: rgba(255,255,255,0.25); /* ✅ */
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.25);
       transform: translateY(-1px);
     }
 
@@ -356,20 +348,20 @@
       margin-top: 12px;
       padding: 12px;
       border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.16); /* ✅ */
-      background: rgba(255,255,255,0.10); /* ✅ */
-      color: rgba(255,255,255,0.84); /* ✅ */
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.84);
       line-height: 1.7;
       font-weight: 850;
       font-size: 13px;
       display:none;
       text-align:center;
       width: 100%;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.22); /* ✅ */
+      box-shadow: 0 18px 40px rgba(0,0,0,0.22);
     }
 
     .fineprint{
-      color: rgba(255,255,255,0.68); /* ✅ */
+      color: rgba(255,255,255,0.68);
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
@@ -389,15 +381,14 @@
 
     .qWrap{
       width: 100%;
-      border: 1px solid rgba(255,255,255,0.18); /* ✅ */
+      border: 1px solid rgba(255,255,255,0.18);
       border-radius: 16px;
       padding: 12px;
-      background: rgba(255,255,255,0.08); /* ✅ */
+      background: rgba(255,255,255,0.08);
     }
 
     .hide{ display:none; }
 
-    /* Mobile Overrides (same fix as Admin) */
     @media (max-width: 900px){
       html, body{
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
@@ -407,8 +398,8 @@
       .container{ background: transparent !important; }
 
       .card{
-        background: rgba(255,255,255,0.14) !important; /* ✅ */
-        border: 1px solid rgba(255,255,255,0.20) !important; /* ✅ */
+        background: rgba(255,255,255,0.14) !important;
+        border: 1px solid rgba(255,255,255,0.20) !important;
         backdrop-filter: blur(14px) !important;
         box-shadow: 0 18px 60px rgba(0,0,0,0.32) !important;
         border-radius: 20px;
@@ -418,8 +409,8 @@
         padding: 10px 10px !important;
         top: 6px !important;
         border-radius: 18px !important;
-        background: rgba(255,255,255,0.10) !important; /* ✅ */
-        border: 1px solid rgba(255,255,255,0.18) !important; /* ✅ */
+        background: rgba(255,255,255,0.10) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
         backdrop-filter: blur(14px) !important;
       }
 
@@ -439,19 +430,14 @@
         font-size: 16px;
         padding: 13px 12px;
         border-radius: 16px;
-        background: rgba(0,0,0,0.08) !important; /* ✅ */
+        background: rgba(0,0,0,0.08) !important;
         color: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.20) !important; /* ✅ */
+        border: 1px solid rgba(255,255,255,0.20) !important;
       }
 
       label{ font-size: 14px; }
-
       .row{ margin-bottom: 14px; }
-      th, td{ font-size: 12.5px; }
-
-      #questionsContainer{
-        gap: 12px;
-      }
+      #questionsContainer{ gap: 12px; }
     }
   </style>
 </head>
@@ -522,7 +508,8 @@
   </div>
 
   <script>
-    const center = "مركز الشامية";
+    // ✅ تم التعديل: لازم يطابق LOCK_CENTER حرفيًا داخل الأدمن
+    const center = "محافظه العاصمة (الشامية)";
 
     const LS_KEYS = {
       current: "reviews_current_v3",
@@ -565,7 +552,6 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // ✅ توحيد النص مع كود الإدارة: "جيد جدا"
     function getRatingOptions(){
       return ["ممتاز", "جيد جدا", "جيد", "مقبول"];
     }
@@ -610,7 +596,7 @@
     }
 
     function loadQuestions(){
-      return loadJson(LS_KEYS.questions, []); // [{id,text}]
+      return loadJson(LS_KEYS.questions, []);
     }
 
     function renderQuestionDropdowns(){
@@ -677,7 +663,7 @@
         questionAnswers[q.id] = value;
       }
 
-      const rating = questionAnswers[qs[0].id]; // أي سؤال يكفي لتخزين rating مختصر
+      const rating = questionAnswers[qs[0].id];
 
       const currentReviews = loadJson(LS_KEYS.current, []);
 
