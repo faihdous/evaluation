@@ -465,7 +465,6 @@
     height:190px !important;
   }
 
-  /* ===== Modals ===== */
   #reviewDetailsModal{
     position: fixed;
     inset: 0;
@@ -866,7 +865,7 @@
         "مركز المسايل",
         "مركز مشرف",
         "مركز صباح أحمد",
-        "مركز الشامية"
+        "محافظه العاصمة (الشامية)"  // ✅ تم تعديلها لتطابق center في الاستبيان/الأدمن
       ];
 
       const LS_KEYS = {
@@ -1146,7 +1145,8 @@
             plugins: { legend: { display: true, labels: { color: "rgba(255,255,255,0.9)" } } },
             scales: {
               y: { beginAtZero: true, ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.08)" } },
-                      x: { ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.05)" } } }
+              x: { ticks: { color: "rgba(255,255,255,0.8)" }, grid: { color: "rgba(255,255,255,0.05)" } }
+            }
           }
         });
 
