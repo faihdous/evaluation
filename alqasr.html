@@ -394,7 +394,6 @@
         background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
         color: var(--text) !important;
       }
-
       .container{ background: transparent !important; }
 
       .card{
@@ -508,7 +507,7 @@
   </div>
 
   <script>
-    // ✅ نفس المفتاح داخل الأدمن
+    // ✅ القصر: نفس مركز الأدمن حرفيًا
     const center = "محافظة الجهراء (القصر)";
 
     const LS_KEYS = {
@@ -552,9 +551,9 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
+    // ✅ نفس استبيان الشامية حرفيًا
     function getRatingOptions(){
-      // خله نفس الأدمن (ممتاز/جيد/مقبول)
-      return ["ممتاز", "جيد", "مقبول"];
+      return ["ممتاز", "جيد جدا", "جيد", "مقبول"];
     }
 
     const employeeSelect = document.getElementById("employeeSelect");
@@ -664,6 +663,7 @@
         questionAnswers[q.id] = value;
       }
 
+      // نفس الشامية حرفيًا (تخزين rating من أول سؤال)
       const rating = questionAnswers[qs[0].id];
 
       const currentReviews = loadJson(LS_KEYS.current, []);
@@ -697,8 +697,10 @@
       reviewerPhone.value = "";
       commentShort.value = "";
       employeeSelect.value = "";
+
       const toastMsg = document.getElementById("toastMsg");
       toastMsg.style.display = "none";
+
       renderQuestionDropdowns();
     });
 
