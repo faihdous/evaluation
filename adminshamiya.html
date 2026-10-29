@@ -7,15 +7,6 @@
 
   <style>
     /* =========================
-       Neon Glass Theme (Laptop-Grade)<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>لوحة الإدارة - مركز الشامية</title>
-
-  <style>
-    /* =========================
        Neon Glass Theme (Laptop-Grade)
        ========================= */
     :root{
@@ -44,10 +35,9 @@
       --pillBg: rgba(255,255,255,0.12);
       --pillBorder: rgba(77,163,255,0.25);
 
-      /* ✅ نخلي الخلفية مثل صفحة الاستبيان (قريبة جدًا من نفس نسب الألوان) */
       --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
-      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.26), transparent 60%);
-      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.16), transparent 60%);
+      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.24), transparent 60%);
+      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.14), transparent 60%);
       --g4: linear-gradient(180deg, #0d1435, #070f22);
     }
 
@@ -63,32 +53,21 @@
       position: relative;
     }
 
-    /* Subtle animated grain / glow (✅ مثل صفحة الاستبيان مع فتح بسيط) */
+    /* Subtle animated grain / glow (kept fakhama on mobile too) */
     body::before{
       content:"";
       position: fixed;
       inset: -40px;
       pointer-events: none;
       background:
-        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.26), transparent 58%),
-        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.22), transparent 60%),
-        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.12), transparent 62%);
-      filter: blur(18px) brightness(1.12) saturate(1.05);
-      opacity: 0.68; /* ✅ بدل 0.85 */
+        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.20), transparent 58%),
+        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.18), transparent 60%),
+        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.10), transparent 62%);
+      filter: blur(18px);
+      opacity: 0.85;
       animation: glowFloat 10s ease-in-out infinite;
       z-index: -1;
     }
-
-    /* ✅ فتح عام خفيف مثل الاستبيان (بدون تدمير الخصائص) */
-    body::after{
-      content:"";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-      background: rgba(0,0,0,0.06);
-    }
-
     @keyframes glowFloat{
       0%,100%{ transform: translate3d(0,0,0); }
       50%{ transform: translate3d(0,-10px,0); }
@@ -102,10 +81,8 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
-
-      /* ✅ مثل صفحة الاستبيان */
-      background: rgba(255,255,255,0.10);
-      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
@@ -121,10 +98,8 @@
       justify-content:center;
       padding: 10px 14px;
       border-radius: 999px;
-
-      /* ✅ فتح */
-      background: rgba(255,255,255,0.14);
-      border: 1px solid rgba(77,163,255,0.28);
+      background: var(--pillBg);
+      border: 1px solid var(--pillBorder);
       box-shadow:
         0 0 0 1px rgba(77,163,255,0.10) inset,
         0 18px 55px rgba(77,163,255,0.12);
@@ -132,28 +107,25 @@
       position: relative;
       overflow: hidden;
     }
-
     .brandPill::after{
       content:"";
       position:absolute;
       inset:-2px;
-      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.30), rgba(33,209,159,0.0));
+      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.28), rgba(33,209,159,0.0));
       transform: translateX(-60%);
       animation: shimmer 2.8s ease-in-out infinite;
-      opacity: 0.62; /* ✅ */
+      opacity: 0.55;
     }
-
     @keyframes shimmer{
       0%, 100%{ transform: translateX(-60%); }
       50%{ transform: translateX(60%); }
     }
-
     .brandPill .title{
       margin:0;
       font-weight: 950;
       font-size: 18px;
       letter-spacing: 0.2px;
-      color: rgba(255,255,255,0.97);
+      color: rgba(255,255,255,0.95);
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
@@ -183,12 +155,11 @@
         0 28px 60px rgba(77,163,255,0.24);
     }
 
-    /* ✅ الكروت مثل الاستبيان (فتح نفس النمط) */
     .card{
-      background: rgba(255,255,255,0.13);
-      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
       border-radius: var(--radius2);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
       overflow:hidden;
       width: 100%;
@@ -197,8 +168,8 @@
 
     .card .cardHead{
       padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.16);
-      background: linear-gradient(90deg, rgba(33,209,159,0.22), rgba(77,163,255,0.20));
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      background: linear-gradient(90deg, rgba(33,209,159,0.16), rgba(77,163,255,0.14));
       position: relative;
     }
     .card .cardHead::after{
@@ -206,9 +177,9 @@
       position:absolute;
       inset:0;
       background:
-        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.30), transparent 60%),
-        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.26), transparent 60%);
-      opacity: 0.70;
+        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.25), transparent 60%),
+        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.22), transparent 60%);
+      opacity: 0.65;
       pointer-events:none;
     }
 
@@ -216,7 +187,7 @@
       margin:0;
       font-size:15px;
       letter-spacing:0.2px;
-      color: rgba(255,255,255,0.98);
+      color: rgba(255,255,255,0.95);
       text-align:center;
       position: relative;
       z-index: 2;
@@ -356,7 +327,7 @@
       box-shadow:
         0 18px 40px rgba(255,140,0,0.14),
         0 0 0 1px rgba(255,140,0,0.28) inset !important;
-      transform: translateY(-1px) !important;
+      transform: translateY(-1px) !important; /* الحفاظ على خصائص الحركة */
     }
     #adminAdjustBtn:disabled{
       opacity: 0.6 !important;
@@ -365,26 +336,26 @@
       box-shadow: none !important;
     }
 
-    /* ✅ Table مثل الاستبيان */
+    /* Table */
     table{
       width:100%;
       border-collapse: collapse;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,0.20);
-      background: rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
       color: var(--text);
     }
     th, td{
       padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.12);
+      border-bottom:1px solid rgba(255,255,255,0.10);
       text-align:center;
       font-size:13px;
       vertical-align: middle;
       white-space: nowrap;
     }
     th{
-      background: rgba(77,163,255,0.12);
+      background: rgba(77,163,255,0.10);
       color: rgba(255,255,255,0.72);
       font-weight:900;
     }
@@ -399,14 +370,13 @@
       font-size: 13px;
     }
 
-    /* ✅ inputs مثل الاستبيان */
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
       border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.22);
-      background: rgba(0,0,0,0.10);
-      color: rgba(255,255,255,0.96);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.15);
+      color: rgba(255,255,255,0.94);
       outline:none;
       appearance: none;
       -webkit-appearance: none;
@@ -415,9 +385,9 @@
     }
 
     input:focus, select:focus, textarea:focus{
-      border-color: rgba(77,163,255,0.62);
+      border-color: rgba(77,163,255,0.55);
       box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
-      background: rgba(0,0,0,0.14);
+      background: rgba(0,0,0,0.20);
     }
 
     select{
@@ -425,7 +395,7 @@
       background-image:
         linear-gradient(45deg, transparent 50%, rgba(77,163,255,0.85) 50%),
         linear-gradient(135deg, rgba(77,163,255,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(255,255,255,0.18), rgba(255,255,255,0.18));
+        linear-gradient(to right, rgba(255,255,255,0.16), rgba(255,255,255,0.16));
       background-position:
         calc(10px) 50%,
         calc(18px) 50%,
@@ -439,7 +409,7 @@
 
     option{ background:#0b1026; color:#fff; }
 
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.52); }
+    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.45); }
 
     .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
     @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
@@ -448,7 +418,7 @@
     .hide{ display:none; }
 
     .fineprint{
-      color: rgba(255,255,255,0.68);
+      color: rgba(255,255,255,0.60);
       font-size: 12px;
       margin-top: 10px;
       line-height: 1.7;
@@ -599,7 +569,7 @@
     }
 
     /* =========================================================
-       Mobile Overrides (مثل الاستبيان + فتح)
+       Mobile Overrides (FIX - FORCE SAME NEON COLORS)
        ========================================================= */
     @media (max-width: 900px){
       html, body{
@@ -610,27 +580,23 @@
         background: transparent !important;
       }
       .card, section.card{
-        background: rgba(255,255,255,0.14) !important;
-        border: 1px solid rgba(255,255,255,0.20) !important;
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.14) !important;
         backdrop-filter: blur(14px) !important;
         box-shadow: var(--shadow) !important;
       }
 
       body::before{
-        opacity: 0.72;
-        filter: blur(20px) brightness(1.10) saturate(1.05);
-      }
-
-      body::after{
-        background: rgba(0,0,0,0.05);
+        opacity: 0.78;
+        filter: blur(20px);
       }
 
       header{
         padding: 10px 10px !important;
         top: 6px !important;
         border-radius: 18px !important;
-        background: rgba(255,255,255,0.10) !important;
-        border: 1px solid rgba(255,255,255,0.18) !important;
+        background: rgba(255,255,255,0.08) !important;
+        border: 1px solid rgba(255,255,255,0.14) !important;
         backdrop-filter: blur(14px) !important;
       }
 
@@ -673,9 +639,9 @@
         font-size: 16px;
         padding: 13px 12px;
         border-radius: 16px;
-        background: rgba(0,0,0,0.08) !important;
-        color: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.20) !important;
+        background: rgba(0,0,0,0.15) !important;
+        color: rgba(255,255,255,0.94) !important;
+        border: 1px solid rgba(255,255,255,0.18) !important;
       }
 
       h3{
@@ -1776,1027 +1742,6 @@
 
     renderQuestions();
     setViewButtons("current");
-  </script>
-</body>
-</html>
-
-       ========================= */
-    :root{
-      --bg1: #0b1026;
-      --bg2: #06162c;
-
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.66);
-
-      --panel: rgba(255,255,255,0.10);
-      --panel2: rgba(255,255,255,0.08);
-      --border: rgba(255,255,255,0.16);
-
-      --blue: #4da3ff;
-      --green: #21d19f;
-      --danger: #ff5a7a;
-      --yellow: #ffd166;
-
-      --shadow: 0 22px 70px rgba(0,0,0,0.45);
-
-      --modalBg: rgba(0,0,0,0.55);
-      --radius2: 22px;
-      --radius: 14px;
-      --fieldPad: 12px;
-
-      --pillBg: rgba(255,255,255,0.12);
-      --pillBorder: rgba(77,163,255,0.25);
-
-      --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
-      --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.26), transparent 60%);
-      --g3: radial-gradient(680px 420px at 50% 10%, rgba(255,209,102,0.16), transparent 60%);
-      --g4: linear-gradient(180deg, #0d1435, #070f22);
-    }
-
-    *{ box-sizing: border-box; }
-
-    body{
-      margin:0;
-      font-family: "Tajawal","Cairo","Segoe UI",Tahoma,Arial,sans-serif;
-      color: var(--text);
-      background: var(--g1), var(--g2), var(--g3), var(--g4);
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    /* ✅ فتح الخلفية + الإضاءة مثل صفحة التقييم */
-    body::before{
-      content:"";
-      position: fixed;
-      inset: -40px;
-      pointer-events: none;
-      background:
-        radial-gradient(800px 420px at 20% 15%, rgba(77,163,255,0.26), transparent 58%),
-        radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.22), transparent 60%),
-        radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.12), transparent 62%);
-      filter: blur(18px) brightness(1.12) saturate(1.05);
-      opacity: 0.68; /* ✅ كان 0.85 */
-      animation: glowFloat 10s ease-in-out infinite;
-      z-index: -1;
-    }
-
-    /* ✅ طبقة فتح خفيفة جداً (بدون سحق الكونسبت) */
-    body::after{
-      content:"";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-      background: rgba(0,0,0,0.06); /* ✅ كان لا يوجد/غامق */
-    }
-
-    @keyframes glowFloat{
-      0%,100%{ transform: translate3d(0,0,0); }
-      50%{ transform: translate3d(0,-10px,0); }
-    }
-
-    .container{ width: min(1200px, 96vw); margin: 12px auto 26px; max-width:100%; }
-
-    header{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 14px;
-      background: rgba(255,255,255,0.10); /* ✅ فتح */
-      border: 1px solid rgba(255,255,255,0.18); /* ✅ */
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      position: sticky;
-      top: 10px;
-      z-index: 50;
-    }
-
-    .brandPill{
-      width: 100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.14); /* ✅ فتح */
-      border: 1px solid rgba(77,163,255,0.28); /* ✅ */
-      box-shadow:
-        0 0 0 1px rgba(77,163,255,0.10) inset,
-        0 18px 55px rgba(77,163,255,0.12);
-      max-width: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .brandPill::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: linear-gradient(90deg, rgba(77,163,255,0.0), rgba(77,163,255,0.30), rgba(33,209,159,0.0));
-      transform: translateX(-60%);
-      animation: shimmer 2.8s ease-in-out infinite;
-      opacity: 0.62; /* ✅ فتح */
-    }
-
-    @keyframes shimmer{
-      0%, 100%{ transform: translateX(-60%); }
-      50%{ transform: translateX(60%); }
-    }
-
-    .brandPill .title{
-      margin:0;
-      font-weight: 950;
-      font-size: 18px;
-      letter-spacing: 0.2px;
-      color: rgba(255,255,255,0.97); /* ✅ */
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-      text-align:center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .loginLogo{
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(77,163,255,0.35);
-      background: rgba(77,163,255,0.10);
-      box-shadow:
-        0 0 0 1px rgba(77,163,255,0.10) inset,
-        0 18px 45px rgba(77,163,255,0.18);
-      margin-top: 4px;
-      margin-bottom: 2px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .loginLogo:hover{
-      transform: translateY(-2px);
-      box-shadow:
-        0 0 0 1px rgba(77,163,255,0.16) inset,
-        0 28px 60px rgba(77,163,255,0.24);
-    }
-
-    /* ✅ فتح الكروت/الزجاج */
-    .card{
-      background: rgba(255,255,255,0.13); /* ✅ كان 0.08 */
-      border: 1px solid rgba(255,255,255,0.20); /* ✅ */
-      border-radius: var(--radius2);
-      box-shadow: 0 18px 60px rgba(0,0,0,0.35); /* ✅ */
-      backdrop-filter: blur(14px);
-      overflow:hidden;
-      width: 100%;
-      transform: translateZ(0);
-    }
-
-    .card .cardHead{
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.16); /* ✅ */
-      background: linear-gradient(90deg, rgba(33,209,159,0.22), rgba(77,163,255,0.20)); /* ✅ */
-      position: relative;
-    }
-    .card .cardHead::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(500px 130px at 10% 50%, rgba(77,163,255,0.30), transparent 60%),
-        radial-gradient(500px 130px at 90% 50%, rgba(33,209,159,0.26), transparent 60%);
-      opacity: 0.70; /* ✅ */
-      pointer-events:none;
-    }
-
-    .card h2{
-      margin:0;
-      font-size:15px;
-      letter-spacing:0.2px;
-      color: rgba(255,255,255,0.98);
-      text-align:center;
-      position: relative;
-      z-index: 2;
-      font-weight: 950;
-    }
-    .card .cardBody{ padding: 14px; }
-
-    .loginStage{
-      min-height: 58vh;
-      display:flex;
-      flex-direction: column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding: 10px 0;
-      gap: 10px;
-    }
-
-    /* Buttons */
-    .toolbarGrid{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      align-items: stretch;
-      width: 100%;
-    }
-    @media (max-width: 720px){
-      .toolbarGrid{ grid-template-columns: 1fr; }
-    }
-    .toolbarGrid .btn{ width: 100%; justify-content: center; }
-
-    .subToolbarGrid{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      align-items: stretch;
-      width: 100%;
-    }
-    @media (max-width: 720px){
-      .subToolbarGrid{ grid-template-columns: 1fr; }
-    }
-    .subToolbarGrid .btn{ width: 100%; justify-content: center; }
-
-    .btnRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-
-    .btn{
-      border:none; cursor:pointer; padding:12px 14px; border-radius:16px;
-      font-weight:950;
-      color: rgba(255,255,255,0.95);
-      transition:0.2s;
-      white-space: nowrap;
-      user-select:none;
-      min-height: 46px;
-      width:auto;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      position: relative;
-
-      background: linear-gradient(180deg, rgba(255,209,102,1), rgba(255,209,102,0.88));
-      box-shadow:
-        0 12px 30px rgba(255,209,102,0.18),
-        0 0 0 1px rgba(255,209,102,0.20) inset;
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      box-shadow:
-        0 18px 45px rgba(255,209,102,0.25),
-        0 0 0 1px rgba(255,209,102,0.25) inset;
-    }
-    .btn:disabled{
-      opacity: 0.6; cursor:not-allowed; transform:none;
-      box-shadow:none !important;
-    }
-
-    .btn.blue{
-      background: linear-gradient(180deg, rgba(77,163,255,1), rgba(77,163,255,0.82));
-      box-shadow:
-        0 12px 30px rgba(77,163,255,0.18),
-        0 0 0 1px rgba(77,163,255,0.22) inset;
-      color:#fff;
-    }
-    .btn.green{
-      background: linear-gradient(180deg, rgba(33,209,159,1), rgba(33,209,159,0.82));
-      box-shadow:
-        0 12px 30px rgba(33,209,159,0.18),
-        0 0 0 1px rgba(33,209,159,0.22) inset;
-      color:#fff;
-    }
-
-    .btn.alt{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
-      box-shadow: none;
-    }
-    .btn.alt:hover{
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
-      transform: translateY(-1px);
-    }
-
-    .btn.danger{
-      background: linear-gradient(180deg, rgba(255,90,122,1), rgba(255,90,122,0.82));
-      box-shadow:
-        0 12px 30px rgba(255,90,122,0.18),
-        0 0 0 1px rgba(255,90,122,0.22) inset;
-      color:#140607;
-    }
-
-    .btn.dangerLight{
-      background: rgba(255,90,122,0.18);
-      color: rgba(255,255,255,0.95);
-      border: 1px solid rgba(255,90,122,0.40);
-      box-shadow: 0 10px 20px rgba(255,90,122,0.10);
-    }
-    .btn.dangerLight:hover{
-      transform: translateY(-1px);
-      background: rgba(255,90,122,0.24);
-    }
-
-    /* =========================
-       تعديل زر التعديلات فقط (كما هو)
-       ========================= */
-    #adminAdjustBtn{
-      background: rgba(255,140,0,0.14) !important;
-      color: rgba(255,236,214,0.98) !important;
-      border: 1px solid rgba(255,140,0,0.40) !important;
-      box-shadow:
-        0 12px 25px rgba(255,140,0,0.08),
-        0 0 0 1px rgba(255,140,0,0.18) inset !important;
-    }
-    #adminAdjustBtn:hover{
-      background: rgba(255,140,0,0.22) !important;
-      border-color: rgba(255,140,0,0.60) !important;
-      box-shadow:
-        0 18px 40px rgba(255,140,0,0.14),
-        0 0 0 1px rgba(255,140,0,0.28) inset !important;
-      transform: translateY(-1px) !important;
-    }
-    #adminAdjustBtn:disabled{
-      opacity: 0.6 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    /* Table */
-    table{
-      width:100%;
-      border-collapse: collapse;
-      border-radius:14px;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,0.20); /* ✅ */
-      background: rgba(255,255,255,0.08); /* ✅ */
-      color: var(--text);
-    }
-    th, td{
-      padding:10px 10px;
-      border-bottom:1px solid rgba(255,255,255,0.12); /* ✅ */
-      text-align:center;
-      font-size:13px;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-    th{
-      background: rgba(77,163,255,0.12); /* ✅ */
-      color: rgba(255,255,255,0.72);
-      font-weight:900;
-    }
-    td{ color: rgba(255,255,255,0.92); }
-    tr:last-child td{ border-bottom:none; }
-
-    label{
-      display:block;
-      color: var(--muted);
-      font-weight: 800;
-      margin-bottom: 8px;
-      font-size: 13px;
-    }
-
-    /* ✅ فتح حقول الإدخال */
-    input, select, textarea{
-      width:100%;
-      padding: calc(var(--fieldPad) + 2px) 12px;
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.22); /* ✅ */
-      background: rgba(0,0,0,0.10); /* ✅ كان 0.15 */
-      color: rgba(255,255,255,0.94);
-      outline:none;
-      appearance: none;
-      -webkit-appearance: none;
-      font-size: 15px;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    input:focus, select:focus, textarea:focus{
-      border-color: rgba(77,163,255,0.62);
-      box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
-      background: rgba(0,0,0,0.14); /* ✅ */
-    }
-
-    select{
-      padding-left: 40px;
-      background-image:
-        linear-gradient(45deg, transparent 50%, rgba(77,163,255,0.85) 50%),
-        linear-gradient(135deg, rgba(77,163,255,0.85) 50%, transparent 50%),
-        linear-gradient(to right, rgba(255,255,255,0.16), rgba(255,255,255,0.16));
-      background-position:
-        calc(10px) 50%,
-        calc(18px) 50%,
-        calc(100% - 42px) 50%;
-      background-size:
-        8px 8px,
-        8px 8px,
-        1px 22px;
-      background-repeat: no-repeat;
-    }
-
-    option{ background:#0b1026; color:#fff; }
-    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,0.52); } /* ✅ */
-
-    .row{ display:grid; grid-template-columns: 1fr; gap:12px; margin-bottom:14px; }
-    @media(min-width:720px){ .row.two{ grid-template-columns: 1fr 1fr; } }
-
-    h3{ margin:14px 0 8px; font-size:15px; color: rgba(255,255,255,0.78); font-weight: 950; }
-    .hide{ display:none; }
-
-    .fineprint{
-      color: rgba(255,255,255,0.68); /* ✅ */
-      font-size: 12px;
-      margin-top: 10px;
-      line-height: 1.7;
-      text-align:center;
-      font-weight: 850;
-    }
-
-    /* (باقي CSS كما هو بدون تعديل) */
-    .ratingTag{
-      display:inline-flex; padding:6px 10px; border-radius:999px;
-      font-weight:900; font-size:12px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06); white-space:nowrap;
-      color: rgba(255,255,255,0.92);
-    }
-    .ratingTag.excellent{ border-color: rgba(33,209,159,0.58); background: rgba(33,209,159,0.12); color: rgba(233,255,247,0.98); }
-    .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); color: rgba(255,248,227,0.98); }
-    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
-    .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); color: rgba(255,235,239,0.98); }
-
-    .smallBtn{
-      padding:9px 10px; border-radius:14px; font-weight:900; border:none; cursor:pointer;
-      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.92);
-      border:1px solid rgba(255,255,255,0.16); box-shadow:none;
-      white-space:nowrap; min-height: 40px;
-      transition: 0.2s;
-    }
-    .smallBtn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,0.10);
-      border-color: rgba(255,255,255,0.22);
-    }
-
-    .msg{
-      margin-top:12px; padding:12px; border-radius:14px;
-      border:1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.78);
-      line-height:1.7; font-weight:850; font-size:13px;
-      display:none;
-      text-align:center;
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
-    }
-
-    .employeeChipRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
-    .employeeChip{
-      display:inline-flex; align-items:center; gap:10px; padding:8px 10px;
-      border-radius:999px;
-      background: rgba(77,163,255,0.08);
-      border: 1px solid rgba(77,163,255,0.18);
-      color: rgba(255,255,255,0.92); font-weight:900; font-size:13px;
-    }
-    .employeeChip button{
-      min-height: 34px; min-width: 34px; padding:0 10px; border-radius: 999px;
-      border:none; cursor:pointer;
-      background: rgba(255,90,122,0.20); color: rgba(255,220,228,0.98);
-      border: 1px solid rgba(255,90,122,0.35); font-weight:950;
-      transition: 0.2s;
-    }
-    .employeeChip button:hover{
-      background: rgba(255,90,122,0.28);
-      transform: translateY(-1px);
-    }
-
-    /* Modal */
-    #reviewDetailsModal{
-      position: fixed;
-      inset: 0;
-      background: var(--modalBg);
-      z-index: 9999;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 14px;
-      backdrop-filter: blur(6px);
-    }
-    #reviewDetailsModal:not(.hide){ display: flex; }
-
-    .btn.printPurple{
-      background: rgba(139,92,246,0.16) !important;
-      color: rgba(236,227,255,0.96) !important;
-      border: 1px solid rgba(139,92,246,0.40) !important;
-      box-shadow: 0 12px 25px rgba(139,92,246,0.14) !important;
-      padding: 8px 10px !important;
-      border-radius: 14px !important;
-      min-height: 40px !important;
-    }
-    .btn.printPurple:hover{ transform: translateY(-1px); }
-
-    /* (باقي CSS كما هو بدون تعديل حرفياً) */
-    #showCurrentBtn{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
-    }
-    #showFinalRatingBtn{
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.92);
-      border: 1px solid rgba(255,255,255,0.16);
-    }
-    #showCurrentBtn:disabled{
-      background: rgba(33,209,159,0.22) !important;
-      color: rgba(205,255,238,0.98) !important;
-      border: 1px solid rgba(33,209,159,0.45) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
-    #showFinalRatingBtn:disabled{
-      background: rgba(255,209,102,0.22) !important;
-      color: rgba(255,244,208,0.98) !important;
-      border: 1px solid rgba(255,209,102,0.55) !important;
-      opacity: 0.95 !important;
-      cursor: not-allowed !important;
-      transform: none !important;
-    }
-
-    .finalReviewItem{
-      border:1px solid rgba(255,255,255,0.14);
-      border-radius:14px;
-      padding:10px 12px;
-      background: rgba(255,255,255,0.06);
-      margin-top:10px;
-    }
-    .finalReviewTop{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      font-weight:900;
-      color: rgba(255,255,255,0.80);
-      font-size:13px;
-    }
-    .finalReviewActions{
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-start;
-    }
-
-    #currentSection, #finalRatingSection, #adminAdjustPage{
-      animation: sectionIn 0.35s ease both;
-    }
-    @keyframes sectionIn{
-      from{ opacity: 0; transform: translateY(6px); }
-      to{ opacity: 1; transform: translateY(0); }
-    }
-
-    /* =========================================================
-       Mobile Overrides (مع نفس الفتح)
-       ========================================================= */
-    @media (max-width: 900px){
-      html, body{
-        background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
-        color: var(--text) !important;
-      }
-      .container{
-        background: transparent !important;
-      }
-      .card, section.card{
-        background: rgba(255,255,255,0.14) !important; /* ✅ فتح */
-        border: 1px solid rgba(255,255,255,0.20) !important;
-        backdrop-filter: blur(14px) !important;
-        box-shadow: 0 18px 60px rgba(0,0,0,0.32) !important;
-      }
-
-      body::before{
-        opacity: 0.72; /* ✅ فتح */
-        filter: blur(20px) brightness(1.10) saturate(1.05);
-      }
-
-      header{
-        padding: 10px 10px !important;
-        top: 6px !important;
-        border-radius: 18px !important;
-        background: rgba(255,255,255,0.10) !important; /* ✅ */
-        border: 1px solid rgba(255,255,255,0.18) !important;
-        backdrop-filter: blur(14px) !important;
-      }
-
-      .brandPill{ padding: 9px 10px !important; }
-      .brandPill .title{ font-size: 16px !important; }
-
-      .loginStage{
-        min-height: 62vh;
-        padding: 14px 0 6px;
-        gap: 10px;
-      }
-
-      .loginLogo{
-        width: 150px;
-        height: 150px;
-        margin-top: -2px;
-        margin-bottom: -6px;
-        transform: translateY(-22px);
-      }
-
-      .card{ border-radius: 20px; }
-      .card .cardBody{ padding: 12px; }
-      .card .cardHead{ padding: 12px 12px; }
-
-      .btn{
-        min-height: 50px;
-        border-radius: 18px;
-        padding: 12px 12px;
-        font-size: 14px;
-      }
-      .btn.alt{ border-radius: 18px; }
-      .smallBtn{
-        min-height: 42px;
-        border-radius: 16px;
-      }
-
-      label{ font-size: 14px; }
-
-      input, select, textarea{
-        font-size: 16px;
-        padding: 13px 12px;
-        border-radius: 16px;
-        background: rgba(0,0,0,0.08) !important; /* ✅ فتح */
-        color: rgba(255,255,255,0.96) !important;
-        border: 1px solid rgba(255,255,255,0.20) !important;
-      }
-
-      h3{
-        font-size: 16px;
-        margin: 14px 0 10px;
-      }
-
-      .fineprint{
-        font-size: 12px;
-        line-height: 1.6;
-        margin-top: 10px;
-        padding: 0 4px;
-      }
-
-      th, td{
-        padding: 10px 8px;
-        font-size: 12.5px;
-      }
-
-      #reviewDetailsModal > div{
-        border-radius: 20px !important;
-        padding: 12px !important;
-      }
-
-      #currentSection, #finalRatingSection, #adminAdjustPage{
-        animation-duration: 0.28s;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <div class="container">
-    <header>
-      <div class="brandPill">
-        <h1 class="title" id="adminHeaderTitle">لوحة الإدارة - مركز الشامية</h1>
-      </div>
-      <div></div>
-    </header>
-
-    <div style="margin-top:14px;">
-      <section class="card">
-        <div class="cardHead">
-          <h2>تسجيل دخول الإدارة</h2>
-        </div>
-
-        <div class="cardBody">
-          <div id="adminLoginBox">
-            <div class="loginStage">
-              <img class="loginLogo" alt="Logo" src="logo.png" />
-
-              <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
-                إدارة الهوية الوطنية
-              </div>
-
-              <div id="adminCenterName" class="admin-center-name" style="
-                background: rgba(77,163,255,0.10);
-                border: 1px solid rgba(77,163,255,0.24);
-                padding: 10px 16px;
-                border-radius: 14px;
-                font-weight: 950;
-                display: inline-block;
-                color: var(--text);
-              "></div>
-
-              <div class="fineprint"></div>
-
-              <div class="btnRow" style="justify-content:center; margin-top:12px;">
-                <button class="btn blue" id="adminLoginBtn" type="button">دخول الإدارة</button>
-              </div>
-
-              <div class="msg" id="toastMsg"></div>
-            </div>
-          </div>
-
-          <div id="adminWorkspace" class="hide">
-            <div class="toolbarGrid" style="margin-bottom:10px;">
-              <button class="btn dangerLight" id="deleteRecordsBtn" type="button">حذف السجلات</button>
-              <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
-              <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
-              <div></div>
-            </div>
-
-            <div class="row two" style="align-items:end; margin-top:4px;">
-              <div></div>
-              <div>
-                <label>أدوات</label>
-                <div class="toolbarGrid">
-                  <button class="btn alt" id="showCurrentBtn" type="button">عرض الحالي</button>
-                  <button class="btn alt" id="showFinalRatingBtn" type="button">التقييم النهائي (إجمالي + تفاصيل)</button>
-                </div>
-              </div>
-            </div>
-
-            <div id="currentSection">
-              <h3>التقييمات الحالية</h3>
-              <div id="currentTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>التاريخ والوقت</th>
-                      <th>اسم المراجع</th>
-                      <th>رقم الهاتف</th>
-                      <th>الموظف</th>
-                      <th>التقييم</th>
-                      <th>إجراء</th>
-                    </tr>
-                  </thead>
-                  <tbody id="currentReviewsTbody"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <div id="finalRatingSection" class="hide" style="margin-top:10px;">
-              <h3>التقييم النهائي لكل موظف</h3>
-              <div class="fineprint" style="margin-top:0;">
-                يتم تجميع (ممتاز/جيد جدا/جيد/مقبول) من <b>تقييم كل مراجعة داخل الحالي</b>، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
-              </div>
-
-              <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
-
-              <div class="fineprint" style="margin-top:12px;">
-                ملاحظة: إذا لم يظهر موظف، فهذا يعني أن لديه تقييماً غير كافٍ أو لا توجد مراجعات باسمه داخل الحالي.
-              </div>
-            </div>
-
-            <div id="adminAdjustPage" class="hide" style="margin-top:10px;">
-              <div class="btnRow" style="justify-content:flex-start; margin-bottom:10px;">
-                <button class="btn alt" id="backToReviewsBtn" type="button">← رجوع</button>
-              </div>
-
-              <div class="btnRow" style="margin:6px 0 14px;">
-                <button class="btn green" id="tabEmployeesBtn" type="button">أسماء الموظفين</button>
-                <button class="btn blue" id="tabQuestionsBtn" type="button">أسئلة التقييم</button>
-              </div>
-
-              <div id="employeesAdminPanel">
-                <div class="card">
-                  <div class="cardHead"><h2>إدارة أسماء الموظفين</h2></div>
-                  <div class="cardBody">
-                    <div class="row two" style="margin-bottom:10px;">
-                      <div>
-                        <label>اسم الموظف (سيظهر في صفحة التقييم)</label>
-                        <input id="newEmployeeName" placeholder="مثال: أحمد" inputmode="text" />
-                      </div>
-                      <div style="display:flex; align-items:end;">
-                        <div class="btnRow" style="width:100%;">
-                          <button class="btn green" id="addEmployeeBtn" type="button">إضافة</button>
-                          <button class="btn alt" id="clearEmployeesBtn" type="button">مسح قائمة الموظفين</button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
-
-                    <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
-                    <div id="employeesList" class="employeeChipRow"></div>
-                    <div class="fineprint" id="noEmployeesMsg" style="display:none;margin-top:10px;">لا توجد أسماء موظفين. أضف اسم أولاً.</div>
-                  </div>
-                </div>
-              </div>
-
-              <div id="questionsAdminPanel" class="hide">
-                <div class="card">
-                  <div class="cardHead"><h2>إدارة أسئلة التقييم</h2></div>
-                  <div class="cardBody">
-                    <div class="row two" style="margin-bottom:10px;">
-                      <div>
-                        <label>اكتب السؤال</label>
-                        <input id="newQuestionText" placeholder="مثال: هل تم حل المشكلة بسرعة؟" inputmode="text" />
-                      </div>
-                      <div style="display:flex; align-items:end;">
-                        <div class="btnRow" style="width:100%;">
-                          <button class="btn green" id="addQuestionBtn" type="button">إضافة سؤال</button>
-                          <button class="btn alt" id="clearQuestionsBtn" type="button">مسح الأسئلة</button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم إنشاء DropDown في صفحة التقييم.</div>
-
-                    <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
-                    <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
-                    <div class="fineprint" id="noQuestionsMsg" style="display:none;margin-top:10px;">لا توجد أسئلة. أضف سؤال أولاً.</div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </div>
-
-  <div id="reviewDetailsModal" class="hide">
-    <div style="
-      width: min(900px, 94vw);
-      background: rgba(10,14,40,0.72);
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      padding: 14px;
-      color: var(--text);
-    ">
-      <div class="btnRow" style="justify-content:space-between; margin-bottom: 10px;">
-        <div style="font-weight:950;">تفاصيل التقييم</div>
-        <button class="btn alt" id="closeReviewDetailsBtn" type="button">إغلاق</button>
-      </div>
-      <div id="reviewDetailsMeta" class="fineprint" style="margin-top:0; text-align:right;"></div>
-
-      <div style="
-        margin-top: 10px;
-        max-height: 55vh;
-        overflow:auto;
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.14);
-        background: rgba(0,0,0,0.18);
-      ">
-        <div id="reviewDetailsQuestions" style="padding: 12px; display:flex; flex-direction:column; gap:10px;"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const LOCK_CENTER = "مركز الشامية";
-
-    const LS_KEYS = {
-      current: "reviews_current_v3",
-      archive: "reviews_archive_v3",
-      adminCenter: "admin_center_session_v3",
-      employeesByCenter: "employees_by_center_v1",
-      questions: "rating_questions_v1"
-    };
-
-    function loadJson(key, fallback){
-      try{
-        const v = localStorage.getItem(key);
-        return v ? JSON.parse(v) : fallback;
-      }catch(e){ return fallback; }
-    }
-    function saveJson(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-
-    function formatDateTime(iso){
-      const d = new Date(iso);
-      if (Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-    }
-
-    function ratingClass(r){
-      if(r === "ممتاز") return "excellent";
-      if(r === "جيد جدا") return "good2";
-      if(r === "جيد") return "good";
-      return "acceptable";
-    }
-
-    function escapeHtml(str){
-      return String(str ?? "")
-        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    const toastMsg = document.getElementById("toastMsg");
-    function showToast(html){
-      toastMsg.style.display = "block";
-      toastMsg.innerHTML = html;
-      setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
-    }
-
-    function pointsForRating(r){
-      if(r === "ممتاز") return 1;
-      if(r === "جيد جدا") return 2;
-      if(r === "جيد") return 3;
-      if(r === "مقبول") return 4;
-      return null;
-    }
-
-    function finalRatingFromAnswers(qs, answers){
-      if(!Array.isArray(qs) || qs.length === 0) return "—";
-
-      let sum = 0;
-      let count = 0;
-
-      for(const q of qs){
-        const ans = answers?.[q.id];
-        const p = pointsForRating(ans);
-        if(p == null) continue;
-        sum += p; count++;
-      }
-      if(count === 0) return "—";
-
-      const minSum = count * 1;
-      const maxSum = count * 4;
-      const t = (sum - minSum) / (maxSum - minSum || 1);
-
-      if(t <= 0.20) return "ممتاز";
-      if(t <= 0.45) return "جيد جدا";
-      if(t <= 0.75) return "جيد";
-      return "مقبول";
-    }
-
-    function computeFinalByCounts(excellentCount, goodExcellentCount, goodCount, acceptableCount){
-      const n = excellentCount + goodExcellentCount + goodCount + acceptableCount;
-      if(n === 0) return "—";
-
-      const sumPoints =
-        (excellentCount * 1) +
-        (goodExcellentCount * 2) +
-        (goodCount * 3) +
-        (acceptableCount * 4);
-
-      const minSum = n * 1;
-      const maxSum = n * 4;
-
-      const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-
-      if(t <= 0.20) return "ممتاز";
-      if(t <= 0.45) return "جيد جدا";
-      if(t <= 0.75) return "جيد";
-      return "مقبول";
-    }
-
-    let currentReviews = loadJson(LS_KEYS.current, []);
-    let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
-
-    let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-    if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
-
-    const adminHeaderTitle = document.getElementById("adminHeaderTitle");
-    const adminCenterNameEl = document.getElementById("adminCenterName");
-    const adminLoginBtn = document.getElementById("adminLoginBtn");
-    const adminLogoutBtn = document.getElementById("adminLogoutBtn");
-    const adminLoginBox = document.getElementById("adminLoginBox");
-    const adminWorkspace = document.getElementById("adminWorkspace");
-
-    const currentReviewsTbody = document.getElementById("currentReviewsTbody");
-
-    const adminAdjustBtn = document.getElementById("adminAdjustBtn");
-    const backToReviewsBtn = document.getElementById("backToReviewsBtn");
-    const adminAdjustPage = document.getElementById("adminAdjustPage");
-
-    const tabEmployeesBtn = document.getElementById("tabEmployeesBtn");
-    const tabQuestionsBtn = document.getElementById("tabQuestionsBtn");
-    const employeesAdminPanel = document.getElementById("employeesAdminPanel");
-    const questionsAdminPanel = document.getElementById("questionsAdminPanel");
-
-    const showCurrentBtn = document.getElementById("showCurrentBtn");
-    const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
-    const currentSection = document.getElementById("currentSection");
-    const finalRatingSection = document.getElementById("finalRatingSection");
-    const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
-
-    const reviewDetailsModal = document.getElementById("reviewDetailsModal");
-    const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
-    const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
-    const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
-
-    const deleteRecordsBtn = document.getElementById("deleteRecordsBtn");
-
-    closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
-
-    /* =========================
-       (باقي جافاسكريبت كما هو تماماً من ملفك)
-       ========================= */
-    // ✅ بقيت نفس الكود كما أرسلته (بدون تغيير).
-    // تم حذف التكرار هنا فقط لتقليل الحجم في الرد.
-    // لو تحب، أرسل لي “أكمل باقي JS” وسأرجعه لك كامل 100%.
   </script>
 </body>
 </html>
