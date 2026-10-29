@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>لوحة الإدارة - محافظة الأحمدي (جابر العلي)</title>
+  <title>لوحة الإدارة - جابر العلي</title>
 
   <style>
     /* =========================
@@ -32,8 +32,8 @@
       --radius: 14px;
       --fieldPad: 12px;
 
-      --pillBg: rgba(255,255,255,0.14);
-      --pillBorder: rgba(77,163,255,0.28);
+      --pillBg: rgba(255,255,255,0.14);     /* ✅ مثل الاستبيان */
+      --pillBorder: rgba(77,163,255,0.28); /* ✅ مثل الاستبيان */
 
       --g1: radial-gradient(900px 500px at 10% 0%, rgba(77,163,255,0.28), transparent 58%);
       --g2: radial-gradient(900px 520px at 90% 0%, rgba(33,209,159,0.26), transparent 60%);
@@ -53,6 +53,7 @@
       position: relative;
     }
 
+    /* ✅ فتح الخلفية + الإضاءة مثل صفحة الاستبيان */
     body::before{
       content:"";
       position: fixed;
@@ -63,7 +64,7 @@
         radial-gradient(700px 380px at 80% 20%, rgba(33,209,159,0.22), transparent 60%),
         radial-gradient(620px 340px at 50% 0%, rgba(255,209,102,0.12), transparent 62%);
       filter: blur(18px) brightness(1.12) saturate(1.05);
-      opacity: 0.68;
+      opacity: 0.68; 
       animation: glowFloat 10s ease-in-out infinite;
       z-index: -1;
     }
@@ -72,6 +73,7 @@
       50%{ transform: translate3d(0,-10px,0); }
     }
 
+    /* ✅ طبقة فتح خفيفة */
     body::after{
       content:"";
       position: fixed;
@@ -146,6 +148,7 @@
       z-index: 2;
     }
 
+    /* Logo hover */
     .loginLogo{
       width: 88px;
       height: 88px;
@@ -167,6 +170,7 @@
         0 28px 60px rgba(77,163,255,0.24);
     }
 
+    /* الكروت/الزجاج */
     .card{
       background: rgba(255,255,255,0.13);
       border: 1px solid rgba(255,255,255,0.20);
@@ -218,6 +222,7 @@
       gap: 10px;
     }
 
+    /* Buttons */
     .toolbarGrid{
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -323,6 +328,7 @@
       background: rgba(255,90,122,0.24);
     }
 
+    /* تعديل زر التعديلات فقط */
     #adminAdjustBtn{
       background: rgba(255,140,0,0.14) !important;
       color: rgba(255,236,214,0.98) !important;
@@ -346,6 +352,7 @@
       box-shadow: none !important;
     }
 
+    /* Table */
     table{
       width:100%;
       border-collapse: collapse;
@@ -379,6 +386,7 @@
       font-size: 13px;
     }
 
+    /* Inputs مثل الاستبيان */
     input, select, textarea{
       width:100%;
       padding: calc(var(--fieldPad) + 2px) 12px;
@@ -443,6 +451,7 @@
     }
     .ratingTag.excellent{ border-color: rgba(33,209,159,0.58); background: rgba(33,209,159,0.12); color: rgba(233,255,247,0.98); }
     .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); color: rgba(255,248,227,0.98); }
+    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
     .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); color: rgba(255,235,239,0.98); }
 
     .smallBtn{
@@ -489,6 +498,7 @@
       transform: translateY(-1px);
     }
 
+    /* Modal */
     #reviewDetailsModal{
       position: fixed;
       inset: 0;
@@ -579,14 +589,16 @@
         color: var(--text) !important;
       }
       .container{ background: transparent !important; }
-      .card{
+      .card, section.card{
         background: rgba(255,255,255,0.14) !important;
         border: 1px solid rgba(255,255,255,0.20) !important;
         backdrop-filter: blur(14px) !important;
         box-shadow: var(--shadow) !important;
       }
+
       body::before{ opacity: 0.72; filter: blur(20px); }
       body::after{ background: rgba(0,0,0,0.05); }
+
       header{
         padding: 10px 10px !important;
         top: 6px !important;
@@ -595,10 +607,12 @@
         border: 1px solid rgba(255,255,255,0.18) !important;
         backdrop-filter: blur(14px) !important;
       }
+
       .brandPill{ padding: 9px 10px !important; }
       .brandPill .title{ font-size: 16px !important; }
 
       .loginStage{ min-height: 62vh; padding: 14px 0 6px; gap: 10px; }
+
       .loginLogo{
         width: 150px;
         height: 150px;
@@ -633,9 +647,17 @@
 
       h3{ font-size: 16px; margin: 14px 0 10px; }
       .fineprint{ font-size: 12px; line-height: 1.6; margin-top: 10px; padding: 0 4px; }
+
       th, td{ padding: 10px 8px; font-size: 12.5px; }
-      #reviewDetailsModal > div{ border-radius: 20px !important; padding: 12px !important; }
-      #currentSection, #finalRatingSection, #adminAdjustPage{ animation-duration: 0.28s; }
+
+      #reviewDetailsModal > div{
+        border-radius: 20px !important;
+        padding: 12px !important;
+      }
+
+      #currentSection, #finalRatingSection, #adminAdjustPage{
+        animation-duration: 0.28s;
+      }
     }
   </style>
 </head>
@@ -644,7 +666,7 @@
   <div class="container">
     <header>
       <div class="brandPill">
-        <h1 class="title" id="adminHeaderTitle">لوحة الإدارة - محافظة الأحمدي (جابر العلي)</h1>
+        <h1 class="title" id="adminHeaderTitle">لوحة الإدارة - جابر العلي</h1>
       </div>
       <div></div>
     </header>
@@ -661,7 +683,7 @@
               <img class="loginLogo" alt="Logo" src="logo.png" />
 
               <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
-                مركز الهوية الوطنية
+               مركز الهوية الوطنية
               </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
@@ -725,7 +747,7 @@
             <div id="finalRatingSection" class="hide" style="margin-top:10px;">
               <h3>التقييم النهائي لكل موظف</h3>
               <div class="fineprint" style="margin-top:0;">
-                يتم تجميع (ممتاز/جيد/مقبول) من <b>تقييم كل مراجعة داخل الحالي</b>، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
+                يتم تجميع (ممتاز/جيد جدا/جيد/مقبول) من <b>تقييم كل مراجعة داخل الحالي</b>، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
               </div>
 
               <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
@@ -835,7 +857,7 @@
   </div>
 
   <script>
-    // ✅ مركز جابر العلي (لا تغيّر حرفيًا)
+    /* ✅ جابر العلي (تعديل واحد فقط عن الشامية) */
     const LOCK_CENTER = "محافظة الأحمدي(جابر العلي)";
 
     const LS_KEYS = {
@@ -860,9 +882,9 @@
       return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
     }
 
-    // ✅ جابر العلي: (ممتاز/جيد/مقبول)
     function ratingClass(r){
       if(r === "ممتاز") return "excellent";
+      if(r === "جيد جدا") return "good2";
       if(r === "جيد") return "good";
       return "acceptable";
     }
@@ -882,8 +904,9 @@
 
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
-      if(r === "جيد") return 2;
-      if(r === "مقبول") return 3;
+      if(r === "جيد جدا") return 2;
+      if(r === "جيد") return 3;
+      if(r === "مقبول") return 4;
       return null;
     }
 
@@ -901,27 +924,34 @@
       }
       if(count === 0) return "—";
 
-      // نفس منطق جابر العلي (نسبة نقاط بين 1 و 3)
       const minSum = count * 1;
-      const maxSum = count * 3;
+      const maxSum = count * 4;
       const t = (sum - minSum) / (maxSum - minSum || 1);
 
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
+      if(t <= 0.20) return "ممتاز";
+      if(t <= 0.45) return "جيد جدا";
+      if(t <= 0.75) return "جيد";
       return "مقبول";
     }
 
-    function computeFinalByCounts(excellentCount, goodCount, acceptableCount){
-      const n = excellentCount + goodCount + acceptableCount;
+    function computeFinalByCounts(excellentCount, goodExcellentCount, goodCount, acceptableCount){
+      const n = excellentCount + goodExcellentCount + goodCount + acceptableCount;
       if(n === 0) return "—";
 
-      const sumPoints = (excellentCount * 1) + (goodCount * 2) + (acceptableCount * 3);
+      const sumPoints =
+        (excellentCount * 1) +
+        (goodExcellentCount * 2) +
+        (goodCount * 3) +
+        (acceptableCount * 4);
+
       const minSum = n * 1;
-      const maxSum = n * 3;
+      const maxSum = n * 4;
 
       const t = (sumPoints - minSum) / (maxSum - minSum || 1);
-      if(t <= 0.33) return "ممتاز";
-      if(t <= 0.66) return "جيد";
+
+      if(t <= 0.20) return "ممتاز";
+      if(t <= 0.45) return "جيد جدا";
+      if(t <= 0.75) return "جيد";
       return "مقبول";
     }
 
@@ -931,7 +961,6 @@
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
-    // Elements
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
@@ -962,7 +991,6 @@
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
 
     const deleteRecordsBtn = document.getElementById("deleteRecordsBtn");
-
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
     function openReviewDetails(review){
@@ -1114,7 +1142,7 @@
             <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
             <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
           </div>
-          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد / مقبول</div>
+          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد جدا / جيد / مقبول</div>
         `;
 
         wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
@@ -1254,7 +1282,7 @@
       });
     }
 
-    /* === Final Rating === */
+    /* === Print final === */
     function printFinalForEmployee(center, empObj){
       const w = window.open("", "_blank");
       if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
@@ -1342,6 +1370,7 @@
 
               <div class="meta">
                 ممتاز: ${empObj.excellent} |
+                جيد جدا: ${empObj.goodExcellent} |
                 جيد: ${empObj.good} |
                 مقبول: ${empObj.acceptable} |
                 المجموع: ${empObj.total}
@@ -1368,6 +1397,7 @@
       w.document.close();
     }
 
+    /* === Final Rating === */
     function renderFinalRatingForEmployees(center){
       currentReviews = loadJson(LS_KEYS.current, []);
       const all = currentReviews.filter(r => r.center === center);
@@ -1403,16 +1433,25 @@
         if(finalRating === "—") continue;
 
         if(!map.has(emp)){
-          map.set(emp, { excellent:0, good:0, acceptable:0, reviews:[] });
+          map.set(emp, { excellent:0, goodExcellent:0, good:0, acceptable:0, reviews:[] });
         }
         const item = map.get(emp);
 
         if(finalRating === "ممتاز") item.excellent++;
+        else if(finalRating === "جيد جدا") item.goodExcellent++;
         else if(finalRating === "جيد") item.good++;
         else if(finalRating === "مقبول") item.acceptable++;
 
         item.reviews.push({
           id: r.id,
+          center: r.center,
+          createdAt: r.createdAt || "",
+          archivedAt: r.archivedAt || "",
+          employeeName: r.employeeName || emp,
+          reviewerName: r.reviewerName || "",
+          reviewerPhone: r.reviewerPhone || "",
+          questionAnswers: r.questionAnswers || {},
+
           time: r.createdAt || "",
           reviewer: r.reviewerName || "",
           phone: r.reviewerPhone || "",
@@ -1425,7 +1464,7 @@
         .map(([emp, data]) => ({
           emp,
           ...data,
-          total: data.excellent + data.good + data.acceptable
+          total: data.excellent + data.goodExcellent + data.good + data.acceptable
         }))
         .filter(x => x.total > 0)
         .sort((a,b)=> b.total - a.total || b.excellent - a.excellent);
@@ -1440,9 +1479,10 @@
       }
 
       const allReviewsCache = new Map();
+
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
-        const final = computeFinalByCounts(x.excellent, x.good, x.acceptable);
+        const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
         for(const rev of x.reviews){
           allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
@@ -1469,7 +1509,7 @@
               </span>
 
               <span style="font-size:12px; color: rgba(255,255,255,0.65); font-weight: 900; white-space:nowrap;">
-                ممتاز: ${x.excellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
+                ممتاز: ${x.excellent} | جيد جدا: ${x.goodExcellent} | جيد: ${x.good} | مقبول: ${x.acceptable} | المجموع: ${x.total}
               </span>
             </summary>
 
@@ -1531,12 +1571,13 @@
           const empObj = rows.find(r => r.emp === empName);
           if(!empObj) return;
 
-          const final = computeFinalByCounts(empObj.excellent, empObj.good, empObj.acceptable);
+          const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
 
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
             excellent: empObj.excellent,
+            goodExcellent: empObj.goodExcellent,
             good: empObj.good,
             acceptable: empObj.acceptable,
             total: empObj.total,
@@ -1686,7 +1727,6 @@
 
     renderQuestions();
     setViewButtons("current");
-    // ملاحظة: employees يتم تحميلها عند دخول الإدارة فقط مثل الشامية
   </script>
 </body>
 </html>
