@@ -6,6 +6,9 @@
   <title>لوحة الإدارة - محافظة حولي (ضاحية مبارك العبدالله)</title>
 
   <style>
+    /* =========================
+       Neon Glass Theme (Laptop-Grade) - MATCH Survey Page
+       ========================= */
     :root{
       --bg1: #0b1026;
       --bg2: #06162c;
@@ -86,6 +89,7 @@
       align-items:center;
       justify-content: space-between;
       padding: 12px 14px;
+
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: var(--radius2);
@@ -103,11 +107,14 @@
       justify-content:center;
       padding: 10px 14px;
       border-radius: 999px;
+
       background: var(--pillBg);
       border: 1px solid var(--pillBorder);
+
       box-shadow:
         0 0 0 1px rgba(77,163,255,0.10) inset,
         0 18px 55px rgba(77,163,255,0.12);
+
       max-width: 100%;
       position: relative;
       overflow: hidden;
@@ -170,6 +177,7 @@
       width: 100%;
       transform: translateZ(0);
     }
+
     .card .cardHead{
       padding: 12px 14px;
       border-bottom: 1px solid rgba(255,255,255,0.16);
@@ -186,6 +194,7 @@
       opacity: 0.70;
       pointer-events:none;
     }
+
     .card h2{
       margin:0;
       font-size:15px;
@@ -263,7 +272,10 @@
         0 18px 45px rgba(255,209,102,0.25),
         0 0 0 1px rgba(255,209,102,0.25) inset;
     }
-    .btn:disabled{ opacity: 0.6; cursor:not-allowed; transform:none; }
+    .btn:disabled{
+      opacity: 0.6; cursor:not-allowed; transform:none;
+      box-shadow:none !important;
+    }
 
     .btn.blue{
       background: linear-gradient(180deg, rgba(77,163,255,1), rgba(77,163,255,0.82));
@@ -292,19 +304,22 @@
       transform: translateY(-1px);
     }
 
+    .btn.dangerLight{
+      background: rgba(255,90,122,0.18);
+      color: rgba(255,255,255,0.95);
+      border: 1px solid rgba(255,90,122,0.40);
+      box-shadow: 0 10px 20px rgba(255,90,122,0.10);
+    }
+    .btn.dangerLight:hover{
+      transform: translateY(-1px);
+      background: rgba(255,90,122,0.24);
+    }
     .btn.danger{
       background: linear-gradient(180deg, rgba(255,90,122,1), rgba(255,90,122,0.82));
       box-shadow:
         0 12px 30px rgba(255,90,122,0.18),
         0 0 0 1px rgba(255,90,122,0.22) inset;
       color:#140607;
-    }
-
-    .btn.dangerLight{
-      background: rgba(255,90,122,0.18);
-      color: rgba(255,255,255,0.95);
-      border: 1px solid rgba(255,90,122,0.40);
-      box-shadow: 0 10px 20px rgba(255,90,122,0.10);
     }
 
     #adminAdjustBtn{
@@ -375,8 +390,8 @@
       -webkit-appearance: none;
       font-size: 15px;
       transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-      text-align: right;
     }
+
     input:focus, select:focus, textarea:focus{
       border-color: rgba(77,163,255,0.62);
       box-shadow: 0 0 0 4px rgba(77,163,255,0.18);
@@ -426,8 +441,8 @@
       color: rgba(255,255,255,0.92);
     }
     .ratingTag.excellent{ border-color: rgba(33,209,159,0.58); background: rgba(33,209,159,0.12); color: rgba(233,255,247,0.98); }
-    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
     .ratingTag.good{ border-color: rgba(255,209,102,0.85); background: rgba(255,209,102,0.16); color: rgba(255,248,227,0.98); }
+    .ratingTag.good2{ border-color: rgba(77,163,255,0.55); background: rgba(77,163,255,0.12); color: rgba(232,248,255,0.98); }
     .ratingTag.acceptable{ border-color: rgba(255,90,122,0.55); background: rgba(255,90,122,0.16); color: rgba(255,235,239,0.98); }
 
     .smallBtn{
@@ -469,7 +484,10 @@
       border: 1px solid rgba(255,90,122,0.35); font-weight:950;
       transition: 0.2s;
     }
-    .employeeChip button:hover{ background: rgba(255,90,122,0.28); transform: translateY(-1px); }
+    .employeeChip button:hover{
+      background: rgba(255,90,122,0.28);
+      transform: translateY(-1px);
+    }
 
     #reviewDetailsModal{
       position: fixed;
@@ -495,7 +513,59 @@
     }
     .btn.printPurple:hover{ transform: translateY(-1px); }
 
-    #currentSection, #finalRatingSection, #adminAdjustPage, #archiveSection{
+    #showCurrentBtn{
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    #showFinalRatingBtn{
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.92);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+    #showCurrentBtn:disabled{
+      background: rgba(33,209,159,0.22) !important;
+      color: rgba(205,255,238,0.98) !important;
+      border: 1px solid rgba(33,209,159,0.45) !important;
+      opacity: 0.95 !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+    #showFinalRatingBtn:disabled{
+      background: rgba(255,209,102,0.22) !important;
+      color: rgba(255,244,208,0.98) !important;
+      border: 1px solid rgba(255,209,102,0.55) !important;
+      opacity: 0.95 !important;
+      cursor: not-allowed !important;
+      transform: none !important;
+    }
+
+    .finalReviewItem{
+      border:1px solid rgba(255,255,255,0.14);
+      border-radius:14px;
+      padding:10px 12px;
+      background: rgba(255,255,255,0.06);
+      margin-top:10px;
+    }
+    .finalReviewTop{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-weight:900;
+      color: rgba(255,255,255,0.80);
+      font-size:13px;
+    }
+    .finalReviewActions{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    #currentSection, #finalRatingSection, #adminAdjustPage{
       animation: sectionIn 0.35s ease both;
     }
     @keyframes sectionIn{
@@ -504,11 +574,28 @@
     }
 
     @media (max-width: 900px){
-      html, body{ background: var(--g1), var(--g2), var(--g3), var(--g4) !important; color: var(--text) !important; }
-      .container{ background: transparent !important; }
-      .card{ background: rgba(255,255,255,0.14) !important; border: 1px solid rgba(255,255,255,0.20) !important; backdrop-filter: blur(14px) !important; box-shadow: var(--shadow) !important; }
-      body::before{ opacity: 0.72; filter: blur(20px); }
-      body::after{ background: rgba(0,0,0,0.05); }
+      html, body{
+        background: var(--g1), var(--g2), var(--g3), var(--g4) !important;
+        color: var(--text) !important;
+      }
+      .container{
+        background: transparent !important;
+      }
+      .card, section.card{
+        background: rgba(255,255,255,0.14) !important;
+        border: 1px solid rgba(255,255,255,0.20) !important;
+        backdrop-filter: blur(14px) !important;
+        box-shadow: var(--shadow) !important;
+      }
+
+      body::before{
+        opacity: 0.72;
+        filter: blur(20px);
+      }
+      body::after{
+        background: rgba(0,0,0,0.05);
+      }
+
       header{
         padding: 10px 10px !important;
         top: 6px !important;
@@ -517,10 +604,23 @@
         border: 1px solid rgba(255,255,255,0.18) !important;
         backdrop-filter: blur(14px) !important;
       }
+
       .brandPill{ padding: 9px 10px !important; }
       .brandPill .title{ font-size: 16px !important; }
 
-      .loginStage{ min-height: 62vh; padding: 14px 0 6px; gap: 10px; }
+      .loginStage{
+        min-height: 62vh;
+        padding: 14px 0 6px;
+        gap: 10px;
+      }
+
+      .loginLogo{
+        width: 150px;
+        height: 150px;
+        margin-top: -2px;
+        margin-bottom: -6px;
+        transform: translateY(-22px);
+      }
 
       .card{ border-radius: 20px; }
       .card .cardBody{ padding: 12px; }
@@ -533,7 +633,10 @@
         font-size: 14px;
       }
       .btn.alt{ border-radius: 18px; }
-      .smallBtn{ min-height: 42px; border-radius: 16px; }
+      .smallBtn{
+        min-height: 42px;
+        border-radius: 16px;
+      }
 
       label{ font-size: 14px; }
 
@@ -546,10 +649,31 @@
         border: 1px solid rgba(255,255,255,0.20) !important;
       }
 
-      h3{ font-size: 16px; margin: 14px 0 10px; }
-      .fineprint{ font-size: 12px; line-height: 1.6; margin-top: 10px; padding: 0 4px; }
-      th, td{ padding: 10px 8px; font-size: 12.5px; }
-      #reviewDetailsModal > div{ border-radius: 20px !important; padding: 12px !important; }
+      h3{
+        font-size: 16px;
+        margin: 14px 0 10px;
+      }
+
+      .fineprint{
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 10px;
+        padding: 0 4px;
+      }
+
+      th, td{
+        padding: 10px 8px;
+        font-size: 12.5px;
+      }
+
+      #reviewDetailsModal > div{
+        border-radius: 20px !important;
+        padding: 12px !important;
+      }
+
+      #currentSection, #finalRatingSection, #adminAdjustPage{
+        animation-duration: 0.28s;
+      }
     }
   </style>
 </head>
@@ -575,7 +699,7 @@
               <img class="loginLogo" alt="Logo" src="logo.png" />
 
               <div class="admin-login-title" style="font-weight:950; font-size:20px; color: var(--text);">
-                إدارة الهوية الوطنية
+                مركز الهوية الوطنية
               </div>
 
               <div id="adminCenterName" class="admin-center-name" style="
@@ -600,33 +724,21 @@
 
           <div id="adminWorkspace" class="hide">
             <div class="toolbarGrid" style="margin-bottom:10px;">
+              <button class="btn dangerLight" id="deleteRecordsBtn" type="button">حذف السجلات</button>
               <button class="btn danger" id="adminLogoutBtn" type="button">خروج</button>
               <button class="btn alt" id="adminAdjustBtn" type="button">التعديلات</button>
+              <div></div>
             </div>
 
             <div class="row two" style="align-items:end; margin-top:4px;">
               <div></div>
               <div>
                 <label>أدوات</label>
-
                 <div class="toolbarGrid">
-                  <button class="btn blue" id="archiveAllBtn" type="button">أرشفة الكل (Current → Archive)</button>
-                  <button class="btn alt" id="downloadArchiveBtn" type="button">تنزيل الأرشيف (CSV)</button>
-                  <button class="btn danger" id="deleteArchiveCenterBtn" type="button">حذف أرشيف مركز مشرف</button>
+                  <button class="btn alt" id="showCurrentBtn" type="button">عرض الحالي</button>
+                  <button class="btn alt" id="showFinalRatingBtn" type="button">التقييم النهائي (إجمالي + تفاصيل)</button>
                 </div>
               </div>
-            </div>
-
-            <div class="subToolbarGrid" style="margin:6px 0 14px;">
-              <button class="btn alt" id="showCurrentBtn" type="button">عرض الحالي</button>
-              <button class="btn green" id="showArchiveBtn" type="button">عرض أرشيف</button>
-            </div>
-
-            <div class="toolbarGrid" style="margin:0 0 14px;">
-              <button class="btn alt" id="showFinalRatingBtn" type="button">
-                التقييم النهائي (إجمالي + تفاصيل)
-              </button>
-              <button class="btn alt" type="button" disabled style="opacity:0; pointer-events:none;"></button>
             </div>
 
             <div id="currentSection">
@@ -648,27 +760,16 @@
               </div>
             </div>
 
-            <div id="archiveSection" class="hide">
-              <h3 id="archiveTitle">أرشيف التقييمات (مركز مشرف)</h3>
-
-              <div id="archiveTableWrap" style="overflow:auto; border-radius:14px; -webkit-overflow-scrolling: touch;">
-                <table>
-                  <thead id="archiveTableThead"></thead>
-                  <tbody id="archiveReviewsTbody"></tbody>
-                </table>
+            <div id="finalRatingSection" class="hide" style="margin-top:10px;">
+              <h3>التقييم النهائي لكل موظف</h3>
+              <div class="fineprint" style="margin-top:0;">
+                يتم تجميع (ممتاز/جيد جدا/جيد/مقبول) من <b>تقييم كل مراجعة داخل الحالي</b>، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
               </div>
 
-              <div id="finalRatingSection" class="hide" style="margin-top:10px;">
-                <h3>التقييم النهائي لكل موظف</h3>
-                <div class="fineprint" style="margin-top:0;">
-                  يتم تجميع (ممتاز/جيد جدا/جيد/مقبول) من تقييم كل مراجعة، ثم حساب الناتج النهائي، مع عرض تفاصيل التقييمات السابقة للموظف.
-                </div>
+              <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
 
-                <div id="finalRatingEmployeesWrap" style="margin-top:10px;"></div>
-
-                <div class="fineprint" style="margin-top:12px;">
-                  ملاحظة: إذا لم يظهر موظف، فهذا يعني أن لديه تقييماً غير كافٍ أو لا توجد مراجعات باسمه.
-                </div>
+              <div class="fineprint" style="margin-top:12px;">
+                ملاحظة: إذا لم يظهر موظف، فهذا يعني أن لديه تقييماً غير كافٍ أو لا توجد مراجعات باسمه داخل الحالي.
               </div>
             </div>
 
@@ -699,9 +800,7 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0; text-align:center;">
-                      سيتم حفظ الأسماء للمركز في جهازك (localStorage).
-                    </div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم حفظ الأسماء للمركز في جهازك (localStorage).</div>
 
                     <h3 style="margin-top:14px;">قائمة موظفين المركز الحالي</h3>
                     <div id="employeesList" class="employeeChipRow"></div>
@@ -727,9 +826,7 @@
                       </div>
                     </div>
 
-                    <div class="fineprint" style="margin-top:0; text-align:center;">
-                      سيتم إنشاء DropDown في صفحة التقييم.
-                    </div>
+                    <div class="fineprint" style="margin-top:0; text-align:center;">سيتم إنشاء DropDown في صفحة التقييم.</div>
 
                     <h3 style="margin-top:14px;">قائمة أسئلة التقييم</h3>
                     <div id="questionsList" style="display:flex; flex-direction:column; gap:10px;"></div>
@@ -739,7 +836,6 @@
               </div>
 
             </div>
-
           </div>
         </div>
       </section>
@@ -749,7 +845,7 @@
   <div id="reviewDetailsModal" class="hide">
     <div style="
       width: min(900px, 94vw);
-      background: rgba(255,255,255,0.10);
+      background: rgba(10,14,40,0.72);
       border: 1px solid rgba(255,255,255,0.18);
       border-radius: 22px;
       box-shadow: var(--shadow);
@@ -777,7 +873,7 @@
   </div>
 
   <script>
-    // مطابق لقيمة صفحة التقييم لمشرف
+    // ✅ تم التعديل: Center هنا يطابق صفحة التقييم للضاحية
     const LOCK_CENTER = "محافظة حولي (ضاحية مبارك العبدالله)";
 
     const LS_KEYS = {
@@ -799,10 +895,14 @@
     function formatDateTime(iso){
       const d = new Date(iso);
       if (Number.isNaN(d.getTime())) return "—";
-      return d.toLocaleString("ar-KW", {
-        year:"numeric", month:"2-digit", day:"2-digit",
-        hour:"2-digit", minute:"2-digit"
-      });
+      return d.toLocaleString("ar-KW", { year:"numeric", month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit" });
+    }
+
+    function ratingClass(r){
+      if(r === "ممتاز") return "excellent";
+      if(r === "جيد جدا") return "good2";
+      if(r === "جيد") return "good";
+      return "acceptable";
     }
 
     function escapeHtml(str){
@@ -818,9 +918,6 @@
       setTimeout(()=>{ toastMsg.style.display = "none"; }, 4500);
     }
 
-    // =========================
-    // ✅ مشرف: ممتاز/جيد جدا/جيد/مقبول
-    // =========================
     function pointsForRating(r){
       if(r === "ممتاز") return 1;
       if(r === "جيد جدا") return 2;
@@ -829,17 +926,10 @@
       return null;
     }
 
-    function ratingClass(r){
-      if(r === "ممتاز") return "excellent";
-      if(r === "جيد جدا") return "good2";
-      if(r === "جيد") return "good";
-      return "acceptable";
-    }
-
     function finalRatingFromAnswers(qs, answers){
       if(!Array.isArray(qs) || qs.length === 0) return "—";
-
-      let sum = 0, count = 0;
+      let sum = 0;
+      let count = 0;
 
       for(const q of qs){
         const ans = answers?.[q.id];
@@ -881,21 +971,19 @@
     }
 
     let currentReviews = loadJson(LS_KEYS.current, []);
-    let archiveReviews = loadJson(LS_KEYS.archive, []);
     let adminCenterSession = localStorage.getItem(LS_KEYS.adminCenter) || "";
 
     let employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
     if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
 
-    let questions = loadJson(LS_KEYS.questions, []);
-
-    // ===== DOM =====
     const adminHeaderTitle = document.getElementById("adminHeaderTitle");
     const adminCenterNameEl = document.getElementById("adminCenterName");
     const adminLoginBtn = document.getElementById("adminLoginBtn");
     const adminLogoutBtn = document.getElementById("adminLogoutBtn");
     const adminLoginBox = document.getElementById("adminLoginBox");
     const adminWorkspace = document.getElementById("adminWorkspace");
+
+    const currentReviewsTbody = document.getElementById("currentReviewsTbody");
 
     const adminAdjustBtn = document.getElementById("adminAdjustBtn");
     const backToReviewsBtn = document.getElementById("backToReviewsBtn");
@@ -906,32 +994,18 @@
     const employeesAdminPanel = document.getElementById("employeesAdminPanel");
     const questionsAdminPanel = document.getElementById("questionsAdminPanel");
 
-    const currentReviewsTbody = document.getElementById("currentReviewsTbody");
-    const archiveReviewsTbody = document.getElementById("archiveReviewsTbody");
-    const archiveTableThead = document.getElementById("archiveTableThead");
-
-    const archiveAllBtn = document.getElementById("archiveAllBtn");
-    const downloadArchiveBtn = document.getElementById("downloadArchiveBtn");
-    const deleteArchiveCenterBtn = document.getElementById("deleteArchiveCenterBtn");
-
     const showCurrentBtn = document.getElementById("showCurrentBtn");
-    const showArchiveBtn = document.getElementById("showArchiveBtn");
     const showFinalRatingBtn = document.getElementById("showFinalRatingBtn");
-
     const currentSection = document.getElementById("currentSection");
-    const archiveSection = document.getElementById("archiveSection");
-
     const finalRatingSection = document.getElementById("finalRatingSection");
     const finalRatingEmployeesWrap = document.getElementById("finalRatingEmployeesWrap");
-    const archiveTitle = document.getElementById("archiveTitle");
-
-    const currentTableWrap = document.getElementById("currentTableWrap");
-    const archiveTableWrap = document.getElementById("archiveTableWrap");
 
     const reviewDetailsModal = document.getElementById("reviewDetailsModal");
     const closeReviewDetailsBtn = document.getElementById("closeReviewDetailsBtn");
     const reviewDetailsQuestions = document.getElementById("reviewDetailsQuestions");
     const reviewDetailsMeta = document.getElementById("reviewDetailsMeta");
+
+    const deleteRecordsBtn = document.getElementById("deleteRecordsBtn");
 
     closeReviewDetailsBtn.addEventListener("click", ()=> reviewDetailsModal.classList.add("hide"));
 
@@ -954,8 +1028,7 @@
         <b>رقم الهاتف:</b> ${escapeHtml(review.reviewerPhone || "")} <br>
         <b>التاريخ:</b> ${escapeHtml(formatDateTime(review.createdAt || review.archivedAt || ""))} <br>
         <b>الملاحظة:</b> ${escapeHtml(noteText)} <br>
-        <b>التقييم النهائي:</b>
-        <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
+        <b>التقييم النهائي:</b> <span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span>
       `;
 
       if(!qs.length){
@@ -982,6 +1055,249 @@
       reviewDetailsModal.classList.remove("hide");
     }
 
+    // === Employees Admin ===
+    const newEmployeeName = document.getElementById("newEmployeeName");
+    const addEmployeeBtn = document.getElementById("addEmployeeBtn");
+    const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
+    const employeesList = document.getElementById("employeesList");
+    const noEmployeesMsg = document.getElementById("noEmployeesMsg");
+
+    function renderEmployeesForCenter(center){
+      const list = employeesByCenter[center] || [];
+      employeesList.innerHTML = "";
+
+      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
+      if(unique.length === 0){
+        noEmployeesMsg.style.display = "block";
+        return;
+      }
+      noEmployeesMsg.style.display = "none";
+
+      for(const name of unique){
+        const chip = document.createElement("div");
+        chip.className = "employeeChip";
+        chip.innerHTML = `
+          <span>${escapeHtml(name)}</span>
+          <button type="button" title="حذف" data-name="${escapeHtml(name)}">×</button>
+        `;
+        chip.querySelector("button").addEventListener("click", ()=> removeEmployee(center, name));
+        employeesList.appendChild(chip);
+      }
+    }
+
+    function removeEmployee(center, name){
+      const current = employeesByCenter[center] || [];
+      employeesByCenter[center] = current.filter(x => String(x).trim() !== String(name).trim());
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+      renderEmployeesForCenter(center);
+      showToast(`✅ تم حذف الموظف: <b>${escapeHtml(name)}</b>`);
+    }
+
+    function addEmployee(){
+      const center = adminCenterSession || LOCK_CENTER;
+      const name = (newEmployeeName.value || "").trim();
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+      if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
+
+      const arr = employeesByCenter[center] || [];
+      const exists = arr.some(x => String(x).trim() === name);
+      if(exists) return showToast(`⚠️ الاسم موجود مسبقاً: <b>${escapeHtml(name)}</b>`);
+
+      arr.push(name);
+      employeesByCenter[center] = arr;
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+
+      newEmployeeName.value = "";
+      renderEmployeesForCenter(center);
+      showToast(`✅ تم إضافة الموظف: <b>${escapeHtml(name)}</b>`);
+    }
+
+    function clearEmployeesForCenter(){
+      const center = adminCenterSession || LOCK_CENTER;
+      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
+
+      const ok = confirm(`هل أنت متأكد؟ سيتم مسح كل أسماء الموظفين لهذا المركز فقط:\n${center}`);
+      if(!ok) return;
+
+      employeesByCenter[center] = [];
+      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
+      renderEmployeesForCenter(center);
+      showToast("✅ تم مسح قائمة الموظفين.");
+    }
+
+    addEmployeeBtn.addEventListener("click", addEmployee);
+    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
+    clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
+
+    // === Questions Admin ===
+    const questionsListEl = document.getElementById("questionsList");
+    const noQuestionsMsg2 = document.getElementById("noQuestionsMsg");
+    const newQuestionText = document.getElementById("newQuestionText");
+    const addQuestionBtn = document.getElementById("addQuestionBtn");
+    const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
+
+    let questions = loadJson(LS_KEYS.questions, []);
+
+    function renderQuestions(){
+      questionsListEl.innerHTML = "";
+      if(!questions.length){
+        noQuestionsMsg2.style.display = "block";
+        return;
+      }
+      noQuestionsMsg2.style.display = "none";
+
+      questions.forEach((q, index)=>{
+        const wrap = document.createElement("div");
+        wrap.style.border="1px solid rgba(255,255,255,0.14)";
+        wrap.style.borderRadius="14px";
+        wrap.style.padding="10px 12px";
+        wrap.style.background="rgba(77,163,255,0.08)";
+
+        wrap.innerHTML = `
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <div style="font-weight:950; color: var(--text);">#${index+1} - ${escapeHtml(q.text)}</div>
+            <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
+          </div>
+          <div class="fineprint" style="margin-top:6px; text-align:center;">الاختيارات: ممتاز / جيد جدا / جيد / مقبول</div>
+        `;
+
+        wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
+          questions = questions.filter(x => x.id !== q.id);
+          saveJson(LS_KEYS.questions, questions);
+          renderQuestions();
+          showToast("✅ تم حذف السؤال.");
+        });
+
+        questionsListEl.appendChild(wrap);
+      });
+    }
+
+    function addQuestion(){
+      const text = (newQuestionText.value || "").trim();
+      if(!text) return showToast("❌ اكتب اسم السؤال أولاً.");
+
+      const q = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), text };
+      questions.push(q);
+      saveJson(LS_KEYS.questions, questions);
+
+      newQuestionText.value = "";
+      renderQuestions();
+      showToast("✅ تم إضافة سؤال.");
+    }
+
+    function clearQuestions(){
+      questions = loadJson(LS_KEYS.questions, []);
+      if(!questions.length) return showToast("لا توجد أسئلة لمسحها.");
+
+      const ok = confirm("هل أنت متأكد؟ سيتم مسح كل أسئلة التقييم.");
+      if(!ok) return;
+
+      questions = [];
+      saveJson(LS_KEYS.questions, questions);
+      renderQuestions();
+      showToast("✅ تم مسح الأسئلة.");
+    }
+
+    addQuestionBtn.addEventListener("click", addQuestion);
+    newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
+    clearQuestionsBtn.addEventListener("click", clearQuestions);
+
+    // === Tabs ===
+    tabEmployeesBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.remove("hide");
+      questionsAdminPanel.classList.add("hide");
+    });
+
+    tabQuestionsBtn.addEventListener("click", ()=>{
+      employeesAdminPanel.classList.add("hide");
+      questionsAdminPanel.classList.remove("hide");
+    });
+
+    // === Delete one current review + recalc Final ===
+    function deleteCurrentReviewByIdAndRecalculate(center, reviewId){
+      const allCurrent = loadJson(LS_KEYS.current, []);
+      const idStr = String(reviewId);
+
+      const filtered = allCurrent.filter(r => {
+        if(!r) return true;
+        return !(String(r.id) === idStr && r.center === center);
+      });
+
+      saveJson(LS_KEYS.current, filtered);
+      currentReviews = filtered;
+
+      renderCurrentTablesForCenter(center);
+
+      if(!finalRatingSection.classList.contains("hide")){
+        renderFinalRatingForEmployees(center);
+      }
+
+      showToast("✅ تم حذف الاستبيان من Current وإعادة حساب الـ Final.");
+    }
+
+    // === Current Table ===
+    function renderCurrentTablesForCenter(center){
+      currentReviews = loadJson(LS_KEYS.current, []);
+      const cur = currentReviews.filter(r => r.center === center);
+      currentReviewsTbody.innerHTML = "";
+      const qs = loadJson(LS_KEYS.questions, []);
+
+      if(cur.length === 0){
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="6" style="color: rgba(255,255,255,0.65); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
+        currentReviewsTbody.appendChild(tr);
+        return;
+      }
+
+      for(const r of cur){
+        const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${formatDateTime(r.createdAt)}</td>
+          <td>${escapeHtml(r.reviewerName)}</td>
+          <td>${escapeHtml(r.reviewerPhone)}</td>
+          <td>${escapeHtml(r.employeeName)}</td>
+          <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
+          <td>
+            <div class="btnRow" style="justify-content:center;">
+              <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
+              <button
+                class="smallBtn"
+                type="button"
+                data-action="delete"
+                data-id="${escapeHtml(r.id)}"
+                title="حذف هذه الاستجابة من Current"
+                style="background: rgba(255,90,122,0.14); border:1px solid rgba(255,90,122,0.35); color: rgba(255,220,228,0.98);">
+                حذف
+              </button>
+            </div>
+          </td>
+        `;
+        currentReviewsTbody.appendChild(tr);
+      }
+
+      currentReviewsTbody.querySelectorAll("button[data-id]").forEach(btn=>{
+        btn.addEventListener("click",(e)=>{
+          const id = e.currentTarget.getAttribute("data-id");
+          const action = e.currentTarget.getAttribute("data-action");
+
+          if(action === "details"){
+            const review = currentReviews.find(x => String(x.id) === String(id) && x.center === center);
+            if(review) openReviewDetails(review);
+            else showToast("❌ لا توجد بيانات للتفاصيل.");
+            return;
+          }
+
+          if(action === "delete"){
+            const ok = confirm("⚠️ هل أنت متأكد؟ سيتم حذف هذه الاستجابة من Current.\nوسيتم إعادة حساب الـ Final.");
+            if(!ok) return;
+            deleteCurrentReviewByIdAndRecalculate(center, id);
+          }
+        });
+      });
+    }
+
+    // === Print final ===
     function printFinalForEmployee(center, empObj){
       const w = window.open("", "_blank");
       if(!w) return showToast("❌ من فضلك فعّل النوافذ المنبثقة للطباعة.");
@@ -1059,15 +1375,25 @@
 
             <div class="box">
               <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div style="font-weight:950;font-size:18px;">${escapeHtml(empObj.emp)}</div>
-                <div class="tag">التقييم النهائي: ${escapeHtml(empObj.final)}</div>
+                <div style="font-weight:950;font-size:18px;">
+                  ${escapeHtml(empObj.emp)}
+                </div>
+                <div class="tag">
+                  التقييم النهائي: ${escapeHtml(empObj.final)}
+                </div>
               </div>
 
               <div class="meta">
-                ممتاز: ${empObj.excellent} | جيد جدا: ${empObj.goodExcellent} | جيد: ${empObj.good} | مقبول: ${empObj.acceptable} | المجموع: ${empObj.total}
+                ممتاز: ${empObj.excellent} |
+                جيد جدا: ${empObj.goodExcellent} |
+                جيد: ${empObj.good} |
+                مقبول: ${empObj.acceptable} |
+                المجموع: ${empObj.total}
               </div>
 
-              <div class="reviews">${htmlReviews}</div>
+              <div class="reviews">
+                ${htmlReviews}
+              </div>
             </div>
 
             <div class="noPrint" style="text-align:center;margin-top:12px;">
@@ -1086,344 +1412,10 @@
       w.document.close();
     }
 
-    // ===== Employees =====
-    const newEmployeeName = document.getElementById("newEmployeeName");
-    const addEmployeeBtn = document.getElementById("addEmployeeBtn");
-    const clearEmployeesBtn = document.getElementById("clearEmployeesBtn");
-    const employeesList = document.getElementById("employeesList");
-    const noEmployeesMsg = document.getElementById("noEmployeesMsg");
-
-    function renderEmployeesForCenter(center){
-      const list = employeesByCenter[center] || [];
-      employeesList.innerHTML = "";
-
-      const unique = Array.from(new Set(list.map(x=>String(x).trim()).filter(Boolean)));
-      if(unique.length === 0){
-        noEmployeesMsg.style.display = "block";
-        return;
-      }
-      noEmployeesMsg.style.display = "none";
-
-      for(const name of unique){
-        const chip = document.createElement("div");
-        chip.className = "employeeChip";
-        chip.innerHTML = `
-          <span>${escapeHtml(name)}</span>
-          <button type="button" title="حذف" data-name="${escapeHtml(name)}">×</button>
-        `;
-        chip.querySelector("button").addEventListener("click", ()=> removeEmployee(center, name));
-        employeesList.appendChild(chip);
-      }
-    }
-
-    function removeEmployee(center, name){
-      const current = employeesByCenter[center] || [];
-      employeesByCenter[center] = current.filter(x => String(x).trim() !== String(name).trim());
-      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
-      renderEmployeesForCenter(center);
-      showToast(`✅ تم حذف الموظف: <b>${escapeHtml(name)}</b>`);
-    }
-
-    function addEmployee(){
-      const center = adminCenterSession || LOCK_CENTER;
-      const name = (newEmployeeName.value || "").trim();
-      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
-      if(!name) return showToast("❌ اكتب اسم الموظف أولاً.");
-
-      const arr = employeesByCenter[center] || [];
-      const exists = arr.some(x => String(x).trim() === name);
-      if(exists) return showToast(`⚠️ الاسم موجود مسبقاً: <b>${escapeHtml(name)}</b>`);
-
-      arr.push(name);
-      employeesByCenter[center] = arr;
-      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
-
-      newEmployeeName.value = "";
-      renderEmployeesForCenter(center);
-      showToast(`✅ تم إضافة الموظف: <b>${escapeHtml(name)}</b>`);
-    }
-
-    function clearEmployeesForCenter(){
-      const center = adminCenterSession || LOCK_CENTER;
-      if(!center) return showToast("❌ ادخل الإدارة أولاً.");
-
-      const ok = confirm(`هل أنت متأكد؟ سيتم مسح كل أسماء الموظفين لهذا المركز فقط:\n${center}`);
-      if(!ok) return;
-
-      employeesByCenter[center] = [];
-      saveJson(LS_KEYS.employeesByCenter, employeesByCenter);
-      renderEmployeesForCenter(center);
-      showToast("✅ تم مسح قائمة الموظفين.");
-    }
-
-    addEmployeeBtn.addEventListener("click", addEmployee);
-    newEmployeeName.addEventListener("keydown", (e)=>{ if(e.key === "Enter") addEmployee(); });
-    clearEmployeesBtn.addEventListener("click", clearEmployeesForCenter);
-
-    // ===== Questions =====
-    const questionsListEl = document.getElementById("questionsList");
-    const noQuestionsMsg = document.getElementById("noQuestionsMsg");
-    const newQuestionText = document.getElementById("newQuestionText");
-    const addQuestionBtn = document.getElementById("addQuestionBtn");
-    const clearQuestionsBtn = document.getElementById("clearQuestionsBtn");
-
-    function renderQuestions(){
-      questionsListEl.innerHTML = "";
-      questions = loadJson(LS_KEYS.questions, []);
-
-      if(!questions.length){
-        noQuestionsMsg.style.display = "block";
-        return;
-      }
-      noQuestionsMsg.style.display = "none";
-
-      questions.forEach((q, index)=>{
-        const wrap = document.createElement("div");
-        wrap.style.border="1px solid rgba(255,255,255,0.14)";
-        wrap.style.borderRadius="14px";
-        wrap.style.padding="10px 12px";
-        wrap.style.background="rgba(77,163,255,0.08)";
-        wrap.innerHTML = `
-          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
-            <div style="font-weight:950; color:rgba(255,255,255,0.96);">#${index+1} - ${escapeHtml(q.text)}</div>
-            <button class="smallBtn" type="button" data-qid="${escapeHtml(q.id)}">حذف</button>
-          </div>
-          <div class="fineprint" style="margin-top:6px; text-align:center; color: rgba(255,255,255,0.62);">
-            الاختيارات: ممتاز / جيد جدا / جيد / مقبول
-          </div>
-        `;
-
-        wrap.querySelector("button[data-qid]").addEventListener("click", ()=>{
-          questions = questions.filter(x => x.id !== q.id);
-          saveJson(LS_KEYS.questions, questions);
-          renderQuestions();
-          showToast("✅ تم حذف السؤال.");
-        });
-
-        questionsListEl.appendChild(wrap);
-      });
-    }
-
-    function addQuestion(){
-      const text = (newQuestionText.value || "").trim();
-      if(!text) return showToast("❌ اكتب السؤال أولاً.");
-
-      const q = { id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()), text };
-      questions.push(q);
-      saveJson(LS_KEYS.questions, questions);
-
-      newQuestionText.value = "";
-      renderQuestions();
-      showToast("✅ تم إضافة سؤال.");
-    }
-
-    function clearQuestions(){
-      questions = loadJson(LS_KEYS.questions, []);
-      if(!questions.length) return showToast("لا توجد أسئلة لمسحها.");
-
-      const ok = confirm("هل أنت متأكد؟ سيتم مسح كل أسئلة التقييم.");
-      if(!ok) return;
-
-      questions = [];
-      saveJson(LS_KEYS.questions, questions);
-      renderQuestions();
-      showToast("✅ تم مسح الأسئلة.");
-    }
-
-    addQuestionBtn.addEventListener("click", addQuestion);
-    newQuestionText.addEventListener("keydown", (e)=>{ if(e.key==="Enter") addQuestion(); });
-    clearQuestionsBtn.addEventListener("click", clearQuestions);
-
-    // Tabs
-    tabEmployeesBtn.addEventListener("click", ()=>{
-      employeesAdminPanel.classList.remove("hide");
-      questionsAdminPanel.classList.add("hide");
-    });
-    tabQuestionsBtn.addEventListener("click", ()=>{
-      employeesAdminPanel.classList.add("hide");
-      questionsAdminPanel.classList.remove("hide");
-    });
-
-    // ===== Tables =====
-    function renderCurrentTablesForCenter(center){
-      currentReviews = loadJson(LS_KEYS.current, []);
-      const cur = currentReviews.filter(r => r.center === center);
-      currentReviewsTbody.innerHTML = "";
-
-      const qs = loadJson(LS_KEYS.questions, []);
-
-      if(cur.length === 0){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(255,255,255,0.65); font-weight:900;">لا توجد تقييمات حالياً لهذا المركز</td>`;
-        currentReviewsTbody.appendChild(tr);
-        return;
-      }
-
-      for(const r of cur){
-        const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(formatDateTime(r.createdAt))}</td>
-          <td>${escapeHtml(r.reviewerName)}</td>
-          <td>${escapeHtml(r.reviewerPhone)}</td>
-          <td>${escapeHtml(r.employeeName)}</td>
-          <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
-          <td>
-            <div class="btnRow" style="justify-content:center;">
-              <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
-              <button class="smallBtn" type="button" data-action="archive" data-id="${escapeHtml(r.id)}" style="background: rgba(33,209,159,0.12); border:1px solid rgba(33,209,159,0.35); color: rgba(232,255,246,0.98);">
-                تم الإنجاز
-              </button>
-              <button class="smallBtn" type="button" data-action="delete" data-id="${escapeHtml(r.id)}" style="background: rgba(255,90,122,0.12); border:1px solid rgba(255,90,122,0.35); color: rgba(255,220,228,0.98);">
-                حذف
-              </button>
-            </div>
-          </td>
-        `;
-        currentReviewsTbody.appendChild(tr);
-      }
-
-      currentReviewsTbody.querySelectorAll("button[data-id]").forEach(btn=>{
-        btn.addEventListener("click",(e)=>{
-          const id = e.currentTarget.getAttribute("data-id");
-          const action = e.currentTarget.getAttribute("data-action");
-
-          if(action === "details"){
-            const review = currentReviews.find(x => x.id === id && x.center === center);
-            if(review) openReviewDetails(review);
-            else showToast("❌ لا توجد بيانات للتفاصيل.");
-            return;
-          }
-          if(action === "archive") archiveOne(id, center);
-          if(action === "delete") deleteCurrentOne(id, center);
-        });
-      });
-    }
-
-    function renderArchiveTablesForCenter(center){
-      archiveReviews = loadJson(LS_KEYS.archive, []);
-      const arc = archiveReviews.filter(r => r.center === center);
-      archiveReviewsTbody.innerHTML = "";
-
-      const qs = loadJson(LS_KEYS.questions, []);
-
-      const theadRow = [];
-      theadRow.push(`<th>التاريخ والوقت</th>`);
-      theadRow.push(`<th>اسم المراجع</th>`);
-      theadRow.push(`<th>رقم الهاتف</th>`);
-      theadRow.push(`<th>الموظف</th>`);
-      theadRow.push(`<th>التقييم</th>`);
-      theadRow.push(`<th>إجراء</th>`);
-      archiveTableThead.innerHTML = `<tr>${theadRow.join("")}</tr>`;
-
-      if(arc.length === 0){
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td colspan="6" style="color: rgba(255,255,255,0.65); font-weight:900;">لا يوجد أرشيف لهذا المركز</td>`;
-        archiveReviewsTbody.appendChild(tr);
-        return;
-      }
-
-      for(const r of arc){
-        const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${escapeHtml(formatDateTime(r.archivedAt || r.createdAt))}</td>
-          <td>${escapeHtml(r.reviewerName)}</td>
-          <td>${escapeHtml(r.reviewerPhone)}</td>
-          <td>${escapeHtml(r.employeeName)}</td>
-          <td><span class="ratingTag ${ratingClass(finalRating)}">${escapeHtml(finalRating)}</span></td>
-          <td>
-            <div class="btnRow" style="justify-content:center;">
-              <button class="smallBtn" type="button" data-action="details" data-id="${escapeHtml(r.id)}">تفاصيل</button>
-            </div>
-          </td>
-        `;
-        archiveReviewsTbody.appendChild(tr);
-      }
-
-      archiveReviewsTbody.querySelectorAll("button[data-id]").forEach(btn=>{
-        btn.addEventListener("click",(e)=>{
-          const id = e.currentTarget.getAttribute("data-id");
-          const review = archiveReviews.find(x => x.id === id && x.center === center);
-          if(review) openReviewDetails(review);
-        });
-      });
-    }
-
-    function archiveOne(id, center){
-      const target = currentReviews.find(r => String(r.id) === String(id) && r.center === center);
-      if(!target) return showToast("❌ التقييم غير موجود (ربما تم أرشفته).");
-
-      const moved = { ...target, archivedAt: new Date().toISOString() };
-      archiveReviews.unshift(moved);
-      currentReviews = currentReviews.filter(r => !(String(r.id) === String(id) && r.center === center));
-
-      saveJson(LS_KEYS.current, currentReviews);
-      saveJson(LS_KEYS.archive, archiveReviews);
-
-      showToast("✅ تم الإنجاز وتم الأرشفة وحذفها من الحالي.");
-      renderCurrentTablesForCenter(center);
-      renderArchiveTablesForCenter(center);
-
-      if(!finalRatingSection.classList.contains("hide")){
-        renderFinalRatingForEmployees(center);
-      }
-    }
-
-    function deleteCurrentOne(id, center){
-      const ok = confirm("⚠️ هل أنت متأكد؟ سيتم حذف هذه الاستجابة من Current.\nسيتم إعادة حساب الـ Final عند الحاجة.");
-      if(!ok) return;
-
-      currentReviews = currentReviews.filter(r => !(String(r.id) === String(id) && r.center === center));
-      saveJson(LS_KEYS.current, currentReviews);
-
-      showToast("✅ تم حذف الاستجابة من Current.");
-      renderCurrentTablesForCenter(center);
-
-      if(!finalRatingSection.classList.contains("hide")){
-        renderFinalRatingForEmployees(center);
-      }
-    }
-
-    function downloadCSV(rows, filename){
-      const qs = loadJson(LS_KEYS.questions, []);
-      const header = ["التاريخ والوقت","اسم المراجع","رقم الهاتف","المركز","الموظف","التقييم","الملاحظة"];
-
-      const csv = [
-        header.join(","),
-        ...rows.map(r=>{
-          const dt = formatDateTime(r.archivedAt || r.createdAt);
-          const finalRating = finalRatingFromAnswers(qs, r.questionAnswers || {});
-          const note = (r.comment && String(r.comment).trim()) ? r.comment : "—";
-
-          const cells = [dt, r.reviewerName, r.reviewerPhone, r.center, r.employeeName, finalRating, note]
-            .map(v=>{
-              const s = String(v ?? "").replaceAll('"','""');
-              return `"${s}"`;
-            });
-
-          return cells.join(",");
-        })
-      ].join("\n");
-
-      const blob = new Blob(["\uFEFF"+csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    // ===== Final Rating =====
+    // === Final Rating (داخل Current فقط مثل الشامية) ===
     function renderFinalRatingForEmployees(center){
       currentReviews = loadJson(LS_KEYS.current, []);
-      archiveReviews = loadJson(LS_KEYS.archive, []);
-      const all = [...currentReviews, ...archiveReviews].filter(r => r.center === center);
-
+      const all = currentReviews.filter(r => r.center === center);
       const qs = loadJson(LS_KEYS.questions, []);
 
       finalRatingEmployeesWrap.innerHTML = "";
@@ -1431,7 +1423,7 @@
       if(all.length === 0){
         finalRatingEmployeesWrap.innerHTML = `
           <div class="fineprint" style="margin-top:0;">
-            لا توجد تقييمات (Current أو Archive) لهذا المركز.
+            لا توجد تقييمات داخل Current لهذا المركز.
           </div>
         `;
         return;
@@ -1440,7 +1432,7 @@
       if(!Array.isArray(qs) || qs.length === 0){
         finalRatingEmployeesWrap.innerHTML = `
           <div class="fineprint" style="margin-top:0;">
-            لا توجد أسئلة تفعيلها أولاً (rating_questions_v1).
+            لا توجد أسئلة مضافة أولاً (rating_questions_v1).
           </div>
         `;
         return;
@@ -1467,7 +1459,15 @@
 
         item.reviews.push({
           id: r.id,
-          time: r.archivedAt || r.createdAt || "",
+          center: r.center,
+          createdAt: r.createdAt || "",
+          archivedAt: r.archivedAt || "",
+          employeeName: r.employeeName || emp,
+          reviewerName: r.reviewerName || "",
+          reviewerPhone: r.reviewerPhone || "",
+          questionAnswers: r.questionAnswers || {},
+
+          time: r.createdAt || "",
           reviewer: r.reviewerName || "",
           phone: r.reviewerPhone || "",
           rating: finalRating,
@@ -1493,27 +1493,19 @@
         return;
       }
 
+      const allReviewsCache = new Map();
+
       for(const x of rows){
         x.reviews.sort((a,b)=> new Date(b.time).getTime() - new Date(a.time).getTime());
         const final = computeFinalByCounts(x.excellent, x.goodExcellent, x.good, x.acceptable);
 
+        for(const rev of x.reviews){
+          allReviewsCache.set(`${x.emp}__${rev.id}`, rev);
+        }
+
         finalRatingEmployeesWrap.innerHTML += `
-          <details class="finalEmployeeDetails" style="
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 14px;
-            background: rgba(255,255,255,0.06);
-            margin-top: 10px;
-            overflow: hidden;
-          ">
-            <summary style="
-              cursor:pointer;
-              padding: 10px 12px;
-              display:flex;
-              align-items:center;
-              justify-content: space-between;
-              gap: 12px;
-              font-weight: 950;
-            ">
+          <details class="finalEmployeeDetails">
+            <summary>
               <span style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-start;">
                 <span>
                   ${escapeHtml(x.emp)}
@@ -1536,50 +1528,59 @@
               </span>
             </summary>
 
-            <div style="padding: 10px 12px 14px; border-top: 1px solid rgba(255,255,255,0.10);">
-              <div style="font-weight:950; color: rgba(255,255,255,0.80); font-size:13px; margin-bottom:8px;">
-                تفاصيل تقييماته السابقة:
+            <div style="margin-top:12px;">
+              <div style="font-weight:950; color: rgba(255,255,255,0.78); font-size:13px; margin-bottom:8px;">
+                تفاصيل مراجعاته السابقة:
               </div>
 
-              <div style="display:flex; flex-direction:column; gap:8px;">
-                ${x.reviews.map(r=>`
-                  <div style="
-                    border: 1px solid rgba(255,255,255,0.14);
-                    border-radius: 12px;
-                    padding: 10px 12px;
-                    background: rgba(255,255,255,0.06);
-                  ">
-                    <div style="
-                      display:flex;
-                      flex-wrap:wrap;
-                      gap: 8px 12px;
-                      align-items:center;
-                      justify-content:flex-start;
-                      margin-bottom: 6px;
-                      font-weight: 900;
-                      color: rgba(255,255,255,0.80);
-                      font-size: 12px;
-                    ">
-                      <span>التاريخ: <b>${escapeHtml(formatDateTime(r.time))}</b></span>
-                      <span>المراجع: <b>${escapeHtml(r.reviewer)}</b></span>
-                      <span>الهاتف: <b>${escapeHtml(r.phone)}</b></span>
+              ${x.reviews.map(rev=>{
+                const detailKey = `${x.emp}__${rev.id}`;
+                return `
+                  <div class="finalReviewItem">
+                    <div class="finalReviewTop">
+                      <span>التاريخ: <b>${escapeHtml(formatDateTime(rev.time))}</b></span>
+                      <span>المراجع: <b>${escapeHtml(rev.reviewer)}</b></span>
+                      <span>الهاتف: <b>${escapeHtml(rev.phone)}</b></span>
                       <span style="margin-inline-start:auto;">
                         التقييم:
-                        <span class="ratingTag ${ratingClass(r.rating)}">${escapeHtml(r.rating)}</span>
+                        <span class="ratingTag ${ratingClass(rev.rating)}">${escapeHtml(rev.rating)}</span>
                       </span>
                     </div>
 
-                    <div style="font-size:13px; color: rgba(255,255,255,0.80); font-weight:850; line-height:1.6;">
-                      الملاحظة: ${escapeHtml(r.comment)}
+                    <div style="margin-top:10px; font-size:13px; color: rgba(255,255,255,0.78); font-weight:850; line-height:1.6;">
+                      الملاحظة: ${escapeHtml(rev.comment)}
+                    </div>
+
+                    <div class="finalReviewActions">
+                      <button
+                        class="smallBtn"
+                        type="button"
+                        data-review-detail="${escapeHtml(detailKey)}"
+                        title="عرض تفاصيل هذه المراجعة بالكامل"
+                      >
+                        تفاصيل المراجعة
+                      </button>
                     </div>
                   </div>
-                `).join("")}
-              </div>
+                `;
+              }).join("")}
             </div>
           </details>
         `;
       }
 
+      // تفاصيل المراجعة من أيقونة التفاصيل
+      finalRatingEmployeesWrap.querySelectorAll("button[data-review-detail]").forEach(btn=>{
+        btn.addEventListener("click",(e)=>{
+          e.stopPropagation();
+          const key = btn.getAttribute("data-review-detail");
+          const review = allReviewsCache.get(key);
+          if(review) openReviewDetails(review);
+          else showToast("❌ لا توجد بيانات للتفاصيل.");
+        });
+      });
+
+      // طباعة التقييم النهائي للموظف
       finalRatingEmployeesWrap.querySelectorAll('button[data-print-emp]').forEach(btn=>{
         btn.addEventListener('click',(e)=>{
           e.stopPropagation();
@@ -1588,6 +1589,7 @@
           if(!empObj) return;
 
           const final = computeFinalByCounts(empObj.excellent, empObj.goodExcellent, empObj.good, empObj.acceptable);
+
           printFinalForEmployee(center, {
             emp: empObj.emp,
             final,
@@ -1596,21 +1598,52 @@
             good: empObj.good,
             acceptable: empObj.acceptable,
             total: empObj.total,
-            reviews: empObj.reviews
+            reviews: empObj.reviews.map(r => ({
+              time: r.time,
+              reviewer: r.reviewer,
+              phone: r.phone,
+              rating: r.rating,
+              comment: r.comment
+            }))
           });
         });
       });
     }
 
-    // ===== Buttons / Views =====
-    function exitAdminWorkspace(){
-      adminCenterSession = "";
-      localStorage.removeItem(LS_KEYS.adminCenter);
-      adminLogoutBtn.disabled = true;
+    function setViewButtons(view){
+      if(view === "current"){
+        showCurrentBtn.disabled = true;
+        showFinalRatingBtn.disabled = false;
+      }else if(view === "final"){
+        showFinalRatingBtn.disabled = true;
+        showCurrentBtn.disabled = false;
+      }
+    }
 
-      adminLoginBox.style.display = "block";
-      adminWorkspace.classList.add("hide");
+    function deleteAllRecords(){
+      const ok = confirm("⚠️ هل أنت متأكد؟ سيتم حذف السجلات بالكامل (Current + Archive) من جهازك لهذا الموقع.\nلا يمكن التراجع.");
+      if(!ok) return;
+
+      try{
+        localStorage.setItem(LS_KEYS.current, JSON.stringify([]));
+        localStorage.setItem(LS_KEYS.archive, JSON.stringify([]));
+      }catch(err){
+        try{ localStorage.removeItem(LS_KEYS.current); }catch(e){}
+        try{ localStorage.removeItem(LS_KEYS.archive); }catch(e){}
+      }
+
+      currentReviews = [];
+      finalRatingEmployeesWrap.innerHTML = "";
       reviewDetailsModal.classList.add("hide");
+
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
+      setViewButtons("current");
+
+      currentSection.classList.remove("hide");
+      finalRatingSection.classList.add("hide");
+      adminAdjustPage.classList.add("hide");
+
+      showToast("✅ تم حذف السجلات بالكامل.");
     }
 
     function enterAdminWorkspace(){
@@ -1623,33 +1656,22 @@
       adminWorkspace.classList.remove("hide");
       adminLogoutBtn.disabled = false;
 
-      // reload latest
-      currentReviews = loadJson(LS_KEYS.current, []);
-      archiveReviews = loadJson(LS_KEYS.archive, []);
-      employeesByCenter = loadJson(LS_KEYS.employeesByCenter, {});
-      if(!Array.isArray(employeesByCenter[LOCK_CENTER])) employeesByCenter[LOCK_CENTER] = [];
-      questions = loadJson(LS_KEYS.questions, []);
+      adminAdjustPage.classList.add("hide");
+      setViewButtons("current");
 
-      setInitialView();
-      renderCurrentTablesForCenter(LOCK_CENTER);
-      renderArchiveTablesForCenter(LOCK_CENTER);
       renderEmployeesForCenter(LOCK_CENTER);
       renderQuestions();
+      showCurrentBtn.click();
     }
 
-    function setView(view){
-      if(view === "archive"){
-        currentSection.classList.add("hide");
-        archiveSection.classList.remove("hide");
-      }else{
-        archiveSection.classList.add("hide");
-        currentSection.classList.remove("hide");
-      }
-    }
+    function exitAdminWorkspace(){
+      adminCenterSession = "";
+      localStorage.removeItem(LS_KEYS.adminCenter);
+      adminLogoutBtn.disabled = true;
 
-    function setInitialView(){
-      setView("current");
-      finalRatingSection.classList.add("hide");
+      adminLoginBox.style.display = "block";
+      adminWorkspace.classList.add("hide");
+      reviewDetailsModal.classList.add("hide");
     }
 
     adminLoginBtn.addEventListener("click", ()=>{
@@ -1659,127 +1681,56 @@
 
     adminLogoutBtn.addEventListener("click", ()=>{
       adminAdjustPage.classList.add("hide");
-      setView("current");
       exitAdminWorkspace();
       showToast("تم تسجيل الخروج من الإدارة.");
     });
 
-    showCurrentBtn.addEventListener("click", ()=>{
+    adminAdjustBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-      adminAdjustPage.classList.add("hide");
-
+      currentSection.classList.add("hide");
       finalRatingSection.classList.add("hide");
-      archiveSection.classList.add("hide");
-      currentSection.classList.remove("hide");
-
-      renderCurrentTablesForCenter(LOCK_CENTER);
+      adminAdjustPage.classList.remove("hide");
+      tabEmployeesBtn.click();
     });
 
-    showArchiveBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+    backToReviewsBtn.addEventListener("click", ()=>{
       adminAdjustPage.classList.add("hide");
 
+      currentSection.classList.remove("hide");
       finalRatingSection.classList.add("hide");
-      currentSection.classList.add("hide");
-      archiveSection.classList.remove("hide");
 
-      renderArchiveTablesForCenter(LOCK_CENTER);
+      setViewButtons("current");
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
+    });
+
+    showCurrentBtn.addEventListener("click", ()=>{
+      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
+
+      adminAdjustPage.classList.add("hide");
+      finalRatingSection.classList.add("hide");
+      currentSection.classList.remove("hide");
+
+      setViewButtons("current");
+      renderCurrentTablesForCenter(adminCenterSession || LOCK_CENTER);
     });
 
     showFinalRatingBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
 
       adminAdjustPage.classList.add("hide");
-      setView("archive");
-
       currentSection.classList.add("hide");
-      archiveTableWrap.classList.add("hide");
-      archiveTitle.classList.add("hide");
-
       finalRatingSection.classList.remove("hide");
+
+      setViewButtons("final");
       renderFinalRatingForEmployees(LOCK_CENTER);
     });
 
-    adminAdjustBtn.addEventListener("click", ()=>{
+    deleteRecordsBtn.addEventListener("click", ()=>{
       if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
-      tabEmployeesBtn.click();
-      adminAdjustPage.classList.remove("hide");
-      currentSection.classList.add("hide");
-      archiveSection.classList.add("hide");
-      finalRatingSection.classList.add("hide");
-      reviewDetailsModal.classList.add("hide");
+      deleteAllRecords();
     });
 
-    backToReviewsBtn.addEventListener("click", ()=>{
-      adminAdjustPage.classList.add("hide");
-      if(!adminCenterSession) return;
-
-      finalRatingSection.classList.add("hide");
-      archiveTableWrap.classList.remove("hide");
-      archiveTitle.classList.remove("hide");
-      currentTableWrap.classList.remove("hide");
-
-      setView("current");
-      renderCurrentTablesForCenter(LOCK_CENTER);
-    });
-
-    archiveAllBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
-      const center = LOCK_CENTER;
-      const toArchive = currentReviews.filter(r => r.center === center);
-      if(toArchive.length === 0) return showToast("لا يوجد تقييمات حالياً للأرشفة لهذا المركز.");
-
-      const moved = toArchive.map(r => ({...r, archivedAt: new Date().toISOString()}));
-      archiveReviews = moved.concat(archiveReviews);
-      currentReviews = currentReviews.filter(r => r.center !== center);
-
-      saveJson(LS_KEYS.current, currentReviews);
-      saveJson(LS_KEYS.archive, archiveReviews);
-
-      showToast(`تمت أرشفة ${toArchive.length} تقييم(ات) ✅`);
-      renderCurrentTablesForCenter(center);
-      renderArchiveTablesForCenter(center);
-
-      if(!finalRatingSection.classList.contains("hide")){
-        renderFinalRatingForEmployees(center);
-      }
-    });
-
-    downloadArchiveBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
-      const center = LOCK_CENTER;
-      const rows = archiveReviews.filter(r => r.center === center);
-      if(rows.length === 0) return showToast("لا يوجد أرشيف لتنزيله لهذا المركز.");
-
-      downloadCSV(rows, `archive_${center.replaceAll(" ","_")}.csv`);
-      showToast("تم تنزيل ملف CSV ✅");
-    });
-
-    deleteArchiveCenterBtn.addEventListener("click", ()=>{
-      if(!adminCenterSession) return showToast("❌ ادخل الإدارة أولاً.");
-
-      const center = LOCK_CENTER;
-      const count = archiveReviews.filter(r => r.center === center).length;
-      if(count === 0) return showToast("لا يوجد أرشيف لحذفه لهذا المركز.");
-
-      const ok = confirm(`هل أنت متأكد؟ سيتم حذف أرشيف هذا المركز فقط:\n${center}\n(العدد: ${count})`);
-      if(!ok) return;
-
-      archiveReviews = archiveReviews.filter(r => r.center !== center);
-      saveJson(LS_KEYS.archive, archiveReviews);
-
-      showToast(`✅ تم حذف أرشيف المركز: ${center}`);
-      renderArchiveTablesForCenter(center);
-
-      if(!finalRatingSection.classList.contains("hide")){
-        renderFinalRatingForEmployees(center);
-      }
-    });
-
-    // init
+    // === init ===
     adminHeaderTitle.textContent = `لوحة الإدارة - ${LOCK_CENTER}`;
     adminCenterNameEl.textContent = LOCK_CENTER;
     adminLogoutBtn.disabled = true;
@@ -1787,15 +1738,8 @@
     reviewDetailsModal.classList.add("hide");
     exitAdminWorkspace();
 
-    archiveTitle.textContent = `أرشيف التقييمات (${LOCK_CENTER})`;
-
-    currentSection.classList.remove("hide");
-    archiveSection.classList.add("hide");
-    finalRatingSection.classList.add("hide");
-
     renderQuestions();
-    renderEmployeesForCenter(LOCK_CENTER);
-    setInitialView();
+    setViewButtons("current");
   </script>
 </body>
 </html>
