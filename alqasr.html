@@ -130,6 +130,28 @@
       50%{ transform: translateX(60%); }
     }
 
+    /* ✅ مثل الشامية: اللوقو فوق الكلام */
+    .brandInnerCol{
+      width: 100%;
+      display:flex;
+      flex-direction: column;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+      text-align:center;
+      min-height: 56px;
+    }
+
+    .brandLogo{
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
+    }
+
     header .brandTitle{
       margin:0;
       font-weight: 950;
@@ -437,6 +459,9 @@
       label{ font-size: 14px; }
       .row{ margin-bottom: 14px; }
       #questionsContainer{ gap: 12px; }
+
+      .brandLogo{ width:44px; height:44px; }
+      header .brandSub{ margin-top: 3px; }
     }
   </style>
 </head>
@@ -445,7 +470,8 @@
   <div class="container">
     <header>
       <div class="brandPill">
-        <div style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div class="brandInnerCol">
+          <img src="logo.png" alt="شعار الجنسية والجوازات" class="brandLogo" />
           <div class="brandTitle">مركز الهوية الوطنية - محافظة الجهراء (القصر)</div>
           <div class="brandSub">تقييم الموظف</div>
         </div>
