@@ -130,32 +130,26 @@
       50%{ transform: translateX(60%); }
     }
 
-    /* ✅ جديد: تصميم محتوى الشعار + النص داخل brandPill */
-    .brandInner{
+    /* ✅ ترتيب الشعار فوق الكلام */
+    .brandInnerCol{
       width: 100%;
       display:flex;
+      flex-direction: column;
       align-items:center;
       justify-content:center;
-      gap: 12px;
+      gap: 8px;
       position: relative;
       z-index: 2;
+      text-align:center;
+      min-height: 56px;
     }
 
     .brandLogo{
-      width: 56px;
-      height: 56px;
+      width: 54px;
+      height: 54px;
       object-fit: contain;
       flex: 0 0 auto;
       filter: drop-shadow(0 10px 25px rgba(0,0,0,0.35));
-    }
-
-    .brandText{
-      display:flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 0;
-      text-align:center;
     }
 
     header .brandTitle{
@@ -167,19 +161,17 @@
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
-      text-align:center;
       position: relative;
       z-index: 2;
     }
 
     header .brandSub{
-      margin-top: 4px;
+      margin-top: 0;
       color: rgba(255,255,255,0.78);
       font-weight: 850;
       font-size: 12.5px;
       position: relative;
       z-index: 2;
-      text-align:center;
       white-space: nowrap;
       overflow:hidden;
       text-overflow: ellipsis;
@@ -190,7 +182,7 @@
       .brandLogo{ width:44px; height:44px; }
       header .brandTitle{ font-size: 16px; }
       header .brandSub{ font-size: 12px; }
-      .brandInner{ gap: 10px; }
+      .brandInnerCol{ gap: 7px; }
     }
 
     .card{
@@ -481,18 +473,14 @@
   <div class="container">
     <header>
       <div class="brandPill">
-        <!-- ✅ تم تعديل: إضافة شعار الجنسية والجوازات (logo.png) -->
-        <div class="brandInner">
+        <div class="brandInnerCol">
           <img
             src="logo.png"
             alt="شعار الجنسية والجوازات"
             class="brandLogo"
           />
-
-          <div class="brandText">
-            <div class="brandTitle">مركز الهوية الوطنية - محافظة العاصمة (الشامية)</div>
-            <div class="brandSub">تقييم الموظف</div>
-          </div>
+          <div class="brandTitle">مركز الهوية الوطنية - محافظة العاصمة (الشامية)</div>
+          <div class="brandSub">تقييم الموظف</div>
         </div>
       </div>
       <div></div>
